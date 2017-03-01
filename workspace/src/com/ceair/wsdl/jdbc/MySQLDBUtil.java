@@ -13,7 +13,7 @@ import java.util.Properties;
 import com.ceair.wsdl.domain.ServiceOperation;
 import com.mysql.jdbc.Connection;
 
-public class DBUtil {
+public class MySQLDBUtil {
     private static String driver;
     private static String url;
     private static String username;
@@ -27,10 +27,10 @@ public class DBUtil {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        driver = properties.getProperty(driver);
-        url = properties.getProperty(url);
-        username = properties.getProperty(username);
-        password = properties.getProperty(password);
+        driver = properties.getProperty("driver");
+        url = properties.getProperty("url");
+        username = properties.getProperty("username");
+        password = properties.getProperty("password");
     }
 
     public static Connection open() {
@@ -54,7 +54,7 @@ public class DBUtil {
     }
 
     public static void createTable(String sql) {
-        Connection connection = DBUtil.open();
+        Connection connection = MySQLDBUtil.open();
         java.sql.Statement stmt;
         try {
             stmt = connection.createStatement();
@@ -71,7 +71,7 @@ public class DBUtil {
     }
 
     public static void insert(String sql) {
-        Connection connection = DBUtil.open();
+        Connection connection = MySQLDBUtil.open();
         java.sql.Statement stmt;
         try {
             stmt = connection.createStatement();
@@ -96,7 +96,7 @@ public class DBUtil {
     }
     
     public static List<ServiceOperation> select(String sql) {
-        Connection connection = DBUtil.open();
+        Connection connection = MySQLDBUtil.open();
         java.sql.Statement stmt;
         try {
             stmt = connection.createStatement();

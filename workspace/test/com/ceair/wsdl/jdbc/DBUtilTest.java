@@ -20,7 +20,7 @@ public class DBUtilTest {
 
     @Test
     public void testOpen() {
-        Connection connection= DBUtil.open();
+        assertNotNull(MySQLDBUtil.open());
     }
 
     @Test
