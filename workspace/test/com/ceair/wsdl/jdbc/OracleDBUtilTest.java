@@ -46,13 +46,15 @@ public class OracleDBUtilTest {
     }
     
     @Test
-    public void testSelectServiceOperation() {        
-        assertNotNull(OracleDBUtil.selectServiceOperation(new ServiceOperation(1, 1, "enname", "srcenname", "inputMsgName", "inputMsgNameSpace", "inputMsgName", "inputMsgNameSpace", "endpoint")));
+    public void testSelectServiceOperation() {    
+        int serviceOperationID =1;
+        assertNotNull(OracleDBUtil.selectServiceOperation(serviceOperationID));
     }
     
     @Test
     public void testSelectServiceVersion() {
-        assertNotNull(OracleDBUtil.selectServiceVersion(new ServiceVersion(2, 1)));
+        int serviceVersionID =1;
+        assertNotNull(OracleDBUtil.selectServiceVersion(serviceVersionID));
     }
 
 }

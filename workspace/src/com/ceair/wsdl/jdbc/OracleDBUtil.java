@@ -1,8 +1,11 @@
 package com.ceair.wsdl.jdbc;
 
+import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.Reader;
+import java.sql.Clob;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -113,13 +116,13 @@ public class OracleDBUtil {
         return i;
     }
 
-    public static ResultSet selectServiceOperation(ServiceOperation serviceOperation) {
+    public static ResultSet selectServiceOperation(int serviceOperationID) {
         Connection conn = open();
         String sql = "select * from ESB_SVC_OPT where OPT_ID = ?";
         PreparedStatement pstmt;
         try {
             pstmt = conn.prepareStatement(sql);
-            pstmt.setInt(1, serviceOperation.getOptId());
+            pstmt.setInt(1, serviceOperationID);
             ResultSet rs = pstmt.executeQuery();
             while (rs.next()) {
                 System.out.println("name: " + rs.getString("OPT_EN_NAME"));
@@ -135,23 +138,32 @@ public class OracleDBUtil {
         return null;
     }
     
-    public static ResultSet selectServiceVersion(ServiceVersion serviceVersion) {
+    //选取
+    public static ResultSet selectServiceVersion(int serviceVersionID) {
+        BufferedReader reader = null;
         Connection conn = open();
         String sql = "select * from ESB_SVC_VERSION where SERVICE_VER_ID = ?";
         PreparedStatement pstmt;
         try {
             pstmt = conn.prepareStatement(sql);
-            pstmt.setInt(1, serviceVersion.getServiceVerId());
+            pstmt.setInt(1, serviceVersionID);
             ResultSet rs = pstmt.executeQuery();
             while (rs.next()) {
                 System.out.println("SERVICE_VERSION: " + rs.getString("SERVICE_VERSION"));
-                System.out.println("WSDL_CLOB: " + rs.getString("WSDL_CLOB"));
+                Clob clob = rs.getClob("WSDL_CLOB");
+                reader = new BufferedReader(new InputStreamReader(clob.getAsciiStream())); 
+                String line = null;  
+                while ((line = reader.readLine()) != null) {  
+                    System.out.println(line);  
+                } 
             }
             rs.close();
             pstmt.close();
             conn.close();
             return rs;
         } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
             e.printStackTrace();
         }
         return null;
