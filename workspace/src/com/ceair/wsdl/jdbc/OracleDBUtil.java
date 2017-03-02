@@ -56,7 +56,7 @@ public class OracleDBUtil {
         return false;
     }
 
-    private static int insertServiceOperation(ServiceOperation serviceOperation) {
+    public static int insertServiceOperation(ServiceOperation serviceOperation) {
         Connection conn = open();
         int i = 0;
         String sql = "insert into ESB_SVC_OPT (OPT_ID,SERVICE_VER_ID,OPT_EN_NAME,OPT_SRC_EN_NAME,OPT_INPUT_MSG_NAME,OPT_INPUT_MSG_NS,OPT_SRC_INPUT_MSG_NAME,OPT_SRC_INPUT_MSG_NS,ENDPOINT) values(?,?,?,?,?,?,?,?,?)";
@@ -84,7 +84,7 @@ public class OracleDBUtil {
         return i;
     }
 
-    private static int insertServiceVersion(ServiceVersion serviceVersion) {
+    public static int insertServiceVersion(ServiceVersion serviceVersion) {
         Connection conn = open();
         int i = 0;
         // String sql = "insert into ESB_SVC_VERSION
@@ -113,7 +113,7 @@ public class OracleDBUtil {
         return i;
     }
 
-    private static ResultSet selectServiceOperation(ServiceOperation serviceOperation) {
+    public static ResultSet selectServiceOperation(ServiceOperation serviceOperation) {
         Connection conn = open();
         String sql = "select * from ESB_SVC_OPT where OPT_ID = ?";
         PreparedStatement pstmt;
@@ -135,7 +135,7 @@ public class OracleDBUtil {
         return null;
     }
     
-    private static ResultSet selectServiceVersion(ServiceVersion serviceVersion) {
+    public static ResultSet selectServiceVersion(ServiceVersion serviceVersion) {
         Connection conn = open();
         String sql = "select * from ESB_SVC_VERSION where SERVICE_VER_ID = ?";
         PreparedStatement pstmt;
@@ -157,54 +157,4 @@ public class OracleDBUtil {
         return null;
     }
 
-//    private static int update(String oldName, String newPass) {
-//        Connection conn = open();
-//        int i = 0;
-//        String sql = "update users set password='" + newPass + "' where username='" + oldName + "'";
-//        PreparedStatement pstmt;
-//        try {
-//            pstmt = conn.prepareStatement(sql);
-//
-//            i = pstmt.executeUpdate();
-//            System.out.println("resutl: " + i);
-//
-//            pstmt.close();
-//            conn.close();
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//        }
-//
-//        return i;
-//    }
-//
-//    private static int delete(String username) {
-//        Connection conn = open();
-//        int i = 0;
-//        String sql = "delete users where username='" + username + "'";
-//        PreparedStatement pstmt;
-//        try {
-//            pstmt = conn.prepareStatement(sql);
-//
-//            i = pstmt.executeUpdate();
-//            System.out.println("resutl: " + i);
-//
-//            pstmt.close();
-//            conn.close();
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//        }
-//
-//        return i;
-//    }
-
-    /**
-     * @param args
-     */
-    public static void main(String[] args) {
-        // insertServiceOperation(newServiceOperation(1,1,"enname","srcenname","inputMsgName","inputMsgNameSpace","inputMsgName","inputMsgNameSpace","endpoint"));
-        // insertServiceVersion(new ServiceVersion(2, 1));
-//        selectServiceOperation(new ServiceOperation(1, 1, "enname", "srcenname", "inputMsgName", "inputMsgNameSpace",
-//                "inputMsgName", "inputMsgNameSpace", "endpoint"));
-        selectServiceVersion(new ServiceVersion(2, 1));
-    }
 }

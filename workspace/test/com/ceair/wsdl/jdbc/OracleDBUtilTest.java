@@ -8,6 +8,9 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.ceair.wsdl.domain.ServiceOperation;
+import com.ceair.wsdl.domain.ServiceVersion;
+
 
 public class OracleDBUtilTest {
 
@@ -28,6 +31,28 @@ public class OracleDBUtilTest {
     public void testClose() {        
         Connection connection = (Connection) OracleDBUtil.open();
         assertTrue(OracleDBUtil.close(connection));
+    }
+    
+    @Test
+    public void testInsertServiceOperation() {        
+        int result = OracleDBUtil.insertServiceOperation(new ServiceOperation(4,1,"enname","srcenname","inputMsgName","inputMsgNameSpace","inputMsgName","inputMsgNameSpace","endpoint"));
+        assertEquals(1, result);
+    }
+    
+    @Test
+    public void testInsertServiceVersion() {        
+        int result = OracleDBUtil.insertServiceVersion(new ServiceVersion(4, 1));
+        assertEquals(1, result);
+    }
+    
+    @Test
+    public void testSelectServiceOperation() {        
+        assertNotNull(OracleDBUtil.selectServiceOperation(new ServiceOperation(1, 1, "enname", "srcenname", "inputMsgName", "inputMsgNameSpace", "inputMsgName", "inputMsgNameSpace", "endpoint")));
+    }
+    
+    @Test
+    public void testSelectServiceVersion() {
+        assertNotNull(OracleDBUtil.selectServiceVersion(new ServiceVersion(2, 1)));
     }
 
 }
