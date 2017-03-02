@@ -1,5 +1,6 @@
 package com.ceair.wsdl;
 
+import javax.jws.soap.SOAPBinding;
 import javax.wsdl.*;
 import javax.wsdl.extensions.*;
 import javax.wsdl.extensions.soap.SOAPOperation;
@@ -9,7 +10,9 @@ import javax.wsdl.xml.*;
 import javax.xml.namespace.QName;
 
 import com.ibm.wsdl.OperationImpl;
+import com.ibm.wsdl.extensions.soap.SOAPBindingImpl;
 import com.ibm.wsdl.extensions.soap.SOAPOperationImpl;
+import com.ibm.wsdl.extensions.soap12.SOAP12BindingImpl;
 import com.ibm.wsdl.extensions.soap12.SOAP12OperationImpl;
 
 import java.util.*;
@@ -31,6 +34,7 @@ public class WSDLParser {
             Map serviceMap = def.getAllServices();
             Iterator serviceItr = serviceMap.entrySet().iterator();
             String soapActionURI = null;
+            String transportURI = null;
             while (serviceItr.hasNext()) {
                 Map.Entry svcEntry = (Map.Entry) serviceItr.next();
                 Service svc = (Service) svcEntry.getValue();
@@ -40,7 +44,10 @@ public class WSDLParser {
                     Map.Entry portEntry = (Map.Entry) portItr.next();
                     Port port = (Port) portEntry.getValue();
                     Binding binding = port.getBinding();
-                    List bindingOperations = binding.getBindingOperations();
+                    ExtensibilityElement bindingElement = (ExtensibilityElement) binding.getExtensibilityElements().get(0);
+                    transportURI = getTransportURI(bindingElement);
+                    System.out.println("transportURI:"+ transportURI);
+                    List bindingOperations = binding.getBindingOperations();                    
                     Iterator bindingOperationItr = bindingOperations.iterator();
                     while (bindingOperationItr.hasNext()) {
                         BindingOperation bindingOperation = (BindingOperation) bindingOperationItr.next();
@@ -87,6 +94,15 @@ public class WSDLParser {
         }
     }
 
+    private static String getTransportURI(ExtensibilityElement bindingElement) {
+        if (bindingElement instanceof SOAPBindingImpl) {
+            return ((SOAPBindingImpl) bindingElement).getTransportURI();
+        }else if (bindingElement instanceof SOAP12BindingImpl) {
+            return ((SOAP12BindingImpl) bindingElement).getTransportURI();
+        }         
+        return null;
+    }
+
     private static String getSOAPActionUrl(ExtensibilityElement extensibilityElement) {
         if (extensibilityElement instanceof SOAP12Operation) {
             return ((SOAP12Operation) extensibilityElement).getSoapActionURI();
@@ -100,5 +116,6 @@ public class WSDLParser {
             return null;
         }
     }
+    
 
 }
