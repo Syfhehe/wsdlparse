@@ -61,12 +61,13 @@ public class WSDLParser {
                 List<Operation> portTypeOperationList = portType.getOperations();
                 Iterator<Operation> portTypeOperationItr = portTypeOperationList.iterator();
                 while (portTypeOperationItr.hasNext()) {
+                    
                     Operation portTypeOperation = (OperationImpl) portTypeOperationItr.next();
                     System.out.println("Operation Name:"+portTypeOperation.getName());
                     QName qnameInput = portTypeOperation.getInput().getMessage().getQName();
                     System.out.println("InputNameSpace:" + qnameInput.getNamespaceURI());
                     System.out.println("InputName:" + qnameInput.getLocalPart());
-
+                    
                     QName qnameOutput = portTypeOperation.getOutput().getMessage().getQName();
                     System.out.println("OutputNameSpace:" + qnameOutput.getNamespaceURI());
                     System.out.println("OutputName:" + qnameOutput.getLocalPart());
