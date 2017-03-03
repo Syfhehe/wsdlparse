@@ -93,10 +93,12 @@ public class WSDLParser {
 
                     Map faultMap = portTypeOperation.getFaults();
                     Iterator faultItr = faultMap.entrySet().iterator();
+                    //fault按照一个做
                     while (faultItr.hasNext()) {
                         Fault fault = (Fault) faultItr.next();
                         System.out.println("FaultNameSpace:" + fault.getMessage().getQName().getNamespaceURI());
                         System.out.println("FaultName:" + fault.getMessage().getQName().getLocalPart());
+                        break;
                     }
 
                 }

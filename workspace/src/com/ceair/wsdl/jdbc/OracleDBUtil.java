@@ -135,13 +135,24 @@ public class OracleDBUtil {
                 optTemp.setOptId(rs.getInt("OPT_ID"));
                 optTemp.setServiceVerId(rs.getInt("SERVICE_VER_ID"));
                 optTemp.setOptEnName(rs.getString("OPT_EN_NAME"));
-                optTemp.setOptInputMsgName("OPT_INPUT_MSG_NAME");
-                optTemp.setOptInputMsgNs("OPT_INPUT_MSG_NS");
-                optTemp.setOptOutputMsgName("OPT_OUTPUT_MSG_NAME");
-                optTemp.setOptOutputMsgNs("OPT_OUTPUT_MSG_NS");
-                optTemp.setOptFaultMsgName("OPT_FAULT_MSG_NAME");
-                optTemp.setOptFaultMsgNs("OPT_FAULT_MSG_NS");
-                optTemp.setOptSoapAction("OPT_SOAP_ACTION");
+                
+                optTemp.setOptInputMsgName(rs.getString("OPT_INPUT_MSG_NAME"));
+                optTemp.setOptInputMsgNs(rs.getString("OPT_INPUT_MSG_NS"));
+                optTemp.setOptOutputMsgName(rs.getString("OPT_OUTPUT_MSG_NAME"));
+                optTemp.setOptOutputMsgNs(rs.getString("OPT_OUTPUT_MSG_NS"));
+                optTemp.setOptFaultMsgName(rs.getString("OPT_FAULT_MSG_NAME"));
+                optTemp.setOptFaultMsgNs(rs.getString("OPT_FAULT_MSG_NS"));
+                
+                optTemp.setOptSoapAction(rs.getString("OPT_SOAP_ACTION"));
+                
+                optTemp.setOptSrcInputMsgName(rs.getString("OPT_SRC_INPUT_MSG_NAME"));
+                optTemp.setOptSrcInputMsgNs(rs.getString("OPT_SRC_INPUT_MSG_NS"));
+                optTemp.setOptSrcOutputMsgName(rs.getString("OPT_SRC_OUTPUT_MSG_NAME"));
+                optTemp.setOptSrcOutputMsgNs(rs.getString("OPT_SRC_OUTPUT_MSG_NS"));
+                optTemp.setOptSrcFaultMsgName(rs.getString("OPT_SRC_FAULT_MSG_NAME"));
+                optTemp.setOptFaultMsgNs(rs.getString("OPT_SRC_FAULT_MSG_NS"));
+                
+                optTemp.setOptSoapAction(rs.getString("OPT_SOAP_ACTION"));
                 optList.add(optTemp);
             }
             rs.close();
