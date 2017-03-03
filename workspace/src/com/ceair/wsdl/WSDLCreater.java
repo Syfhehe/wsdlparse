@@ -16,6 +16,7 @@ import javax.xml.namespace.QName;
 
 import com.ceair.wsdl.domain.ServiceOperation;
 import com.ceair.wsdl.domain.ServiceVersion;
+import com.ceair.wsdl.jdbc.FileUtil;
 import com.ceair.wsdl.jdbc.OracleDBUtil;
 import com.ibm.wsdl.OperationImpl;
 
@@ -25,12 +26,17 @@ public class WSDLCreater {
     
     public static void main(String args[]){
         ServiceOperation serviceOperation = OracleDBUtil.selectServiceOperation(4);
-        
-        
+ 
+        createWSDL(serviceOperation);
     }
 
-    public static void createWSDL(ServiceOperation serviceOperation, String wsdlLocation) {
-
+    public static void createWSDL(ServiceOperation serviceOperation) {
+        
+        ServiceVersion serviceVersion = OracleDBUtil.selectServiceVersion(serviceOperation.getServiceVerId());
+        String wsdlString = serviceVersion.getWsdlClob();
+        String wsdlLocation = serviceVersion.getWsdlLocation();
+        FileUtil.string2File(wsdlString, wsdlLocation);
+      
         try {
             WSDLFactory wsdlFactory = WSDLFactory.newInstance();
             WSDLReader reader = wsdlFactory.newWSDLReader();
