@@ -1,16 +1,22 @@
 package com.ceair.wsdl.jdbc;
 
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
+import java.io.StringReader;
 import java.sql.Clob;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Properties;
 
 import com.ceair.wsdl.domain.ServiceOperation;
@@ -90,21 +96,18 @@ public class OracleDBUtil {
     public static int insertServiceVersion(ServiceVersion serviceVersion) {
         Connection conn = open();
         int i = 0;
-        // String sql = "insert into ESB_SVC_VERSION
-        // (SERVICE_VER_ID,SERVICE_ID,SERVICE_VERSION,WSDL_LOCATION,DUBBO_LOCATION)
-        // values(?,?,?,?,?)";
-        String sql = "insert into ESB_SVC_VERSION (SERVICE_VER_ID,SERVICE_VERSION) values(?,?)";
-
+        String sql = "insert into ESB_SVC_VERSION (SERVICE_VER_ID,SERVICE_VERSION,WSDL_LOCATION,WSDL_CLOB) values(?,?,?,?)";
         PreparedStatement pstmt;
         try {
+            String clobContent = serviceVersion.getWsdlClob();
+            StringReader reader = new StringReader(clobContent);
+
             pstmt = conn.prepareStatement(sql);
             pstmt.setInt(1, serviceVersion.getServiceVerId());
             pstmt.setFloat(2, serviceVersion.getServiceVersion());
-            // pstmt.setInt(1, serviceVersion.getServiceVerId());
-            // pstmt.setInt(2, serviceVersion.getServiceId());
-            // pstmt.setFloat(3, serviceVersion.getServiceVersion());
-            // pstmt.setString(4, serviceVersion.getWsdlLocation());
-            // pstmt.setString(5, serviceVersion.getDubboLocation());
+            pstmt.setString(3, serviceVersion.getWsdlLocation());
+            pstmt.setCharacterStream(4, reader, clobContent.length());
+
             i = pstmt.executeUpdate();
             System.out.println("result: " + i);
             pstmt.close();
@@ -112,11 +115,12 @@ public class OracleDBUtil {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
         return i;
     }
 
-    public static ResultSet selectServiceOperation(int serviceOperationID) {
+    // 根据OPT_ID选取ServiceOperation
+    public static ServiceOperation selectServiceOperation(int serviceOperationID) {
+        List<ServiceOperation> optList = new ArrayList<>();
         Connection conn = open();
         String sql = "select * from ESB_SVC_OPT where OPT_ID = ?";
         PreparedStatement pstmt;
@@ -125,21 +129,34 @@ public class OracleDBUtil {
             pstmt.setInt(1, serviceOperationID);
             ResultSet rs = pstmt.executeQuery();
             while (rs.next()) {
+                ServiceOperation optTemp = new ServiceOperation();
                 System.out.println("name: " + rs.getString("OPT_EN_NAME"));
                 System.out.println("SERVICE_VER_ID: " + rs.getString("SERVICE_VER_ID"));
+                optTemp.setOptId(rs.getInt("OPT_ID"));
+                optTemp.setServiceVerId(rs.getInt("SERVICE_VER_ID"));
+                optTemp.setOptEnName(rs.getString("OPT_EN_NAME"));
+                optTemp.setOptInputMsgName("OPT_INPUT_MSG_NAME");
+                optTemp.setOptInputMsgNs("OPT_INPUT_MSG_NS");
+                optTemp.setOptOutputMsgName("OPT_OUTPUT_MSG_NAME");
+                optTemp.setOptOutputMsgNs("OPT_OUTPUT_MSG_NS");
+                optTemp.setOptFaultMsgName("OPT_FAULT_MSG_NAME");
+                optTemp.setOptFaultMsgNs("OPT_FAULT_MSG_NS");
+                optTemp.setOptSoapAction("OPT_SOAP_ACTION");
+                optList.add(optTemp);
             }
             rs.close();
             pstmt.close();
             conn.close();
-            return rs;
+            return optList.get(0);
         } catch (SQLException e) {
             e.printStackTrace();
         }
         return null;
     }
-    
-    //选取
-    public static ResultSet selectServiceVersion(int serviceVersionID) {
+
+    // 根据SERVICE_VER_ID选取
+    public static ServiceVersion selectServiceVersion(int serviceVersionID) {
+        List<ServiceVersion> svrVerList = new ArrayList<>();
         BufferedReader reader = null;
         Connection conn = open();
         String sql = "select * from ESB_SVC_VERSION where SERVICE_VER_ID = ?";
@@ -149,21 +166,22 @@ public class OracleDBUtil {
             pstmt.setInt(1, serviceVersionID);
             ResultSet rs = pstmt.executeQuery();
             while (rs.next()) {
+                ServiceVersion svrVer = new ServiceVersion();
                 System.out.println("SERVICE_VERSION: " + rs.getString("SERVICE_VERSION"));
                 Clob clob = rs.getClob("WSDL_CLOB");
-                reader = new BufferedReader(new InputStreamReader(clob.getAsciiStream())); 
-                String line = null;  
-                while ((line = reader.readLine()) != null) {  
-                    System.out.println(line);  
-                } 
+                String value = clob.getSubString(1, (int) clob.length());  
+                System.out.println("CLOB value：" + value);  
+                svrVer.setServiceVerId(rs.getInt("SERVICE_VER_ID"));
+                svrVer.setServiceVersion(rs.getInt("SERVICE_VERSION"));
+                svrVer.setWsdlLocation(rs.getString("WSDL_LOCATION"));
+                svrVer.setWsdlClob(value);
+                svrVerList.add(svrVer);
             }
             rs.close();
             pstmt.close();
             conn.close();
-            return rs;
+            return svrVerList.get(0);
         } catch (SQLException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
             e.printStackTrace();
         }
         return null;

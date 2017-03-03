@@ -16,6 +16,10 @@ public class ServiceOperation {
         this.endpoint = endpoint;
     }
 
+    public ServiceOperation() {
+        super();
+    }
+
     private int optId;// not null
     private int originalOptId;
     private int serviceVerId;// not null

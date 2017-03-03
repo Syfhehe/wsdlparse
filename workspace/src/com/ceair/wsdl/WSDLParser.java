@@ -1,40 +1,47 @@
 package com.ceair.wsdl;
 
-import javax.jws.soap.SOAPBinding;
 import javax.wsdl.*;
 import javax.wsdl.extensions.*;
+import javax.wsdl.extensions.soap.SOAPAddress;
 import javax.wsdl.extensions.soap.SOAPOperation;
+import javax.wsdl.extensions.soap12.SOAP12Address;
 import javax.wsdl.extensions.soap12.SOAP12Operation;
 import javax.wsdl.factory.*;
 import javax.wsdl.xml.*;
 import javax.xml.namespace.QName;
 
+import com.ceair.wsdl.domain.ServiceOperation;
 import com.ibm.wsdl.OperationImpl;
+import com.ibm.wsdl.extensions.soap.SOAPAddressImpl;
 import com.ibm.wsdl.extensions.soap.SOAPBindingImpl;
 import com.ibm.wsdl.extensions.soap.SOAPOperationImpl;
+import com.ibm.wsdl.extensions.soap12.SOAP12AddressImpl;
 import com.ibm.wsdl.extensions.soap12.SOAP12BindingImpl;
 import com.ibm.wsdl.extensions.soap12.SOAP12OperationImpl;
 
+import java.net.URL;
 import java.util.*;
 
 public class WSDLParser {
 
-    public static void main(String[] args) {
+    public static List<ServiceOperation> parseWSDL(String wsdlLocation) {
+
+        List<ServiceOperation> srvOptList = new ArrayList<ServiceOperation>();
+
         try {
             WSDLFactory factory = WSDLFactory.newInstance();
             WSDLReader reader = factory.newWSDLReader();
             reader.setFeature("javax.wsdl.verbose", true);
             reader.setFeature("javax.wsdl.importDocuments", true);
             // read wsdl file
-            Definition def = reader.readWSDL("./wsdlfile/M1.wsdl");
-            //Definition def = reader.readWSDL("./wsdlfile/S1.wsdl");
-            //Definition def = reader.readWSDL("./wsdlfile/SM1.wsdl");
-            //Definition def = reader.readWSDL("./wsdlfile/test.wsdl");
+            Definition def = reader.readWSDL(wsdlLocation);
 
             Map serviceMap = def.getAllServices();
             Iterator serviceItr = serviceMap.entrySet().iterator();
             String soapActionURI = null;
             String transportURI = null;
+            URL addressURI = null;
+
             while (serviceItr.hasNext()) {
                 Map.Entry svcEntry = (Map.Entry) serviceItr.next();
                 Service svc = (Service) svcEntry.getValue();
@@ -43,11 +50,16 @@ public class WSDLParser {
                 while (portItr.hasNext()) {
                     Map.Entry portEntry = (Map.Entry) portItr.next();
                     Port port = (Port) portEntry.getValue();
+                    ExtensibilityElement extensibilityElement = (ExtensibilityElement) port.getExtensibilityElements()
+                            .get(0);
+                    addressURI = new URL(getAddressUrl(extensibilityElement));
+                    System.out.println("addressURI:" + addressURI);
                     Binding binding = port.getBinding();
-                    ExtensibilityElement bindingElement = (ExtensibilityElement) binding.getExtensibilityElements().get(0);
+                    ExtensibilityElement bindingElement = (ExtensibilityElement) binding.getExtensibilityElements()
+                            .get(0);
                     transportURI = getTransportURI(bindingElement);
-                    System.out.println("transportURI:"+ transportURI);
-                    List bindingOperations = binding.getBindingOperations();                    
+                    System.out.println("transportURI:" + transportURI);
+                    List bindingOperations = binding.getBindingOperations();
                     Iterator bindingOperationItr = bindingOperations.iterator();
                     while (bindingOperationItr.hasNext()) {
                         BindingOperation bindingOperation = (BindingOperation) bindingOperationItr.next();
@@ -68,13 +80,13 @@ public class WSDLParser {
                 List<Operation> portTypeOperationList = portType.getOperations();
                 Iterator<Operation> portTypeOperationItr = portTypeOperationList.iterator();
                 while (portTypeOperationItr.hasNext()) {
-                    
+
                     Operation portTypeOperation = (OperationImpl) portTypeOperationItr.next();
-                    System.out.println("Operation Name:"+portTypeOperation.getName());
+                    System.out.println("Operation Name:" + portTypeOperation.getName());
                     QName qnameInput = portTypeOperation.getInput().getMessage().getQName();
                     System.out.println("InputNameSpace:" + qnameInput.getNamespaceURI());
                     System.out.println("InputName:" + qnameInput.getLocalPart());
-                    
+
                     QName qnameOutput = portTypeOperation.getOutput().getMessage().getQName();
                     System.out.println("OutputNameSpace:" + qnameOutput.getNamespaceURI());
                     System.out.println("OutputName:" + qnameOutput.getLocalPart());
@@ -92,14 +104,15 @@ public class WSDLParser {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        return null;
     }
 
     private static String getTransportURI(ExtensibilityElement bindingElement) {
         if (bindingElement instanceof SOAPBindingImpl) {
             return ((SOAPBindingImpl) bindingElement).getTransportURI();
-        }else if (bindingElement instanceof SOAP12BindingImpl) {
+        } else if (bindingElement instanceof SOAP12BindingImpl) {
             return ((SOAP12BindingImpl) bindingElement).getTransportURI();
-        }         
+        }
         return null;
     }
 
@@ -112,10 +125,22 @@ public class WSDLParser {
             return ((SOAP12OperationImpl) extensibilityElement).getSoapActionURI();
         } else if (extensibilityElement instanceof SOAPOperationImpl) {
             return ((SOAPOperationImpl) extensibilityElement).getSoapActionURI();
+        }
+        return null;
+    }
+
+    private static String getAddressUrl(ExtensibilityElement extensibilityElement) {
+        if (extensibilityElement instanceof SOAP12AddressImpl) {
+            return ((SOAP12AddressImpl) extensibilityElement).getLocationURI();
+        } else if (extensibilityElement instanceof SOAP12Address) {
+            return ((SOAP12Address) extensibilityElement).getLocationURI();
+        } else if (extensibilityElement instanceof SOAPAddressImpl) {
+            return ((SOAPAddressImpl) extensibilityElement).getLocationURI();
+        } else if (extensibilityElement instanceof SOAPAddress) {
+            return ((SOAPAddress) extensibilityElement).getLocationURI();
         } else {
             return null;
         }
     }
-    
 
 }

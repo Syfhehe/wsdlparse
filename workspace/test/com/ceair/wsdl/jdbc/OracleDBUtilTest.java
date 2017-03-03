@@ -2,6 +2,7 @@ package com.ceair.wsdl.jdbc;
 
 import static org.junit.Assert.*;
 
+import java.io.File;
 import java.sql.Connection;
 
 import org.junit.After;
@@ -41,7 +42,11 @@ public class OracleDBUtilTest {
     
     @Test
     public void testInsertServiceVersion() {        
-        int result = OracleDBUtil.insertServiceVersion(new ServiceVersion(4, 1));
+//        int result = OracleDBUtil.insertServiceVersion(new ServiceVersion(4, 1));
+//        assertEquals(1, result);
+        File file = new File("./wsdlfile/M1.wsdl") ;
+        String wsdlclob = FileUtil.file2String(file, "utf-8");
+        int result = OracleDBUtil.insertServiceVersion(new ServiceVersion(7, 1, "./wsdlfile/M1.wsdl",wsdlclob ));
         assertEquals(1, result);
     }
     
@@ -53,7 +58,7 @@ public class OracleDBUtilTest {
     
     @Test
     public void testSelectServiceVersion() {
-        int serviceVersionID =1;
+        int serviceVersionID =6;
         assertNotNull(OracleDBUtil.selectServiceVersion(serviceVersionID));
     }
 

@@ -24,8 +24,9 @@ import oracle.jpub.runtime.OracleDataUtil;
 public class WSDLCreater {
     
     public static void main(String args[]){
-//        ServiceOperation serviceOperation = OracleDBUtil.
-//        createWSDL();
+        ServiceOperation serviceOperation = OracleDBUtil.selectServiceOperation(4);
+        
+        
     }
 
     public static void createWSDL(ServiceOperation serviceOperation, String wsdlLocation) {
