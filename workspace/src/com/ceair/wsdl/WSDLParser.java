@@ -119,11 +119,7 @@ public class WSDLParser {
     }
 
     private static String getSOAPActionUrl(ExtensibilityElement extensibilityElement) {
-        if (extensibilityElement instanceof SOAP12Operation) {
-            return ((SOAP12Operation) extensibilityElement).getSoapActionURI();
-        } else if (extensibilityElement instanceof SOAPOperation) {
-            return ((SOAPOperation) extensibilityElement).getSoapActionURI();
-        } else if (extensibilityElement instanceof SOAP12OperationImpl) {
+        if (extensibilityElement instanceof SOAP12OperationImpl) {
             return ((SOAP12OperationImpl) extensibilityElement).getSoapActionURI();
         } else if (extensibilityElement instanceof SOAPOperationImpl) {
             return ((SOAPOperationImpl) extensibilityElement).getSoapActionURI();
@@ -134,12 +130,8 @@ public class WSDLParser {
     private static String getAddressUrl(ExtensibilityElement extensibilityElement) {
         if (extensibilityElement instanceof SOAP12AddressImpl) {
             return ((SOAP12AddressImpl) extensibilityElement).getLocationURI();
-        } else if (extensibilityElement instanceof SOAP12Address) {
-            return ((SOAP12Address) extensibilityElement).getLocationURI();
         } else if (extensibilityElement instanceof SOAPAddressImpl) {
             return ((SOAPAddressImpl) extensibilityElement).getLocationURI();
-        } else if (extensibilityElement instanceof SOAPAddress) {
-            return ((SOAPAddress) extensibilityElement).getLocationURI();
         } else {
             return null;
         }

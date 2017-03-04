@@ -15,6 +15,8 @@ public class FileUtil {
     private static final int DEFAULT_BUFFER_SIZE = 1024;
 
     public static String file2String(File file, String encoding) {
+        
+        
         InputStreamReader reader = null;
         StringWriter writer = new StringWriter();
         try {
@@ -44,10 +46,24 @@ public class FileUtil {
         return writer.toString();
     }
 
-    public static boolean string2File(String res, String filePath) {
+    public static String string2File(String res, String filePath) {
         boolean flag = true;
         BufferedReader bufferedReader = null;
         BufferedWriter bufferedWriter = null;
+        
+        String fName = filePath.trim();
+        String fNameNew = null;
+        String temp[] = fName.replaceAll("\\\\","/").split("/");  
+        if (temp.length > 1) {  
+            fName = temp[temp.length - 1];
+            System.out.println("fName"+fName);
+            File distFile = new File(filePath);
+            if(distFile.exists()){
+                fNameNew = fName.replace(".wsdl", "_temp.wsdl");
+            }
+            filePath = filePath.replace(fName, fNameNew);
+        }  
+        
         try {
             File distFile = new File(filePath);
             if (!distFile.getParentFile().exists())
@@ -64,8 +80,6 @@ public class FileUtil {
             bufferedWriter.close();
         } catch (IOException e) {
             e.printStackTrace();
-            flag = false;
-            return flag;
         } finally {
             if (bufferedReader != null) {
                 try {
@@ -75,7 +89,7 @@ public class FileUtil {
                 }
             }
         }
-        return flag;
+        return filePath;
     }
 
 }

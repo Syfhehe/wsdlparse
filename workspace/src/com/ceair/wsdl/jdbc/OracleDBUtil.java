@@ -135,7 +135,8 @@ public class OracleDBUtil {
                 optTemp.setOptId(rs.getInt("OPT_ID"));
                 optTemp.setServiceVerId(rs.getInt("SERVICE_VER_ID"));
                 optTemp.setOptEnName(rs.getString("OPT_EN_NAME"));
-                
+                optTemp.setOptSrcEnName(rs.getString("OPT_SRC_EN_NAME"));
+
                 optTemp.setOptInputMsgName(rs.getString("OPT_INPUT_MSG_NAME"));
                 optTemp.setOptInputMsgNs(rs.getString("OPT_INPUT_MSG_NS"));
                 optTemp.setOptOutputMsgName(rs.getString("OPT_OUTPUT_MSG_NAME"));
@@ -150,7 +151,7 @@ public class OracleDBUtil {
                 optTemp.setOptSrcOutputMsgName(rs.getString("OPT_SRC_OUTPUT_MSG_NAME"));
                 optTemp.setOptSrcOutputMsgNs(rs.getString("OPT_SRC_OUTPUT_MSG_NS"));
                 optTemp.setOptSrcFaultMsgName(rs.getString("OPT_SRC_FAULT_MSG_NAME"));
-                optTemp.setOptFaultMsgNs(rs.getString("OPT_SRC_FAULT_MSG_NS"));
+                optTemp.setOptSrcFaultMsgNs(rs.getString("OPT_SRC_FAULT_MSG_NS"));
                 
                 optTemp.setOptSoapAction(rs.getString("OPT_SOAP_ACTION"));
                 optList.add(optTemp);
