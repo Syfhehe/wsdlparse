@@ -8,6 +8,8 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import javax.wsdl.Definition;
+import javax.wsdl.Operation;
+import javax.wsdl.PortType;
 import javax.wsdl.WSDLException;
 import javax.wsdl.extensions.ExtensibilityElement;
 import javax.wsdl.factory.WSDLFactory;
@@ -65,49 +67,7 @@ public class WSDLMerger {
         return null;
 
     }
-
-    private static Definition mergeSchema(Definition def1_replace, Definition def2_replace, Definition targetDef) {
-        
-        List targetDefList = targetDef.getTypes().getExtensibilityElements();
-        Iterator targetDefItr = targetDefList.iterator();
-        while(targetDefItr.hasNext()){
-            targetDef.getTypes().removeExtensibilityElement((ExtensibilityElement) targetDefItr.next());
-        }
-        
-        List eleList1 = def1_replace.getTypes().getExtensibilityElements();
-        Iterator eleItr1 = eleList1.iterator();
-        while(eleItr1.hasNext()){
-            targetDef.getTypes().addExtensibilityElement((ExtensibilityElement) eleItr1.next());
-        }
-        List eleList2 = def2_replace.getTypes().getExtensibilityElements();
-        Iterator eleItr2 = eleList2.iterator();
-        while(eleItr2.hasNext()){
-            targetDef.getTypes().addExtensibilityElement((ExtensibilityElement) eleItr2.next());
-        }        
-        
-        return targetDef;
-    }
     
-    private static Definition mergeBinding(Definition def1, Definition def2) {
-
-        
-
-        return def2;
-    }
-
-    private static Definition mergePortType(Definition def1, Definition def2) {
-        return def2;
-        // TODO Auto-generated method stub
-
-    }
-
-    private static Definition mergeMessage(Definition def1_replace, Definition def2_replace, Definition targetDef) {
-       
-        return targetDef;
-    }
-
-
-
     private static Definition mergeNamespace(Definition def1, Definition def2) {
         Map namespaceMap1 = def1.getNamespaces();
         Map namespaceMap2 = def2.getNamespaces();
@@ -130,5 +90,83 @@ public class WSDLMerger {
         return def2;
 
     }
+    
+
+    private static Definition mergeSchema(Definition def1_replace, Definition def2_replace, Definition targetDef) {
+        
+        List<ExtensibilityElement> targetDefList = targetDef.getTypes().getExtensibilityElements();
+        Iterator targetDefItr = targetDefList.iterator();
+        while(targetDefItr.hasNext()){
+            targetDefItr.next();
+            targetDefItr.remove();
+        }
+        
+        List eleList1 = def1_replace.getTypes().getExtensibilityElements();
+        Iterator eleItr1 = eleList1.iterator();
+        while(eleItr1.hasNext()){
+            targetDef.getTypes().addExtensibilityElement((ExtensibilityElement) eleItr1.next());
+        }
+        List eleList2 = def2_replace.getTypes().getExtensibilityElements();
+        Iterator eleItr2 = eleList2.iterator();
+        while(eleItr2.hasNext()){
+            targetDef.getTypes().addExtensibilityElement((ExtensibilityElement) eleItr2.next());
+        }        
+        
+        return targetDef;
+    }
+    
+    private static Definition mergeMessage(Definition def1_replace, Definition def2_replace, Definition targetDef) {
+        Map messageMap = targetDef.getMessages();
+        Iterator messageKeyItr = messageMap.keySet().iterator();
+        while(messageKeyItr.hasNext()){
+            messageKeyItr.next();
+            messageKeyItr.remove();
+        }        
+        targetDef.getMessages().putAll(def1_replace.getMessages());
+        targetDef.getMessages().putAll(def2_replace.getMessages());
+        return targetDef;
+    }
+    
+    //针对只有porttype一个的情况
+    private static Definition mergePortType(Definition def1, Definition def2) {
+        PortType portType1 =null;
+        PortType portType2 =null;
+        QName portTypeQname2 =null;
+        List optlist1 = null;
+        List optlist2 = null;
+        
+        //获取def1下portType的所有operation
+        Map porttypesMap1 = def1.getAllPortTypes();
+        Iterator itr= porttypesMap1.entrySet().iterator();
+        while(itr.hasNext()){
+            Map.Entry portTypeEntry = (Entry) itr.next();
+            portType1 = (PortType) portTypeEntry.getValue();   
+            optlist1 = portType1.getOperations();
+            break;
+        }
+        
+        //添加到def2中去
+        Map porttypesMap2 = def2.getAllPortTypes();
+        Iterator itr2= porttypesMap2.entrySet().iterator();
+        while(itr2.hasNext()){
+            Map.Entry portTypeEntry = (Entry) itr2.next();
+            portTypeQname2 = (QName) portTypeEntry.getKey();   
+            portType2 = (PortType) portTypeEntry.getValue();   
+            portType2.getOperations().addAll(optlist1);
+            break;
+        }
+
+        def2.getAllPortTypes().put(portTypeQname2, portType2);
+        
+        return def2;
+
+    }
+    
+    private static Definition mergeBinding(Definition def1, Definition def2) {
+        Map bindingMap1 = def1.getAllBindings();
+        def2.getAllBindings().putAll(bindingMap1);
+        return def2;
+    }
+
 
 }
