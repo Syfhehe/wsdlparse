@@ -31,7 +31,6 @@ public class WSDLMerger {
             WSDLReader reader = factory.newWSDLReader();
             reader.setFeature("javax.wsdl.verbose", true);
             reader.setFeature("javax.wsdl.importDocuments", true);
-           
             
             String string1 = FileUtil.file2String(new File(filepath1), "utf-8");
             String string2 = FileUtil.file2String(new File(filepath2), "utf-8");
@@ -59,7 +58,6 @@ public class WSDLMerger {
             return def2;
 
         } catch (WSDLException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
         return null;
