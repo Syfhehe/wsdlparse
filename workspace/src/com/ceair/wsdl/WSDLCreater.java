@@ -59,7 +59,7 @@ public class WSDLCreater {
                 PortType portType = (PortType) portTypeEntry.getValue();
                 List<Operation> portTypeOperationList = portType.getOperations();
                 // new port list
-                List<Operation> portTypeOperationListModify = new ArrayList<>();
+                List<Operation> portTypeOperationListModify = new ArrayList();
                 Iterator<Operation> portTypeOperationItr = portTypeOperationList.iterator();
                 while (portTypeOperationItr.hasNext()) {
                     Operation portTypeOperation = (OperationImpl) portTypeOperationItr.next();

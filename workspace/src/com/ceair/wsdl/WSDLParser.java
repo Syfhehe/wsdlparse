@@ -2,10 +2,6 @@ package com.ceair.wsdl;
 
 import javax.wsdl.*;
 import javax.wsdl.extensions.*;
-import javax.wsdl.extensions.soap.SOAPAddress;
-import javax.wsdl.extensions.soap.SOAPOperation;
-import javax.wsdl.extensions.soap12.SOAP12Address;
-import javax.wsdl.extensions.soap12.SOAP12Operation;
 import javax.wsdl.factory.*;
 import javax.wsdl.xml.*;
 import javax.xml.namespace.QName;

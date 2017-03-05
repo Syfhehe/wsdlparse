@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import javax.wsdl.Binding;
 import javax.wsdl.Definition;
 import javax.wsdl.Operation;
 import javax.wsdl.PortType;
@@ -133,7 +134,6 @@ public class WSDLMerger {
         PortType portType2 =null;
         QName portTypeQname2 =null;
         List optlist1 = null;
-        List optlist2 = null;
         
         //获取def1下portType的所有operation
         Map porttypesMap1 = def1.getAllPortTypes();
@@ -156,15 +156,39 @@ public class WSDLMerger {
             break;
         }
 
-        def2.getAllPortTypes().put(portTypeQname2, portType2);
-        
+        def2.getAllPortTypes().put(portTypeQname2, portType2);       
         return def2;
 
     }
     
+    //合并单个binding下面的Operation
     private static Definition mergeBinding(Definition def1, Definition def2) {
+        Binding binding1 = null;
+        Binding binding2 = null;
+        QName bindingQname2 =null;
+        List optlist1 = null;
+        
         Map bindingMap1 = def1.getAllBindings();
-        def2.getAllBindings().putAll(bindingMap1);
+        Iterator itr = bindingMap1.entrySet().iterator();
+        while(itr.hasNext()){
+            Map.Entry bindingEntry = (Entry) itr.next();
+            binding1 = (Binding) bindingEntry.getValue();
+            optlist1 = binding1.getBindingOperations();
+            break;
+        }
+      //添加到def2中去
+        Map porttypesMap2 = def2.getAllBindings();
+        Iterator itr2= porttypesMap2.entrySet().iterator();
+        while(itr2.hasNext()){
+            Map.Entry bindingEntry = (Entry) itr2.next();
+            bindingQname2 = (QName) bindingEntry.getKey();   
+            binding2 = (Binding) bindingEntry.getValue();   
+            binding2.getBindingOperations().addAll(optlist1);
+            break;
+        }
+        def2.getAllBindings().put(bindingQname2, binding2);       
+
+        
         return def2;
     }
 

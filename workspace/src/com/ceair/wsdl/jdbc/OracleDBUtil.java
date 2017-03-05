@@ -120,7 +120,7 @@ public class OracleDBUtil {
 
     // 根据OPT_ID选取ServiceOperation
     public static ServiceOperation selectServiceOperation(int serviceOperationID) {
-        List<ServiceOperation> optList = new ArrayList<>();
+        List<ServiceOperation> optList = new ArrayList();
         Connection conn = open();
         String sql = "select * from ESB_SVC_OPT where OPT_ID = ?";
         PreparedStatement pstmt;
@@ -168,7 +168,7 @@ public class OracleDBUtil {
 
     // 根据SERVICE_VER_ID选取
     public static ServiceVersion selectServiceVersion(int serviceVersionID) {
-        List<ServiceVersion> svrVerList = new ArrayList<>();
+        List<ServiceVersion> svrVerList = new ArrayList();
         BufferedReader reader = null;
         Connection conn = open();
         String sql = "select * from ESB_SVC_VERSION where SERVICE_VER_ID = ?";
