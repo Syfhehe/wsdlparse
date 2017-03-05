@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:n1="Yangzhili" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" targetNamespace="Yangzhili" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <s:schema elementFormDefault="qualified" targetNamespace="Yangzhili">
+      <s:element name="getInfoByMobilePhone">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="PhoneNumber" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="UserId" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="getInfoByMobilePhoneResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="getInfoByMobilePhoneResult" type="n1:MobilePhone" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="MobilePhone">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="Mobile" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="QueryResult" type="s:boolean" />
+          <s:element minOccurs="0" maxOccurs="1" name="Province" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="City" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="AreaCode" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="PostCode" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Corp" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Card" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="MobilePhone" nillable="true" type="n1:MobilePhone" />
+    </s:schema>
+  </wsdl:types>
+  <wsdl:message name="getInfoByMobilePhoneSoapIn">
+    <wsdl:part name="parameters" element="n1:getInfoByMobilePhone" />
+  </wsdl:message>
+  <wsdl:message name="getInfoByMobilePhoneSoapOut">
+    <wsdl:part name="parameters" element="n1:getInfoByMobilePhoneResponse" />
+  </wsdl:message>
+  <wsdl:message name="getInfoByMobilePhoneSoapfault">
+    <wsdl:part name="parameters" element="n1:getInfoByMobilePhoneResponse" />
+  </wsdl:message>
+  <wsdl:portType name="MobilePhoneServiceSoap">
+    <wsdl:operation name="getInfoByMobilePhone">
+      <wsdl:input message="n1:getInfoByMobilePhoneSoapIn" />
+      <wsdl:output message="n1:getInfoByMobilePhoneSoapOut" />
+      <wsdl:fault message="n1:getInfoByMobilePhoneSoapfault" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="MobilePhoneServiceSoap" type="n1:MobilePhoneServiceSoap">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="getInfoByMobilePhone">
+      <soap:operation soapAction="Yangzhili/getInfoByMobilePhone" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+	  <wsdl:fault>
+        <soap:body use="literal" />
+      </wsdl:fault>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="MobilePhoneService">
+    <wsdl:port name="MobilePhoneServiceSoap" binding="n1:MobilePhoneServiceSoap">
+      <soap:address location="http://webservice.36wu.com/MobilePhoneService.asmx" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

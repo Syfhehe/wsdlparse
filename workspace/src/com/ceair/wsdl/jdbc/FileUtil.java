@@ -15,10 +15,10 @@ public class FileUtil {
     private static final int DEFAULT_BUFFER_SIZE = 1024;
 
     public static String file2String(File file, String encoding) {
-        
-        
+
         InputStreamReader reader = null;
         StringWriter writer = new StringWriter();
+        
         try {
             if (encoding == null || "".equals(encoding.trim())) {
                 reader = new InputStreamReader(new FileInputStream(file), encoding);
@@ -50,27 +50,27 @@ public class FileUtil {
         boolean flag = true;
         BufferedReader bufferedReader = null;
         BufferedWriter bufferedWriter = null;
-        
+
         String fName = filePath.trim();
         String fNameNew = null;
-        String temp[] = fName.replaceAll("\\\\","/").split("/");  
-        if (temp.length > 1) {  
+        String temp[] = fName.replaceAll("\\\\", "/").split("/");
+        if (temp.length > 1) {
             fName = temp[temp.length - 1];
-            System.out.println("fName"+fName);
+            System.out.println("fName" + fName);
             File distFile = new File(filePath);
-            if(distFile.exists()){
+            if (distFile.exists()) {
                 fNameNew = fName.replace(".wsdl", "_temp.wsdl");
             }
             filePath = filePath.replace(fName, fNameNew);
-        }  
-        
+        }
+
         try {
             File distFile = new File(filePath);
             if (!distFile.getParentFile().exists())
                 distFile.getParentFile().mkdirs();
             bufferedReader = new BufferedReader(new StringReader(res));
             bufferedWriter = new BufferedWriter(new FileWriter(distFile));
-            char buf[] = new char[1024]; 
+            char buf[] = new char[1024];
             int len;
             while ((len = bufferedReader.read(buf)) != -1) {
                 bufferedWriter.write(buf, 0, len);

@@ -1,7 +1,6 @@
 package com.ceair.wsdl;
 
 import java.io.File;
-import java.lang.reflect.Field;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -9,7 +8,6 @@ import java.util.Map.Entry;
 
 import javax.wsdl.Binding;
 import javax.wsdl.Definition;
-import javax.wsdl.Operation;
 import javax.wsdl.PortType;
 import javax.wsdl.WSDLException;
 import javax.wsdl.extensions.ExtensibilityElement;
@@ -17,7 +15,6 @@ import javax.wsdl.factory.WSDLFactory;
 import javax.wsdl.xml.WSDLReader;
 import javax.wsdl.xml.WSDLWriter;
 import javax.xml.namespace.QName;
-import javax.xml.stream.events.Namespace;
 
 import com.ceair.wsdl.jdbc.FileUtil;
 

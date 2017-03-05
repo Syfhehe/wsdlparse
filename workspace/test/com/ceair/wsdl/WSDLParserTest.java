@@ -3,6 +3,7 @@ package com.ceair.wsdl;
 import static org.junit.Assert.*;
 
 import java.util.List;
+import java.util.Map;
 
 import org.junit.After;
 import org.junit.Before;
@@ -22,28 +23,34 @@ public class WSDLParserTest {
 
     @Test
     public void testParseWSDL1() {
-        List<ServiceOperation> list1 = WSDLParser.parseWSDL("./wsdlfile/M1.wsdl");
-        assertEquals(1, list1.size());
+        Map<String, ServiceOperation> map = WSDLParser.parseWSDL("./wsdlfile/M1.wsdl",5);
+        assertEquals(1, map.size());
 
     }
 
     @Test
     public void testParseWSDL2() {
-        List<ServiceOperation> list2 = WSDLParser.parseWSDL("./wsdlfile/S1.wsdl");
-        assertEquals(1, list2.size());
+        Map<String, ServiceOperation> map = WSDLParser.parseWSDL("./wsdlfile/S1.wsdl",5);
+        assertEquals(1, map.size());
     }
 
     @Test
     public void testParseWSDL3() {
         ;
-        List<ServiceOperation> list3 = WSDLParser.parseWSDL("./wsdlfile/SM1.wsdl");
-        assertEquals(3, list3.size());
+        Map<String, ServiceOperation> map = WSDLParser.parseWSDL("./wsdlfile/SM1.wsdl",5);
+        assertEquals(3, map.size());
     }
 
     @Test
     public void testParseWSDL4() {
-        List<ServiceOperation> list4 = WSDLParser.parseWSDL("./wsdlfile/test.wsdl");
-        assertEquals(1, list4.size());
+        Map<String, ServiceOperation> map = WSDLParser.parseWSDL("./wsdlfile/test.wsdl",5);
+        assertEquals(1, map.size());
+    }
+    
+    @Test
+    public void testParseWSDLwithFault() {
+        Map<String, ServiceOperation> map = WSDLParser.parseWSDL("./wsdlfile/M1_withfault.wsdl",5);
+        assertEquals(1, map.size());
     }
 
 }

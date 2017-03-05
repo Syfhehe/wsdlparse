@@ -7,6 +7,8 @@ import javax.wsdl.xml.*;
 import javax.xml.namespace.QName;
 
 import com.ceair.wsdl.domain.ServiceOperation;
+import com.ceair.wsdl.domain.ServiceVersion;
+import com.ceair.wsdl.jdbc.FileUtil;
 import com.ibm.wsdl.OperationImpl;
 import com.ibm.wsdl.extensions.soap.SOAPAddressImpl;
 import com.ibm.wsdl.extensions.soap.SOAPBindingImpl;
@@ -15,29 +17,40 @@ import com.ibm.wsdl.extensions.soap12.SOAP12AddressImpl;
 import com.ibm.wsdl.extensions.soap12.SOAP12BindingImpl;
 import com.ibm.wsdl.extensions.soap12.SOAP12OperationImpl;
 
-import java.net.URL;
+import java.io.File;
 import java.util.*;
 
 public class WSDLParser {
+    public static void main(String args[]){
+        saveSrvVerWSDLClob("./wsdlfile/M1.wsdl");
+    }
+    
+    public static void saveSrvVerWSDLClob(String wsdlLocation){
+        ServiceVersion serviceVersion = new ServiceVersion();
+        File file = new File(wsdlLocation);
+        String wsdlclob = FileUtil.file2String(file, "utf-8");
+        serviceVersion.setWsdlClob(wsdlclob);
+    }
 
-    public static List<ServiceOperation> parseWSDL(String wsdlLocation) {
+    public static Map<String, ServiceOperation> parseWSDL(String wsdlLocation, int srvVerID) {
 
-        List<ServiceOperation> srvOptList = new ArrayList<ServiceOperation>();
-
+        Map<String, ServiceOperation> srvOptMap = new HashMap();
+        
         try {
+            //对应SOAP_ACTION, PROTOCOL_TYPE, ENDPOINT
+            String soapActionURI = null;
+            String transportURI = null;
+            String addressURI = null;
+            //读取 WSDL到def
             WSDLFactory factory = WSDLFactory.newInstance();
             WSDLReader reader = factory.newWSDLReader();
             reader.setFeature("javax.wsdl.verbose", true);
             reader.setFeature("javax.wsdl.importDocuments", true);
-            // read wsdl file
             Definition def = reader.readWSDL(wsdlLocation);
-
+            
+            //解析service————port（获取ENDPOINT）————binding（获取PROTOCOL_TYPE）——operation（获取 SOAP_ACTION）
             Map serviceMap = def.getAllServices();
             Iterator serviceItr = serviceMap.entrySet().iterator();
-            String soapActionURI = null;
-            String transportURI = null;
-            URL addressURI = null;
-
             while (serviceItr.hasNext()) {
                 Map.Entry svcEntry = (Map.Entry) serviceItr.next();
                 Service svc = (Service) svcEntry.getValue();
@@ -48,7 +61,7 @@ public class WSDLParser {
                     Port port = (Port) portEntry.getValue();
                     ExtensibilityElement extensibilityElement = (ExtensibilityElement) port.getExtensibilityElements()
                             .get(0);
-                    addressURI = new URL(getAddressUrl(extensibilityElement));
+                    addressURI = getAddressUrl(extensibilityElement);
                     System.out.println("addressURI:" + addressURI);
                     Binding binding = port.getBinding();
                     ExtensibilityElement bindingElement = (ExtensibilityElement) binding.getExtensibilityElements()
@@ -58,16 +71,29 @@ public class WSDLParser {
                     List bindingOperations = binding.getBindingOperations();
                     Iterator bindingOperationItr = bindingOperations.iterator();
                     while (bindingOperationItr.hasNext()) {
+                        ServiceOperation tempServiceOperation = new ServiceOperation();
                         BindingOperation bindingOperation = (BindingOperation) bindingOperationItr.next();
                         ExtensibilityElement bindingOperationElement = (ExtensibilityElement) bindingOperation
                                 .getExtensibilityElements().get(0);
                         soapActionURI = getSOAPActionUrl(bindingOperationElement);
+
                         System.out.println("soapActionURI:" + soapActionURI);
                         System.out.println("bindingOperationName:" + bindingOperation.getName().toString());
+                        String optEnName = bindingOperation.getName().toString();
+
+                        tempServiceOperation.setOptSrcSoapAction(soapActionURI);
+                        tempServiceOperation.setOptSoapAction(soapActionURI);
+                        tempServiceOperation.setProtocolType(transportURI);
+                        tempServiceOperation.setEndpoint(addressURI);
+                        tempServiceOperation.setFormateType("SOAP");
+                        tempServiceOperation.setOptSrcEnName(bindingOperation.getName().toString());
+                        tempServiceOperation.setOptEnName(optEnName);
+                        tempServiceOperation.setServiceVerId(srvVerID);
+                        srvOptMap.put(optEnName, tempServiceOperation);
                     }
                 }
             }
-
+            //解析service————port（获取ENDPOINT）————binding（获取PROTOCOL_TYPE）——operation（获取 SOAP_ACTION）
             Map portTypeMap = def.getAllPortTypes();
             Iterator portTypeItr = portTypeMap.entrySet().iterator();
             while (portTypeItr.hasNext()) {
@@ -75,9 +101,9 @@ public class WSDLParser {
                 PortType portType = (PortType) portTypeEntry.getValue();
                 List<Operation> portTypeOperationList = portType.getOperations();
                 Iterator<Operation> portTypeOperationItr = portTypeOperationList.iterator();
-                while (portTypeOperationItr.hasNext()) {
-
+                while (portTypeOperationItr.hasNext()) {   
                     Operation portTypeOperation = (OperationImpl) portTypeOperationItr.next();
+                    ServiceOperation tempServiceOperation = srvOptMap.get(portTypeOperation.getName());
                     System.out.println("Operation Name:" + portTypeOperation.getName());
                     QName qnameInput = portTypeOperation.getInput().getMessage().getQName();
                     System.out.println("InputNameSpace:" + qnameInput.getNamespaceURI());
@@ -89,20 +115,36 @@ public class WSDLParser {
 
                     Map faultMap = portTypeOperation.getFaults();
                     Iterator faultItr = faultMap.entrySet().iterator();
-                    //fault按照一个做
+                    // fault按照一个做
                     while (faultItr.hasNext()) {
                         Fault fault = (Fault) faultItr.next();
                         System.out.println("FaultNameSpace:" + fault.getMessage().getQName().getNamespaceURI());
                         System.out.println("FaultName:" + fault.getMessage().getQName().getLocalPart());
+                        
+                        tempServiceOperation.setOptSrcFaultMsgNs(fault.getMessage().getQName().getNamespaceURI());
+                        tempServiceOperation.setOptFaultMsgNs(fault.getMessage().getQName().getNamespaceURI());                    
+                        tempServiceOperation.setOptSrcFaultMsgName(fault.getMessage().getQName().getLocalPart());
+                        tempServiceOperation.setOptFaultMsgName(fault.getMessage().getQName().getLocalPart());
+                        
                         break;
-                    }
-
+                    }                    
+                    tempServiceOperation.setOptSrcInputMsgNs(qnameInput.getNamespaceURI());
+                    tempServiceOperation.setOptInputMsgNs(qnameInput.getNamespaceURI());                    
+                    tempServiceOperation.setOptSrcInputMsgName(qnameInput.getLocalPart());
+                    tempServiceOperation.setOptInputMsgName(qnameInput.getLocalPart());
+                    
+                    tempServiceOperation.setOptSrcOutputMsgNs(qnameOutput.getNamespaceURI());
+                    tempServiceOperation.setOptOutputMsgNs(qnameOutput.getNamespaceURI());                    
+                    tempServiceOperation.setOptSrcOutputMsgName(qnameOutput.getLocalPart());
+                    tempServiceOperation.setOptOutputMsgName(qnameOutput.getLocalPart());                 
+                  
+                    srvOptMap.put(portTypeOperation.getName(), tempServiceOperation);
                 }
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return null;
+        return srvOptMap;
     }
 
     private static String getTransportURI(ExtensibilityElement bindingElement) {
