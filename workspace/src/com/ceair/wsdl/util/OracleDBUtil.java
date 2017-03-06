@@ -1,4 +1,4 @@
-package com.ceair.wsdl.jdbc;
+package com.ceair.wsdl.util;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -118,7 +118,7 @@ public class OracleDBUtil {
         return i;
     }
 
-    // æ ¹æ®OPT_IDé€‰å–ServiceOperation
+    // æ ¹æ?®OPT_IDé€‰å?–ServiceOperation
     public static ServiceOperation selectServiceOperation(int serviceOperationID) {
         List<ServiceOperation> optList = new ArrayList();
         Connection conn = open();
@@ -166,7 +166,7 @@ public class OracleDBUtil {
         return null;
     }
 
-    // æ ¹æ®SERVICE_VER_IDé€‰å–
+    // æ ¹æ?®SERVICE_VER_IDé€‰å?–
     public static ServiceVersion selectServiceVersion(int serviceVersionID) {
         List<ServiceVersion> svrVerList = new ArrayList();
         BufferedReader reader = null;

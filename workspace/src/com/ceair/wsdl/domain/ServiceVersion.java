@@ -4,6 +4,11 @@ import java.io.File;
 
 public class ServiceVersion {
 
+    public ServiceVersion(String wsdlClob) {
+        super();
+        this.wsdlClob = wsdlClob;
+    }
+
     public ServiceVersion() {
         super();
     }

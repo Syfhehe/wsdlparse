@@ -2,6 +2,29 @@ package com.ceair.wsdl.domain;
 
 public class ServiceOperation {
 
+    public ServiceOperation(String optEnName, String optSrcEnName, String optInputMsgName, String optInputMsgNs,
+            String optOutputMsgName, String optOutputMsgNs, String optFaultMsgName, String optFaultMsgNs,
+            String optSoapAction, String optSrcInputMsgName, String optSrcInputMsgNs, String optSrcOutputMsgName,
+            String optSrcOutputMsgNs, String optSrcFaultMsgName, String optSrcFaultMsgNs, String optSrcSoapAction) {
+        super();
+        this.optEnName = optEnName;
+        this.optSrcEnName = optSrcEnName;
+        this.optInputMsgName = optInputMsgName;
+        this.optInputMsgNs = optInputMsgNs;
+        this.optOutputMsgName = optOutputMsgName;
+        this.optOutputMsgNs = optOutputMsgNs;
+        this.optFaultMsgName = optFaultMsgName;
+        this.optFaultMsgNs = optFaultMsgNs;
+        this.optSoapAction = optSoapAction;
+        this.optSrcInputMsgName = optSrcInputMsgName;
+        this.optSrcInputMsgNs = optSrcInputMsgNs;
+        this.optSrcOutputMsgName = optSrcOutputMsgName;
+        this.optSrcOutputMsgNs = optSrcOutputMsgNs;
+        this.optSrcFaultMsgName = optSrcFaultMsgName;
+        this.optSrcFaultMsgNs = optSrcFaultMsgNs;
+        this.optSrcSoapAction = optSrcSoapAction;
+    }
+
     public ServiceOperation(int optId, int serviceVerId, String optEnName, String optSrcEnName, String optInputMsgName,
             String optInputMsgNs, String optSrcInputMsgName, String optSrcInputMsgNs, String endpoint) {
         super();

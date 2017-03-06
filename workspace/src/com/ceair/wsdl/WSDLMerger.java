@@ -16,7 +16,7 @@ import javax.wsdl.xml.WSDLReader;
 import javax.wsdl.xml.WSDLWriter;
 import javax.xml.namespace.QName;
 
-import com.ceair.wsdl.jdbc.FileUtil;
+import com.ceair.wsdl.util.FileUtil;
 
 public class WSDLMerger {
 

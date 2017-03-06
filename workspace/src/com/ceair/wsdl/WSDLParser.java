@@ -8,7 +8,7 @@ import javax.xml.namespace.QName;
 
 import com.ceair.wsdl.domain.ServiceOperation;
 import com.ceair.wsdl.domain.ServiceVersion;
-import com.ceair.wsdl.jdbc.FileUtil;
+import com.ceair.wsdl.util.FileUtil;
 import com.ibm.wsdl.OperationImpl;
 import com.ibm.wsdl.extensions.soap.SOAPAddressImpl;
 import com.ibm.wsdl.extensions.soap.SOAPBindingImpl;
@@ -19,10 +19,40 @@ import com.ibm.wsdl.extensions.soap12.SOAP12OperationImpl;
 
 import java.io.File;
 import java.util.*;
+import java.util.Map.Entry;
 
 public class WSDLParser {
+    
     public static void main(String args[]){
-        saveSrvVerWSDLClob("./wsdlfile/M1.wsdl");
+        Map<String, ServiceOperation> map = WSDLParser.parseWSDL("./wsdlfile/SM1.wsdl",7,5);
+        System.out.println("Map Size:"+map.size());
+        Iterator iterator = map.entrySet().iterator();
+        while(iterator.hasNext()){
+            Map.Entry serviceOperationEntry = (Entry) iterator.next();
+            ServiceOperation serviceOperation = (ServiceOperation) serviceOperationEntry.getValue();
+            System.out.println("serviceOperation optId:"+serviceOperation.getOptId());
+            System.out.println("serviceOperation originalOptId:"+serviceOperation.getOriginalOptId());
+            System.out.println("serviceOperation serviceVerId:"+serviceOperation.getServiceVerId());
+            System.out.println("serviceOperation optEnName:"+serviceOperation.getOptEnName());
+            System.out.println("serviceOperation optSrcEnName:"+serviceOperation.getOptSrcEnName());
+            System.out.println("serviceOperation protocolType:"+serviceOperation.getProtocolType());
+            System.out.println("serviceOperation formateType:"+serviceOperation.getFormateType());
+            System.out.println("serviceOperation optInputMsgName:"+serviceOperation.getOptInputMsgName());
+            System.out.println("serviceOperation optInputMsgNs:"+serviceOperation.getOptInputMsgNs());
+            System.out.println("serviceOperation optOutputMsgName:"+serviceOperation.getOptOutputMsgName());
+            System.out.println("serviceOperation optOutputMsgNs:"+serviceOperation.getOptOutputMsgNs());
+            System.out.println("serviceOperation optFaultMsgName:"+serviceOperation.getOptFaultMsgName());
+            System.out.println("serviceOperation optFaultMsgNs:"+serviceOperation.getOptFaultMsgNs());   
+            System.out.println("serviceOperation optSoapAction:"+serviceOperation.getOptSoapAction());            
+            System.out.println("serviceOperation optSrcInputMsgName:"+serviceOperation.getOptSrcInputMsgName());
+            System.out.println("serviceOperation optSrcInputMsgNs:"+serviceOperation.getOptSrcInputMsgNs());
+            System.out.println("serviceOperation optSrcOutputMsgName:"+serviceOperation.getOptSrcOutputMsgName());
+            System.out.println("serviceOperation optSrcOutputMsgNs:"+serviceOperation.getOptOutputMsgNs());
+            System.out.println("serviceOperation optSrcFaultMsgName:"+serviceOperation.getOptSrcFaultMsgName());
+            System.out.println("serviceOperation optSrcFaultMsgNs:"+serviceOperation.getOptSrcFaultMsgNs());
+            System.out.println("serviceOperation optSrcSoapAction:"+serviceOperation.getOptSrcSoapAction());
+            System.out.println("serviceOperation endpoint:"+serviceOperation.getEndpoint());           
+        }
     }
     
     public static void saveSrvVerWSDLClob(String wsdlLocation){
@@ -32,7 +62,7 @@ public class WSDLParser {
         serviceVersion.setWsdlClob(wsdlclob);
     }
 
-    public static Map<String, ServiceOperation> parseWSDL(String wsdlLocation, int srvVerID) {
+    public static Map<String, ServiceOperation> parseWSDL(String wsdlLocation, int srvID, int srvVerID) {
 
         Map<String, ServiceOperation> srvOptMap = new HashMap();
         
@@ -89,6 +119,8 @@ public class WSDLParser {
                         tempServiceOperation.setOptSrcEnName(bindingOperation.getName().toString());
                         tempServiceOperation.setOptEnName(optEnName);
                         tempServiceOperation.setServiceVerId(srvVerID);
+                        tempServiceOperation.setOptId(srvID);
+                        tempServiceOperation.setOriginalOptId(srvID);
                         srvOptMap.put(optEnName, tempServiceOperation);
                     }
                 }

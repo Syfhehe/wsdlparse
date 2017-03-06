@@ -1,5 +1,9 @@
 package com.ceair.wsdl;
 
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -18,10 +22,12 @@ import javax.wsdl.xml.WSDLReader;
 import javax.wsdl.xml.WSDLWriter;
 import javax.xml.namespace.QName;
 
+import org.xml.sax.InputSource;
+
 import com.ceair.wsdl.domain.ServiceOperation;
 import com.ceair.wsdl.domain.ServiceVersion;
-import com.ceair.wsdl.jdbc.FileUtil;
-import com.ceair.wsdl.jdbc.OracleDBUtil;
+import com.ceair.wsdl.util.FileUtil;
+import com.ceair.wsdl.util.OracleDBUtil;
 import com.ibm.wsdl.OperationImpl;
 import com.ibm.wsdl.extensions.soap.SOAPOperationImpl;
 import com.ibm.wsdl.extensions.soap12.SOAP12OperationImpl;
@@ -30,25 +36,36 @@ import com.ibm.wsdl.extensions.soap12.SOAP12OperationImpl;
 public class WSDLCreater {
 
     public static void main(String args[]) {
-        ServiceOperation serviceOperation = OracleDBUtil.selectServiceOperation(4);
-        ServiceVersion serviceVersion = OracleDBUtil.selectServiceVersion(serviceOperation.getServiceVerId());
-        createWSDL(serviceOperation, serviceVersion);
+//        ServiceOperation serviceOperation = OracleDBUtil.selectServiceOperation(4);
+//        ServiceVersion serviceVersion = OracleDBUtil.selectServiceVersion(serviceOperation.getServiceVerId());
+//        createWSDL(serviceOperation, serviceVersion);
+        
+        List<ServiceOperation> serviceOperationList = new ArrayList<ServiceOperation>();
+        ServiceOperation serviceOperation1 = new ServiceOperation("getStockInfo", "getStockInfo", 
+                "optInputMsgName1", "optInputMsgNs1", "optOutputMsgName1", "optOutputMsgNs1", "optFaultMsgName1", "optFaultMsgNs1", "optSoapAction1",
+                "getStockInfoSoapIn", "www.cea.com", "getStockInfoSoapOut","www.cea.com", "", "", "http://webxml.com.cn/getStockInfo");
+        ServiceOperation serviceOperation2 = new ServiceOperation("getInfoByMobilePhone", "getInfoByMobilePhone", 
+                "optInputMsgName2", "optInputMsgNs2", "optOutputMsgName2", "optOutputMsgNs2", "optFaultMsgName2", "optFaultMsgNs2", "optSoapAction2", 
+                "getInfoByMobilePhoneSoapIn", "www.cea.com", "getInfoByMobilePhoneSoapOut", "www.cea.com", "", "", "Yangzhili/getInfoByMobilePhone");
+        serviceOperationList.add(serviceOperation1);
+        serviceOperationList.add(serviceOperation2);
+        ServiceVersion serviceVersion = new ServiceVersion(FileUtil.file2String(new File("./wsdlfile/SM1.wsdl"), "utf-8"));
+        createWSDL(serviceOperationList,serviceVersion);
+                
     }
 
-    public static void createWSDL(ServiceOperation serviceOperation, ServiceVersion serviceVersion) {
-        //从数据库中得到ServiceOperation对应的ServiceVersion， 并将其wsdl_Clob保存成wsdl文件方便读取
-        String wsdlString = serviceVersion.getWsdlClob();
-        String wsdlLocation = serviceVersion.getWsdlLocation();
-        String filePathTemp = FileUtil.string2File(wsdlString, wsdlLocation);
+    public static void createWSDL(List<ServiceOperation> serviceOperation, ServiceVersion serviceVersion) {
 
         try {
+            String wsdlString = serviceVersion.getWsdlClob();
+            InputStream in_withcode = new ByteArrayInputStream(wsdlString.getBytes("UTF-8"));  
             //读取刚才保存的wsdl文件 文件内容和数据库中的wsdl_clob一致
             WSDLFactory wsdlFactory = WSDLFactory.newInstance();
             WSDLReader reader = wsdlFactory.newWSDLReader();
             reader.setFeature("javax.wsdl.verbose", true);
             reader.setFeature("javax.wsdl.importDocuments", true);
-            Definition def = reader.readWSDL(wsdlLocation);
-            FileUtil.deleteFile(filePathTemp);
+            Definition def = reader.readWSDL("",new InputSource(in_withcode));
+            String aString = null;
             //遍历整个PortTypes
             Map portTypeMap = def.getAllPortTypes();
             Iterator portTypeItr = portTypeMap.entrySet().iterator();
@@ -123,6 +140,8 @@ public class WSDLCreater {
             WSDLWriter wirter = wsdlFactory.newWSDLWriter();
             wirter.writeWSDL(def, System.out);
         } catch (WSDLException e) {
+            e.printStackTrace();
+        } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
     }
