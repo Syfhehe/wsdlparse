@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<wsdl:definitions targetNamespace="www.cea.com" xmlns:n1="Yangzhili" xmlns:n2="http://webxml.com.cn/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:saaaa="http://www.w3.org/2001/XMLSchema" xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="www.cea.com" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:ooooo="http://schemas.xmlsoap.org/wsdl/soap/">
+<wsdl:definitions targetNamespace="www.cea.com" xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:n1="http://webxml.com.cn/" xmlns:n2="Yangzhili" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:tns="www.cea.com" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/">
   <wsdl:types>
     <s:schema elementFormDefault="qualified" targetNamespace="Yangzhili">
       <s:element name="getInfoByMobilePhone">
@@ -13,7 +13,7 @@
       <s:element name="getInfoByMobilePhoneResponse">
         <s:complexType>
           <s:sequence>
-            <s:element maxOccurs="1" minOccurs="0" name="getInfoByMobilePhoneResult" type="n1:MobilePhone"/>
+            <s:element maxOccurs="1" minOccurs="0" name="getInfoByMobilePhoneResult" type="tns:MobilePhone"/>
           </s:sequence>
         </s:complexType>
       </s:element>
@@ -29,7 +29,7 @@
           <s:element maxOccurs="1" minOccurs="0" name="Card" type="s:string"/>
         </s:sequence>
       </s:complexType>
-      <s:element name="MobilePhone" nillable="true" type="n1:MobilePhone"/>
+      <s:element name="MobilePhone" nillable="true" type="tns:MobilePhone"/>
     </s:schema>
     <s:schema elementFormDefault="qualified" targetNamespace="http://webxml.com.cn/">
       <s:element name="getStockInfo">
@@ -43,7 +43,7 @@
       <s:element name="getStockInfoResponse">
         <s:complexType>
           <s:sequence>
-            <s:element maxOccurs="1" minOccurs="0" name="getStockInfoResult" type="n2:ArrayOfString"/>
+            <s:element maxOccurs="1" minOccurs="0" name="getStockInfoResult" type="tns:ArrayOfString"/>
           </s:sequence>
         </s:complexType>
       </s:element>
@@ -55,46 +55,37 @@
     </s:schema>
   </wsdl:types>
   <wsdl:message name="getStockInfoSoapIn">
-    <wsdl:part name="parameters" element="n2:getStockInfo">
+    <wsdl:part name="parameters" element="n1:getStockInfo">
     </wsdl:part>
   </wsdl:message>
   <wsdl:message name="getStockInfoSoapOut">
-    <wsdl:part name="parameters" element="n2:getStockInfoResponse">
+    <wsdl:part name="parameters" element="n1:getStockInfoResponse">
     </wsdl:part>
   </wsdl:message>
   <wsdl:message name="getInfoByMobilePhoneSoapIn">
-    <wsdl:part name="parameters" element="n1:getInfoByMobilePhone">
+    <wsdl:part name="parameters" element="n2:getInfoByMobilePhone">
     </wsdl:part>
   </wsdl:message>
   <wsdl:message name="getInfoByMobilePhoneSoapOut">
-    <wsdl:part name="parameters" element="n1:getInfoByMobilePhoneResponse">
+    <wsdl:part name="parameters" element="n2:getInfoByMobilePhoneResponse">
     </wsdl:part>
   </wsdl:message>
-  <wsdl:portType name="StockInfoWSSoap">
-    <wsdl:operation name="getStockInfo">
-      <wsdl:input message="n2:getStockInfoSoapIn">
+  <wsdl:portType name="SMServiceSoap">
+    <wsdl:operation name="getInfoByMobilePhone">
+      <wsdl:input message="tns:getInfoByMobilePhoneSoapIn">
     </wsdl:input>
-      <wsdl:output message="n2:getStockInfoSoapOut">
+      <wsdl:output message="tns:getInfoByMobilePhoneSoapOut">
     </wsdl:output>
     </wsdl:operation>
-    <wsdl:operation name="getInfoByMobilePhone">
-      <wsdl:input message="n1:getInfoByMobilePhoneSoapIn">
+    <wsdl:operation name="getStockInfo">
+      <wsdl:input message="tns:getStockInfoSoapIn">
     </wsdl:input>
-      <wsdl:output message="n1:getInfoByMobilePhoneSoapOut">
+      <wsdl:output message="tns:getStockInfoSoapOut">
     </wsdl:output>
     </wsdl:operation>
   </wsdl:portType>
-  <wsdl:binding name="StockInfoWSSoap" type="n2:StockInfoWSSoap">
+  <wsdl:binding name="SMServiceSoap" type="tns:SMServiceSoap">
     <soap:binding transport="http://schemas.xmlsoap.org/soap/http"/>
-    <wsdl:operation name="getStockInfo">
-      <soap:operation soapAction="http://webxml.com.cn/getStockInfo" style="document"/>
-      <wsdl:input>
-        <soap:body use="literal"/>
-      </wsdl:input>
-      <wsdl:output>
-        <soap:body use="literal"/>
-      </wsdl:output>
-    </wsdl:operation>
     <wsdl:operation name="getInfoByMobilePhone">
       <soap:operation soapAction="Yangzhili/getInfoByMobilePhone" style="document"/>
       <wsdl:input>
@@ -104,10 +95,19 @@
         <soap:body use="literal"/>
       </wsdl:output>
     </wsdl:operation>
+    <wsdl:operation name="getStockInfo">
+      <soap:operation soapAction="http://webxml.com.cn/getStockInfo" style="document"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
   </wsdl:binding>
-  <wsdl:service name="StockInfoWS">
-    <wsdl:port name="StockInfoWSSoap" binding="n2:StockInfoWSSoap">
-      <soap:address location="http://www.webxml.com.cn/WebServices/StockInfoWS.asmx"/>
+  <wsdl:service name="SMService">
+    <wsdl:port name="MobilePhoneServiceSoap" binding="tns:SMServiceSoap">
+      <soap:address location="http://webservice.36wu.com/MobilePhoneService.asmx"/>
     </wsdl:port>
   </wsdl:service>
 </wsdl:definitions>

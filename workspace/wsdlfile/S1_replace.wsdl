@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<wsdl:definitions xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:n2="http://webxml.com.cn/" xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" targetNamespace="http://webxml.com.cn/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+<wsdl:definitions xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:tns="http://webxml.com.cn/" xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" targetNamespace="http://webxml.com.cn/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
   <wsdl:types>
     <s:schema elementFormDefault="qualified" targetNamespace="http://webxml.com.cn/">
       <s:element name="getStockInfo">
@@ -13,7 +13,7 @@
       <s:element name="getStockInfoResponse">
         <s:complexType>
           <s:sequence>
-            <s:element minOccurs="0" maxOccurs="1" name="getStockInfoResult" type="n2:ArrayOfString"/>
+            <s:element minOccurs="0" maxOccurs="1" name="getStockInfoResult" type="tns:ArrayOfString"/>
           </s:sequence>
         </s:complexType>
       </s:element>
@@ -25,18 +25,18 @@
     </s:schema>
   </wsdl:types>
   <wsdl:message name="getStockInfoSoapIn">
-    <wsdl:part name="parameters" element="n2:getStockInfo"/>
+    <wsdl:part name="parameters" element="tns:getStockInfo"/>
   </wsdl:message>
   <wsdl:message name="getStockInfoSoapOut">
-    <wsdl:part name="parameters" element="n2:getStockInfoResponse"/>
+    <wsdl:part name="parameters" element="tns:getStockInfoResponse"/>
   </wsdl:message>
   <wsdl:portType name="StockInfoWSSoap">
     <wsdl:operation name="getStockInfo">
-      <wsdl:input message="n2:getStockInfoSoapIn"/>
-      <wsdl:output message="n2:getStockInfoSoapOut"/>
+      <wsdl:input message="tns:getStockInfoSoapIn"/>
+      <wsdl:output message="tns:getStockInfoSoapOut"/>
     </wsdl:operation>
   </wsdl:portType>
-  <wsdl:binding name="StockInfoWSSoap" type="n2:StockInfoWSSoap">
+  <wsdl:binding name="StockInfoWSSoap" type="tns:StockInfoWSSoap">
     <soap:binding transport="http://schemas.xmlsoap.org/soap/http"/>
     <wsdl:operation name="getStockInfo">
       <soap:operation soapAction="http://webxml.com.cn/getStockInfo" style="document"/>
@@ -49,7 +49,7 @@
     </wsdl:operation>
   </wsdl:binding>
   <wsdl:service name="StockInfoWS">
-    <wsdl:port name="StockInfoWSSoap" binding="n2:StockInfoWSSoap">
+    <wsdl:port name="StockInfoWSSoap" binding="tns:StockInfoWSSoap">
       <soap:address location="http://www.webxml.com.cn/WebServices/StockInfoWS.asmx"/>
     </wsdl:port>
   </wsdl:service>

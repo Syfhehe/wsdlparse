@@ -21,12 +21,12 @@ public class WSDLParserTest {
     public void tearDown() throws Exception {
     }
 
-//    @Test
-//    public void testParseWSDL1() {
-//        Map<String, ServiceOperation> map = WSDLParser.parseWSDL("./wsdlfile/M1.wsdl",5);
-//        assertEquals(1, map.size());
-//
-//    }
+    @Test
+    public void testParseWSDL1() {
+        Map<String, ServiceOperation> map = WSDLParser.parseWSDL("./wsdlfile/SM1_merger.wsdl",7,5);
+        assertEquals(1, map.size());
+
+    }
 //
 //    @Test
 //    public void testParseWSDL2() {

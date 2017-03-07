@@ -77,7 +77,6 @@ public class WSDLParser {
             reader.setFeature("javax.wsdl.verbose", true);
             reader.setFeature("javax.wsdl.importDocuments", true);
             Definition def = reader.readWSDL(wsdlLocation);
-            
             //解析service————port（获取ENDPOINT）————binding（获取PROTOCOL_TYPE）——operation（获取 SOAP_ACTION）
             Map serviceMap = def.getAllServices();
             Iterator serviceItr = serviceMap.entrySet().iterator();
@@ -149,7 +148,8 @@ public class WSDLParser {
                     Iterator faultItr = faultMap.entrySet().iterator();
                     // fault按照一个做
                     while (faultItr.hasNext()) {
-                        Fault fault = (Fault) faultItr.next();
+                        Map.Entry faultEntry = (Map.Entry) faultItr.next();
+                        Fault fault = (Fault) faultEntry.getValue();
                         System.out.println("FaultNameSpace:" + fault.getMessage().getQName().getNamespaceURI());
                         System.out.println("FaultName:" + fault.getMessage().getQName().getLocalPart());
                         
