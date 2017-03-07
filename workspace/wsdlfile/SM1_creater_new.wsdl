@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions targetNamespace="www.cea.com" xmlns:n1="Yangzhili" xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:n2="http://webxml.com.cn/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:tns="www.cea.com" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/">
+  <wsdl:types>
+    <s:schema elementFormDefault="qualified" targetNamespace="Yangzhili">
+      <s:element name="getInfoByMobilePhone">
+        <s:complexType>
+          <s:sequence>
+            <s:element maxOccurs="1" minOccurs="0" name="PhoneNumber" type="s:string"/>
+            <s:element maxOccurs="1" minOccurs="0" name="UserId" type="s:string"/>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="getInfoByMobilePhoneResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element maxOccurs="1" minOccurs="0" name="getInfoByMobilePhoneResult" type="n1:MobilePhone"/>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="MobilePhone">
+        <s:sequence>
+          <s:element maxOccurs="1" minOccurs="0" name="Mobile" type="s:string"/>
+          <s:element maxOccurs="1" minOccurs="1" name="QueryResult" type="s:boolean"/>
+          <s:element maxOccurs="1" minOccurs="0" name="Province" type="s:string"/>
+          <s:element maxOccurs="1" minOccurs="0" name="City" type="s:string"/>
+          <s:element maxOccurs="1" minOccurs="0" name="AreaCode" type="s:string"/>
+          <s:element maxOccurs="1" minOccurs="0" name="PostCode" type="s:string"/>
+          <s:element maxOccurs="1" minOccurs="0" name="Corp" type="s:string"/>
+          <s:element maxOccurs="1" minOccurs="0" name="Card" type="s:string"/>
+        </s:sequence>
+      </s:complexType>
+      <s:element name="MobilePhone" nillable="true" type="n1:MobilePhone"/>
+    </s:schema>
+    <s:schema elementFormDefault="qualified" targetNamespace="http://webxml.com.cn/">
+      <s:element name="getStockInfo">
+        <s:complexType>
+          <s:sequence>
+            <s:element maxOccurs="1" minOccurs="0" name="theStockCode" type="s:string"/>
+            <s:element maxOccurs="1" minOccurs="0" name="userID" type="s:string"/>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="getStockInfoResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element maxOccurs="1" minOccurs="0" name="getStockInfoResult" type="n2:ArrayOfString"/>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="ArrayOfString">
+        <s:sequence>
+          <s:element maxOccurs="unbounded" minOccurs="0" name="string" nillable="true" type="s:string"/>
+        </s:sequence>
+      </s:complexType>
+    </s:schema>
+  </wsdl:types>
+  <wsdl:message name="optInputMsgName1">
+    <wsdl:part name="parameters" element="n2:getStockInfo">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="optOutputMsgName1">
+    <wsdl:part name="parameters" element="n2:getStockInfoResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="optInputMsgName2">
+    <wsdl:part name="parameters" element="n1:getInfoByMobilePhone">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="optOutputMsgName2">
+    <wsdl:part name="parameters" element="n1:getInfoByMobilePhoneResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:portType name="SMServiceSoap">
+    <wsdl:operation name="getInfoByMobilePhone">
+      <wsdl:input message="n1:optInputMsgName2">
+    </wsdl:input>
+      <wsdl:output message="n1:optOutputMsgName2">
+    </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getStockInfo">
+      <wsdl:input message="n1:optInputMsgName1">
+    </wsdl:input>
+      <wsdl:output message="n1:optOutputMsgName1">
+    </wsdl:output>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="SMServiceSoap" type="tns:SMServiceSoap">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="getInfoByMobilePhone">
+      <soap:operation soapAction="optSoapAction2" style="document"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="SMService">
+    <wsdl:port name="SMServiceSoap" binding="tns:SMServiceSoap">
+      <soap:address location="http://webservice.36wu.com/MobilePhoneService.asmx"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

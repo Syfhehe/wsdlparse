@@ -24,7 +24,7 @@ import java.util.Map.Entry;
 public class WSDLParser {
     
     public static void main(String args[]){
-        Map<String, ServiceOperation> map = WSDLParser.parseWSDL("./wsdlfile/SM1.wsdl",7,5);
+        Map<String, ServiceOperation> map = WSDLParser.parseWSDL("./wsdlfile/S1.wsdl",7,5);
         System.out.println("Map Size:"+map.size());
         Iterator iterator = map.entrySet().iterator();
         while(iterator.hasNext()){

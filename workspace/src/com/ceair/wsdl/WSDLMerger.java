@@ -58,8 +58,6 @@ public class WSDLMerger {
 
     }
 
-
-
     // namespace合并主要考虑两点：
     // 1.要是前缀不同， 内容一样，直接添加
     // 2.如果前缀一样， 内容不同，修改前缀再添加
@@ -255,7 +253,7 @@ public class WSDLMerger {
             Map.Entry srvEntry = (Entry) itr.next();
             Service service = (Service) srvEntry.getValue();
             service.setQName(new QName(def2.getNamespace("tns"), srvName));
-            Map portMap = def2.getAllServices();
+            Map portMap = service.getPorts();
             Iterator portItr = portMap.entrySet().iterator();
             while (portItr.hasNext()) {
                 Map.Entry portMapEntry = (Entry) portItr.next();
