@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import javax.wsdl.Binding;
 import javax.wsdl.BindingOperation;
@@ -16,7 +17,6 @@ import javax.wsdl.Fault;
 import javax.wsdl.Message;
 import javax.wsdl.Operation;
 import javax.wsdl.PortType;
-import javax.wsdl.BindingOperation;
 import javax.wsdl.WSDLException;
 import javax.wsdl.extensions.ExtensibilityElement;
 import javax.wsdl.factory.WSDLFactory;
@@ -52,11 +52,12 @@ public class WSDLCreater {
         serviceOperationList.add(serviceOperation1);
         serviceOperationList.add(serviceOperation2);
         ServiceVersion serviceVersion = new ServiceVersion(
-                FileUtil.file2String(new File("./wsdlfile/SM1.wsdl"), "utf-8"));
+                FileUtil.file2String(new File("./wsdlfile/SM1_withfault.wsdl"), "utf-8"));
         createWSDL(serviceOperationList, serviceVersion);
 
     }
 
+    @SuppressWarnings("unchecked")
     public static void createWSDL(List<ServiceOperation> serviceOperationList, ServiceVersion serviceVersion) {
         try {
             // 读取wsdl原始数据
@@ -71,12 +72,12 @@ public class WSDLCreater {
             Definition def = reader.readWSDL("", new InputSource(in_withcode));
             
             //遍历整个PortTypes
-            Iterator portTypeItr = def.getAllPortTypes().entrySet().iterator();
+            Iterator<Entry<QName, PortType>> portTypeItr = def.getAllPortTypes().entrySet().iterator();
             while (portTypeItr.hasNext()) {          
-                Map.Entry portTypeEntry = (Map.Entry) portTypeItr.next();
+                Entry<QName, PortType> portTypeEntry = portTypeItr.next();
                 PortType portType = (PortType) portTypeEntry.getValue();                                
                 // 新的Operation List用来替换原来的Operation
-                List<Operation> portTypeOperationListModify = new ArrayList();
+                List<Operation> portTypeOperationListModify = new ArrayList<Operation>();
                 //遍历porttype对应的Operation
                 Iterator<Operation> portTypeOperationItr = portType.getOperations().iterator();
                 while (portTypeOperationItr.hasNext()) {
@@ -91,14 +92,14 @@ public class WSDLCreater {
             
             // 修改 soap action,
             // binding--operation--bindingOperationElement(替换SoapAction)--operation（替换BindingOperation）--binding（替换binding）
-            Map bindingMap = def.getAllBindings();
-            Iterator bindingItr = bindingMap.entrySet().iterator();
+            Map<QName, Binding> bindingMap = def.getAllBindings();
+            Iterator<Entry<QName, Binding>> bindingItr = bindingMap.entrySet().iterator();
             while (bindingItr.hasNext()) {
-                Map.Entry bindingEntry = (Map.Entry) bindingItr.next();
+                Entry<QName, Binding> bindingEntry = bindingItr.next();
                 Binding binding = (Binding) bindingEntry.getValue();
                 // 新的Operation List用来替换原来的Operation
                 List<BindingOperation> bindingOperationListModify = new ArrayList<BindingOperation>();
-                Iterator bindingOperationItr = binding.getBindingOperations().iterator();
+                Iterator<Entry<QName, BindingOperation>> bindingOperationItr = binding.getBindingOperations().iterator();
                 while (bindingOperationItr.hasNext()) {
                     BindingOperation bindingOperation = (BindingOperation) bindingOperationItr.next();
                     ServiceOperation serviceOperation = getSvrOptByOptName(serviceOperationList, bindingOperation.getName());
@@ -123,13 +124,14 @@ public class WSDLCreater {
     }
     
     //删除PortType中已有的Operations 增加修改完的Operations
+    @SuppressWarnings("unchecked")
     private static PortType replaceOptsOfPortType(PortType portType, List<Operation> portTypeOptListModified){
-        Iterator portTypeItr = portType.getOperations().iterator();
+        Iterator<Operation> portTypeItr = portType.getOperations().iterator();
         while(portTypeItr.hasNext()){
             portTypeItr.next();
             portTypeItr.remove();
         }
-        Iterator portTypeOptListItr = portTypeOptListModified.iterator();
+        Iterator<Operation> portTypeOptListItr = portTypeOptListModified.iterator();
         while(portTypeOptListItr.hasNext()){
             portType.addOperation((Operation) portTypeOptListItr.next());
         }
@@ -137,13 +139,14 @@ public class WSDLCreater {
     }
     
     //删除binding中已有的Binding Operations 增加修改完的Operations
+    @SuppressWarnings("unchecked")
     private static Binding replaceOptsOfBinding(Binding binding, List<BindingOperation> bindingOperationListModify){
-        Iterator bindingOptsItr = binding.getBindingOperations().iterator();
+        Iterator<Entry<QName, BindingOperation>> bindingOptsItr = binding.getBindingOperations().iterator();
         while(bindingOptsItr.hasNext()){
             bindingOptsItr.next();
             bindingOptsItr.remove();
         }
-        Iterator bindingOperationListItr = bindingOperationListModify.iterator();
+        Iterator<BindingOperation> bindingOperationListItr = bindingOperationListModify.iterator();
         while(bindingOperationListItr.hasNext()){
             binding.addBindingOperation((BindingOperation) bindingOperationListItr.next());
         }
@@ -151,6 +154,7 @@ public class WSDLCreater {
     }
     
     //替换Operation中的input output fault信息，但是要是修改的namespace没有定义 那就会报错
+    @SuppressWarnings("unchecked")
     private static Operation replaceOptElement(ServiceOperation srvOpt, Operation portTypeOperation){
         if (srvOpt != null) {
             // 修改 input message
@@ -166,10 +170,10 @@ public class WSDLCreater {
                 messageOutput.setQName(qNameOutput);
             }
             // 修改 fault message
-            Map faultMap = portTypeOperation.getFaults();
-            Iterator faultItr = faultMap.entrySet().iterator();
+            Map<QName, Fault> faultMap = portTypeOperation.getFaults();
+            Iterator<Entry<QName, Fault>> faultItr = faultMap.entrySet().iterator();
             while (faultItr.hasNext()) {
-                Map.Entry faultEntry = (Map.Entry) faultItr.next();
+                Entry<QName, Fault> faultEntry = faultItr.next();
                 Fault fault = (Fault) faultEntry.getValue();
                 Message faultMessage = fault.getMessage();
                 faultMessage.setQName(new QName(srvOpt.getOptFaultMsgNs(), srvOpt.getOptFaultMsgName()));
