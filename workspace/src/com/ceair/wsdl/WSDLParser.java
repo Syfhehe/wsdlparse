@@ -24,7 +24,9 @@ import java.util.Map.Entry;
 public class WSDLParser {
     
     public static void main(String args[]){
-        Map<String, ServiceOperation> map = WSDLParser.parseWSDL("./wsdlfile/S1.wsdl",7,5);
+        //Map<String, ServiceOperation> map = WSDLParser.parseWSDL("./wsdlfile/SM1.wsdl",7,5);
+        Map<String, ServiceOperation> map = WSDLParser.parseWSDL("./wsdlfile/35wsdl/AirScheduleService.wsdl",7,5);
+
         System.out.println("Map Size:"+map.size());
         Iterator iterator = map.entrySet().iterator();
         while(iterator.hasNext()){
@@ -62,9 +64,10 @@ public class WSDLParser {
         serviceVersion.setWsdlClob(wsdlclob);
     }
 
+    @SuppressWarnings("unchecked")
     public static Map<String, ServiceOperation> parseWSDL(String wsdlLocation, int srvID, int srvVerID) {
 
-        Map<String, ServiceOperation> srvOptMap = new HashMap();
+        Map<String, ServiceOperation> srvOptMap = new HashMap<String, ServiceOperation>();
         
         try {
             //对应SOAP_ACTION, PROTOCOL_TYPE, ENDPOINT
@@ -78,27 +81,28 @@ public class WSDLParser {
             reader.setFeature("javax.wsdl.importDocuments", true);
             Definition def = reader.readWSDL(wsdlLocation);
             //解析service————port（获取ENDPOINT）————binding（获取PROTOCOL_TYPE）——operation（获取 SOAP_ACTION）
-            Map serviceMap = def.getAllServices();
-            Iterator serviceItr = serviceMap.entrySet().iterator();
+            Map<QName, Service> serviceMap = def.getAllServices();
+            Iterator<Entry<QName, Service>> serviceItr = serviceMap.entrySet().iterator();
             while (serviceItr.hasNext()) {
-                Map.Entry svcEntry = (Map.Entry) serviceItr.next();
+                Entry<QName, Service> svcEntry = serviceItr.next();
                 Service svc = (Service) svcEntry.getValue();
-                Map portMap = svc.getPorts();
-                Iterator portItr = portMap.entrySet().iterator();
+                Map<String, Binding> portMap = svc.getPorts();
+                Iterator<Entry<String, Binding>> portItr = portMap.entrySet().iterator();
                 while (portItr.hasNext()) {
-                    Map.Entry portEntry = (Map.Entry) portItr.next();
+                    Entry<String, Binding> portEntry =  portItr.next();
                     Port port = (Port) portEntry.getValue();
                     ExtensibilityElement extensibilityElement = (ExtensibilityElement) port.getExtensibilityElements()
                             .get(0);
                     addressURI = getAddressUrl(extensibilityElement);
-                    System.out.println("addressURI:" + addressURI);
+                    System.out.println("addressURI:" + addressURI);                   
+                    
                     Binding binding = port.getBinding();
                     ExtensibilityElement bindingElement = (ExtensibilityElement) binding.getExtensibilityElements()
                             .get(0);
                     transportURI = getTransportURI(bindingElement);
                     System.out.println("transportURI:" + transportURI);
-                    List bindingOperations = binding.getBindingOperations();
-                    Iterator bindingOperationItr = bindingOperations.iterator();
+                    List<BindingOperation> bindingOperations = binding.getBindingOperations();
+                    Iterator<BindingOperation> bindingOperationItr = bindingOperations.iterator();
                     while (bindingOperationItr.hasNext()) {
                         ServiceOperation tempServiceOperation = new ServiceOperation();
                         BindingOperation bindingOperation = (BindingOperation) bindingOperationItr.next();
@@ -112,7 +116,8 @@ public class WSDLParser {
 
                         tempServiceOperation.setOptSrcSoapAction(soapActionURI);
                         tempServiceOperation.setOptSoapAction(soapActionURI);
-                        tempServiceOperation.setProtocolType(transportURI);
+                        String protocolTypeString = getProtocolTypeString(addressURI);
+                        tempServiceOperation.setProtocolType(protocolTypeString);
                         tempServiceOperation.setEndpoint(addressURI);
                         tempServiceOperation.setFormateType("SOAP");
                         tempServiceOperation.setOptSrcEnName(bindingOperation.getName().toString());
@@ -125,10 +130,10 @@ public class WSDLParser {
                 }
             }
             //解析service————port（获取ENDPOINT）————binding（获取PROTOCOL_TYPE）——operation（获取 SOAP_ACTION）
-            Map portTypeMap = def.getAllPortTypes();
-            Iterator portTypeItr = portTypeMap.entrySet().iterator();
+            Map<QName, PortType> portTypeMap = def.getAllPortTypes();
+            Iterator<Entry<QName, PortType>> portTypeItr = portTypeMap.entrySet().iterator();
             while (portTypeItr.hasNext()) {
-                Map.Entry portTypeEntry = (Map.Entry) portTypeItr.next();
+                Entry<QName, PortType> portTypeEntry =  portTypeItr.next();
                 PortType portType = (PortType) portTypeEntry.getValue();
                 List<Operation> portTypeOperationList = portType.getOperations();
                 Iterator<Operation> portTypeOperationItr = portTypeOperationList.iterator();
@@ -144,11 +149,11 @@ public class WSDLParser {
                     System.out.println("OutputNameSpace:" + qnameOutput.getNamespaceURI());
                     System.out.println("OutputName:" + qnameOutput.getLocalPart());
 
-                    Map faultMap = portTypeOperation.getFaults();
-                    Iterator faultItr = faultMap.entrySet().iterator();
+                    Map<QName, Fault> faultMap = portTypeOperation.getFaults();
+                    Iterator<Entry<QName, Fault>> faultItr = faultMap.entrySet().iterator();
                     // fault按照一个做
                     while (faultItr.hasNext()) {
-                        Map.Entry faultEntry = (Map.Entry) faultItr.next();
+                        Entry<QName, Fault> faultEntry =  faultItr.next();
                         Fault fault = (Fault) faultEntry.getValue();
                         System.out.println("FaultNameSpace:" + fault.getMessage().getQName().getNamespaceURI());
                         System.out.println("FaultName:" + fault.getMessage().getQName().getLocalPart());
@@ -177,6 +182,11 @@ public class WSDLParser {
             e.printStackTrace();
         }
         return srvOptMap;
+    }
+
+    private static String getProtocolTypeString(String addressURI) {
+        String[] temp = addressURI.split(":");        
+        return temp[0];
     }
 
     private static String getTransportURI(ExtensibilityElement bindingElement) {

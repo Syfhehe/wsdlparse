@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions name="IcsService" targetNamespace="http://service.basic.pss.ceair.com/" xmlns:ns1="http://schemas.xmlsoap.org/soap/http" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="http://service.basic.pss.ceair.com/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <wsdl:types>
+<xs:schema attributeFormDefault="unqualified" elementFormDefault="unqualified" targetNamespace="http://service.basic.pss.ceair.com/" xmlns:tns="http://service.basic.pss.ceair.com/" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:complexType name="icsRQ">
+    <xs:sequence>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="queryInformation" nillable="true" type="tns:queryInformation"/>
+      <xs:element minOccurs="0" name="usrID" type="xs:string"/>
+      <xs:element minOccurs="0" name="usrPwd" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="queryInformation">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="CARRIER_CD" type="xs:string"/>
+      <xs:element minOccurs="0" name="FLT_DT" type="xs:string"/>
+      <xs:element minOccurs="0" name="DEST_AIRPORT_CD" type="xs:string"/>
+      <xs:element minOccurs="0" name="FLT_NBR" type="xs:string"/>
+      <xs:element minOccurs="0" name="ORIG_AIRPORT_CD" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="icsRS">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="comment" type="xs:string"/>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="ics" nillable="true" type="tns:ics"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="ics">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="AIRCRAFT_TYPE" type="xs:string"/>
+      <xs:element minOccurs="0" name="ARV_SCHEDULE" type="xs:string"/>
+      <xs:element minOccurs="0" name="CABIN_1_BKD" type="xs:int"/>
+      <xs:element minOccurs="0" name="CABIN_1_BKD_LEG" type="xs:int"/>
+      <xs:element minOccurs="0" name="CABIN_1_CAP" type="xs:int"/>
+      <xs:element minOccurs="0" name="CABIN_1_CD" type="xs:string"/>
+      <xs:element minOccurs="0" name="CABIN_1_GROUP" type="xs:int"/>
+      <xs:element minOccurs="0" name="CABIN_1_SERVICE" type="xs:string"/>
+      <xs:element minOccurs="0" name="CABIN_2_BKD" type="xs:int"/>
+      <xs:element minOccurs="0" name="CABIN_2_BKD_LEG" type="xs:int"/>
+      <xs:element minOccurs="0" name="CABIN_2_CAP" type="xs:int"/>
+      <xs:element minOccurs="0" name="CABIN_2_CD" type="xs:string"/>
+      <xs:element minOccurs="0" name="CABIN_2_GROUP" type="xs:int"/>
+      <xs:element minOccurs="0" name="CABIN_2_SERVICE" type="xs:string"/>
+      <xs:element minOccurs="0" name="CABIN_3_BKD" type="xs:int"/>
+      <xs:element minOccurs="0" name="CABIN_3_BKD_LEG" type="xs:int"/>
+      <xs:element minOccurs="0" name="CABIN_3_CAP" type="xs:int"/>
+      <xs:element minOccurs="0" name="CABIN_3_CD" type="xs:string"/>
+      <xs:element minOccurs="0" name="CABIN_3_GROUP" type="xs:int"/>
+      <xs:element minOccurs="0" name="CABIN_3_SERVICE" type="xs:string"/>
+      <xs:element minOccurs="0" name="CARRIER_CD" type="xs:string"/>
+      <xs:element minOccurs="0" name="CARRIER_OP" type="xs:string"/>
+      <xs:element minOccurs="0" name="DAYS_CHANGE" type="xs:int"/>
+      <xs:element minOccurs="0" name="DEST_AIRPORT_CD" type="xs:string"/>
+      <xs:element minOccurs="0" name="DISTANCE" type="xs:int"/>
+      <xs:element minOccurs="0" name="DPT_SCHEDULE" type="xs:string"/>
+      <xs:element minOccurs="0" name="FLT_DT" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="FLT_NBR" type="xs:string"/>
+      <xs:element minOccurs="0" name="FLT_NBR_OP" type="xs:string"/>
+      <xs:element minOccurs="0" name="FLT_TYPE" type="xs:string"/>
+      <xs:element minOccurs="0" name="LEG_IND" type="xs:string"/>
+      <xs:element minOccurs="0" name="LINE_CD" type="xs:string"/>
+      <xs:element minOccurs="0" name="ORIG_AIRPORT_CD" type="xs:string"/>
+      <xs:element minOccurs="0" name="UPDATED_TIME" type="xs:dateTime"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="queryIcs" type="tns:queryIcs"/>
+  <xs:complexType name="queryIcs">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="arg0" type="tns:icsRQ"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="queryIcsResponse" type="tns:queryIcsResponse"/>
+  <xs:complexType name="queryIcsResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="return" type="tns:icsRS"/>
+    </xs:sequence>
+  </xs:complexType>
+</xs:schema>
+  </wsdl:types>
+  <wsdl:message name="queryIcs">
+    <wsdl:part element="tns:queryIcs" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="queryIcsResponse">
+    <wsdl:part element="tns:queryIcsResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:portType name="IcsServicePortType">
+    <wsdl:operation name="queryIcs">
+      <wsdl:input message="tns:queryIcs" name="queryIcs">
+    </wsdl:input>
+      <wsdl:output message="tns:queryIcsResponse" name="queryIcsResponse">
+    </wsdl:output>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="IcsServiceSoapBinding" type="tns:IcsServicePortType">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="queryIcs">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="queryIcs">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="queryIcsResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="IcsService">
+    <wsdl:port binding="tns:IcsServiceSoapBinding" name="IcsServicePort">
+      <soap:address location="http://172.31.3.194:7602/basiccs/ws/com.ceair.pss.basic.service.IcsService"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

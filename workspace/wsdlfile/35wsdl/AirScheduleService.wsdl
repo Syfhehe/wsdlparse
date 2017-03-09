@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions name="AirScheduleService" targetNamespace="http://service.basic.pss.ceair.com/" xmlns:ns1="http://schemas.xmlsoap.org/soap/http" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="http://service.basic.pss.ceair.com/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <wsdl:types>
+<xs:schema attributeFormDefault="unqualified" elementFormDefault="unqualified" targetNamespace="http://service.basic.pss.ceair.com/" xmlns:tns="http://service.basic.pss.ceair.com/" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:complexType name="airScheduleRQ">
+    <xs:sequence>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="queryInformation" nillable="true" type="tns:queryInformation"/>
+      <xs:element minOccurs="0" name="usrID" type="xs:string"/>
+      <xs:element minOccurs="0" name="usrPwd" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="queryInformation">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="CARRIER_CD" type="xs:string"/>
+      <xs:element minOccurs="0" name="FLT_DT" type="xs:string"/>
+      <xs:element minOccurs="0" name="DEST_AIRPORT_CD" type="xs:string"/>
+      <xs:element minOccurs="0" name="FLT_NBR" type="xs:string"/>
+      <xs:element minOccurs="0" name="ORIG_AIRPORT_CD" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="airScheduleRS">
+    <xs:sequence>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="airSchedule" nillable="true" type="tns:airSchedule"/>
+      <xs:element minOccurs="0" name="comment" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="airSchedule">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="AC_TYPE" type="xs:string"/>
+      <xs:element minOccurs="0" name="DEST_AIRPORT_CD" type="xs:string"/>
+      <xs:element minOccurs="0" name="CARRIER_CD" type="xs:string"/>
+      <xs:element minOccurs="0" name="ORIG_AIRPORT_CD" type="xs:string"/>
+      <xs:element minOccurs="0" name="FLIGHT_NO_FIS" type="xs:string"/>
+      <xs:element minOccurs="0" name="FLIGHT_TYPE" type="xs:string"/>
+      <xs:element minOccurs="0" name="FLT_DT" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="FLT_NBR" type="xs:string"/>
+      <xs:element minOccurs="0" name="TAIL_NO" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="queryAirSchedule" type="tns:queryAirSchedule"/>
+  <xs:complexType name="queryAirSchedule">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="arg0" type="tns:airScheduleRQ"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="queryAirScheduleResponse" type="tns:queryAirScheduleResponse"/>
+  <xs:complexType name="queryAirScheduleResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="return" type="tns:airScheduleRS"/>
+    </xs:sequence>
+  </xs:complexType>
+</xs:schema>
+  </wsdl:types>
+  <wsdl:message name="queryAirScheduleResponse">
+    <wsdl:part element="tns:queryAirScheduleResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="queryAirSchedule">
+    <wsdl:part element="tns:queryAirSchedule" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  
+  <wsdl:message name="queryAirScheduleResponseFault">
+    <wsdl:part element="tns:queryAirSchedule" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  
+  <wsdl:portType name="AirScheduleServicePortType">
+    <wsdl:operation name="queryAirSchedule">
+      <wsdl:input message="tns:queryAirSchedule" name="queryAirSchedule">
+    </wsdl:input>
+      <wsdl:output message="tns:queryAirScheduleResponse" name="queryAirScheduleResponse">
+    </wsdl:output>
+	  <wsdl:fault message="tns:queryAirScheduleResponseFault" name="queryAirScheduleResponseFault">
+    </wsdl:fault>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="AirScheduleServiceSoapBinding" type="tns:AirScheduleServicePortType">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="queryAirSchedule">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="queryAirSchedule">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="queryAirScheduleResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+	  <wsdl:fault name="queryAirScheduleResponseFault">
+        <soap:fault use="literal"/>
+      </wsdl:fault>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="AirScheduleService">
+    <wsdl:port binding="tns:AirScheduleServiceSoapBinding" name="AirScheduleServicePort">
+      <soap:address location="http://172.31.3.194:7602/basiccs/ws/com.ceair.pss.basic.service.AirScheduleService"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

@@ -9,7 +9,6 @@ import java.util.Map.Entry;
 import javax.wsdl.Binding;
 import javax.wsdl.Definition;
 import javax.wsdl.Fault;
-import javax.wsdl.Input;
 import javax.wsdl.Message;
 import javax.wsdl.Operation;
 import javax.wsdl.Port;
@@ -21,7 +20,6 @@ import javax.wsdl.factory.WSDLFactory;
 import javax.wsdl.xml.WSDLReader;
 import javax.wsdl.xml.WSDLWriter;
 import javax.xml.namespace.QName;
-import javax.xml.transform.Templates;
 
 public class WSDLMerger {
 
@@ -61,6 +59,7 @@ public class WSDLMerger {
     // namespace合并主要考虑两点：
     // 1.要是前缀不同， 内容一样，直接添加
     // 2.如果前缀一样， 内容不同，修改前缀再添加
+    @SuppressWarnings({ "rawtypes", "unchecked" })
     private static Definition mergeNamespace(Definition def1, Definition def2, String targetNameSpace) {
         Map<String, String> namespaceMap1 = def1.getNamespaces();
         Map<String, String> namespaceMap2 = def2.getNamespaces();
@@ -111,6 +110,7 @@ public class WSDLMerger {
     }
 
     // 合并types下面的schema
+    @SuppressWarnings("rawtypes")
     private static Definition mergeSchema(Definition def1, Definition def2) {
         List eleList1 = def1.getTypes().getExtensibilityElements();
         Iterator eleItr1 = eleList1.iterator();
@@ -121,6 +121,7 @@ public class WSDLMerger {
     }
 
     // 需要 考虑名称一样的情况 如果名称一样 那就需要改成不一样 输入参数一 加后缀“1”，参数二加后缀“2”
+    @SuppressWarnings({ "rawtypes", "unchecked" })
     private static Definition mergeMessage(Definition def1, Definition def2) {
         Map msgMap1 = def1.getMessages();
         Map msgMap2 = def2.getMessages();
@@ -160,6 +161,7 @@ public class WSDLMerger {
     }
 
     // 针对只有porttype一个的情况
+    @SuppressWarnings({ "rawtypes", "unchecked" })
     private static Definition mergePortType(Definition def1, Definition def2, String portName) {
         PortType portType1 = null;
         PortType portType2 = null;
@@ -216,6 +218,7 @@ public class WSDLMerger {
     }
 
     // 合并单个binding下面的Operation
+    @SuppressWarnings({ "rawtypes", "unchecked" })
     private static Definition mergeBinding(Definition def1, Definition def2, String portName) {
         Binding binding1 = null;
         Binding binding2 = null;
@@ -246,6 +249,7 @@ public class WSDLMerger {
     }
     
     // 合并服务 用主的
+    @SuppressWarnings({ "rawtypes" })
     private static Definition mergeService(Definition def2, String srvName, String portName) {
         Map srvmap = def2.getAllServices();
         Iterator itr = srvmap.entrySet().iterator();

@@ -52,7 +52,7 @@ public class WSDLCreater {
         serviceOperationList.add(serviceOperation1);
         serviceOperationList.add(serviceOperation2);
         ServiceVersion serviceVersion = new ServiceVersion(
-                FileUtil.file2String(new File("./wsdlfile/SM1_withfault.wsdl"), "utf-8"));
+                FileUtil.file2String(new File("./wsdlfile/SM1.wsdl"), "utf-8"));
         createWSDL(serviceOperationList, serviceVersion);
 
     }
@@ -75,7 +75,6 @@ public class WSDLCreater {
             while (portTypeItr.hasNext()) {          
                 Map.Entry portTypeEntry = (Map.Entry) portTypeItr.next();
                 PortType portType = (PortType) portTypeEntry.getValue();                                
-                QName portTypeQname = (QName) portTypeEntry.getKey();
                 // 新的Operation List用来替换原来的Operation
                 List<Operation> portTypeOperationListModify = new ArrayList();
                 //遍历porttype对应的Operation

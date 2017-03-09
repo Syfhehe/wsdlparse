@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions name="DdfService" targetNamespace="http://service.basic.pss.ceair.com/" xmlns:ns1="http://schemas.xmlsoap.org/soap/http" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="http://service.basic.pss.ceair.com/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <wsdl:types>
+<xs:schema attributeFormDefault="unqualified" elementFormDefault="unqualified" targetNamespace="http://service.basic.pss.ceair.com/" xmlns:tns="http://service.basic.pss.ceair.com/" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:complexType name="ddfRQ">
+    <xs:sequence>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="ddfQuery" nillable="true" type="tns:ddfQuery"/>
+      <xs:element minOccurs="0" name="usrID" type="xs:string"/>
+      <xs:element minOccurs="0" name="usrPwd" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="ddfQuery">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="STATUS" type="xs:string"/>
+      <xs:element minOccurs="0" name="TAIL_NO" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="ddfRS">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="comment" type="xs:string"/>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="ddf" nillable="true" type="tns:ddf"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="ddf">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="ATA_DESC" type="xs:string"/>
+      <xs:element minOccurs="0" name="CRDAT" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="CRTIM" type="xs:string"/>
+      <xs:element minOccurs="0" name="CREATED_TIME" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="DDF_CD" type="xs:string"/>
+      <xs:element minOccurs="0" name="DDF_DESC" type="xs:string"/>
+      <xs:element minOccurs="0" name="DDF_STATUS" type="xs:string"/>
+      <xs:element minOccurs="0" name="END_TIME" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="MDNUM" type="xs:string"/>
+      <xs:element minOccurs="0" name="MUID" type="xs:string"/>
+      <xs:element minOccurs="0" name="START_TIME" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="TAIL_NO" type="xs:string"/>
+      <xs:element minOccurs="0" name="TASK_ACTYPE" type="xs:string"/>
+      <xs:element minOccurs="0" name="TASK_CODE" type="xs:string"/>
+      <xs:element minOccurs="0" name="UPDATED_TIME" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="ZAPPDT" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="ZAPPER" type="xs:string"/>
+      <xs:element minOccurs="0" name="ZAPRDT" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="ZAPRER" type="xs:string"/>
+      <xs:element minOccurs="0" name="ZAPRTM" type="xs:string"/>
+      <xs:element minOccurs="0" name="ZAYQDT" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="ZBLCLA" type="xs:string"/>
+      <xs:element minOccurs="0" name="ZBLTH" type="xs:string"/>
+      <xs:element minOccurs="0" name="ZBYQDT" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="ZCHNNM" type="xs:string"/>
+      <xs:element minOccurs="0" name="ZCLBM" type="xs:string"/>
+      <xs:element minOccurs="0" name="ZCLBMCHN" type="xs:string"/>
+      <xs:element minOccurs="0" name="ZCLER" type="xs:string"/>
+      <xs:element minOccurs="0" name="ZCLTH" type="xs:string"/>
+      <xs:element minOccurs="0" name="ZDDFFC" type="xs:int"/>
+      <xs:element minOccurs="0" name="ZDDFFH" type="xs:int"/>
+      <xs:element minOccurs="0" name="ZDEFBS" type="xs:string"/>
+      <xs:element minOccurs="0" name="ZDEFR" type="xs:string"/>
+      <xs:element minOccurs="0" name="ZDWMC" type="xs:string"/>
+      <xs:element minOccurs="0" name="ZFL_DATE" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="ZIFHC" type="xs:string"/>
+      <xs:element minOccurs="0" name="ZIFKCL" type="xs:string"/>
+      <xs:element minOccurs="0" name="ZIFRW" type="xs:string"/>
+      <xs:element minOccurs="0" name="ZIFXZ" type="xs:string"/>
+      <xs:element minOccurs="0" name="ZMITEM" type="xs:string"/>
+      <xs:element minOccurs="0" name="ZOITEM" type="xs:string"/>
+      <xs:element minOccurs="0" name="ZOPLIMIT" type="xs:string"/>
+      <xs:element minOccurs="0" name="ZPGFA" type="xs:string"/>
+      <xs:element minOccurs="0" name="ZREMARK" type="xs:string"/>
+      <xs:element minOccurs="0" name="ZSPLX" type="xs:string"/>
+      <xs:element minOccurs="0" name="ZSZBM" type="xs:string"/>
+      <xs:element minOccurs="0" name="ZTHDAT" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="ZTHER" type="xs:string"/>
+      <xs:element minOccurs="0" name="ZTHTIM" type="xs:string"/>
+      <xs:element minOccurs="0" name="ZTJER" type="xs:string"/>
+      <xs:element minOccurs="0" name="ZTJRQ" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="ZTJTIM" type="xs:string"/>
+      <xs:element minOccurs="0" name="ZTKREC" type="xs:string"/>
+      <xs:element minOccurs="0" name="ZTSNZCSN" type="xs:string"/>
+      <xs:element minOccurs="0" name="ZUDNAM" type="xs:string"/>
+      <xs:element minOccurs="0" name="ZWXDW" type="xs:string"/>
+      <xs:element minOccurs="0" name="ZXZID" type="xs:string"/>
+      <xs:element minOccurs="0" name="ZYQDD" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="ZYQER" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="queryDdf" type="tns:queryDdf"/>
+  <xs:complexType name="queryDdf">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="arg0" type="tns:ddfRQ"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="queryDdfResponse" type="tns:queryDdfResponse"/>
+  <xs:complexType name="queryDdfResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="return" type="tns:ddfRS"/>
+    </xs:sequence>
+  </xs:complexType>
+</xs:schema>
+  </wsdl:types>
+  <wsdl:message name="queryDdfResponse">
+    <wsdl:part element="tns:queryDdfResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="queryDdf">
+    <wsdl:part element="tns:queryDdf" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:portType name="DdfServicePortType">
+    <wsdl:operation name="queryDdf">
+      <wsdl:input message="tns:queryDdf" name="queryDdf">
+    </wsdl:input>
+      <wsdl:output message="tns:queryDdfResponse" name="queryDdfResponse">
+    </wsdl:output>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="DdfServiceSoapBinding" type="tns:DdfServicePortType">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="queryDdf">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="queryDdf">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="queryDdfResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="DdfService">
+    <wsdl:port binding="tns:DdfServiceSoapBinding" name="DdfServicePort">
+      <soap:address location="http://172.31.3.194:7602/basiccs/ws/com.ceair.pss.basic.service.DdfService"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>
