@@ -30,10 +30,14 @@
   <wsdl:message name="getStockInfoSoapOut">
     <wsdl:part name="parameters" element="tns:getStockInfoResponse"/>
   </wsdl:message>
+  <wsdl:message name="getStockInfoSoapfault">
+    <wsdl:part name="parameters" element="tns:getStockInfoResponse"/>
+  </wsdl:message>
   <wsdl:portType name="StockInfoWSSoap">
     <wsdl:operation name="getStockInfo">
       <wsdl:input message="tns:getStockInfoSoapIn"/>
       <wsdl:output message="tns:getStockInfoSoapOut"/>
+	  <wsdl:fault message="tns:getStockInfoSoapfault"/>
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="StockInfoWSSoap" type="tns:StockInfoWSSoap">
@@ -46,6 +50,9 @@
       <wsdl:output>
         <soap:body use="literal"/>
       </wsdl:output>
+	  <wsdl:fault>
+        <soap:fault use="literal"/>
+      </wsdl:fault>
     </wsdl:operation>
   </wsdl:binding>
   <wsdl:service name="StockInfoWS">

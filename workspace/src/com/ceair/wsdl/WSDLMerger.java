@@ -1,5 +1,9 @@
 package com.ceair.wsdl;
 
+import java.io.ByteArrayOutputStream;
+import java.io.FileOutputStream;
+import java.io.OutputStream;
+import java.io.Writer;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -7,6 +11,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import javax.wsdl.Binding;
+import javax.wsdl.BindingOperation;
 import javax.wsdl.Definition;
 import javax.wsdl.Fault;
 import javax.wsdl.Message;
@@ -24,10 +29,11 @@ import javax.xml.namespace.QName;
 public class WSDLMerger {
 
     public static void main(String args[]) {
-        mergeWSDL("./wsdlfile/S1.wsdl", "./wsdlfile/M1.wsdl", "SMService", "SMServiceSoap","www.cea.com");
+        mergeWSDL("./wsdlfile/S1.wsdl", "./wsdlfile/SM1.wsdl", "SMService", "SMServiceSoap", "www.cea.com");
     }
 
-    public static Definition mergeWSDL(String filepath1, String filepath2, String srvName, String portName, String targetNameSpace) {
+    public static Definition mergeWSDL(String filepath1, String filepath2, String srvName, String portName,
+            String targetNameSpace) {
         WSDLFactory factory;
         try {
             factory = WSDLFactory.newInstance();
@@ -42,10 +48,17 @@ public class WSDLMerger {
             def2 = mergeNamespace(def1, def2, targetNameSpace);
             def2 = mergeSchema(def1, def2);
             def2 = mergeMessage(def1, def2);
-            def2 = mergePortType(def1, def2, portName);            
+            def2 = mergePortType(def1, def2, portName);
             def2 = mergeBinding(def1, def2, portName);
             def2 = mergeService(def2, srvName, portName);
+            
             wirter.writeWSDL(def2, System.out);
+            
+            OutputStream wsdlString = new ByteArrayOutputStream();
+            wirter.writeWSDL(def2,  wsdlString); 
+            wsdlString.toString();
+            
+            System.out.println(wsdlString.toString());
 
             return def2;
 
@@ -59,7 +72,7 @@ public class WSDLMerger {
     // namespace合并主要考虑两点：
     // 1.要是前缀不同， 内容一样，直接添加
     // 2.如果前缀一样， 内容不同，修改前缀再添加
-    @SuppressWarnings({ "rawtypes", "unchecked" })
+    @SuppressWarnings({ "unchecked" })
     private static Definition mergeNamespace(Definition def1, Definition def2, String targetNameSpace) {
         Map<String, String> namespaceMap1 = def1.getNamespaces();
         Map<String, String> namespaceMap2 = def2.getNamespaces();
@@ -100,9 +113,9 @@ public class WSDLMerger {
         }
         def2.addNamespace("tns", targetNameSpace);
         // 输出结果 查看是否正确
-        Iterator namespaceItr2 = namespaceMap2.entrySet().iterator();
+        Iterator<Entry<String, String>> namespaceItr2 = namespaceMap2.entrySet().iterator();
         while (namespaceItr2.hasNext()) {
-            Entry namespaceEntry2 = (Map.Entry) namespaceItr2.next();
+            Entry<String, String> namespaceEntry2 = namespaceItr2.next();
             System.out.println(namespaceEntry2.getKey() + ":" + namespaceEntry2.getValue());
         }
         System.out.println("targetNamespace:" + def2.getTargetNamespace());
@@ -110,10 +123,10 @@ public class WSDLMerger {
     }
 
     // 合并types下面的schema
-    @SuppressWarnings("rawtypes")
+    @SuppressWarnings("unchecked")
     private static Definition mergeSchema(Definition def1, Definition def2) {
-        List eleList1 = def1.getTypes().getExtensibilityElements();
-        Iterator eleItr1 = eleList1.iterator();
+        List<ExtensibilityElement> eleList1 = def1.getTypes().getExtensibilityElements();
+        Iterator<ExtensibilityElement> eleItr1 = eleList1.iterator();
         while (eleItr1.hasNext()) {
             def2.getTypes().addExtensibilityElement((ExtensibilityElement) eleItr1.next());
         }
@@ -121,15 +134,15 @@ public class WSDLMerger {
     }
 
     // 需要 考虑名称一样的情况 如果名称一样 那就需要改成不一样 输入参数一 加后缀“1”，参数二加后缀“2”
-    @SuppressWarnings({ "rawtypes", "unchecked" })
+    @SuppressWarnings("unchecked")
     private static Definition mergeMessage(Definition def1, Definition def2) {
-        Map msgMap1 = def1.getMessages();
-        Map msgMap2 = def2.getMessages();
+        Map<QName, Message> msgMap1 = def1.getMessages();
+        Map<QName, Message> msgMap2 = def2.getMessages();
         // message的名称和实际内容不一样的情况 把key都保存下来
-        List keyList = new ArrayList<String>();
-        Iterator<Entry> iter1 = msgMap1.entrySet().iterator();
+        List<QName> keyList = new ArrayList<QName>();
+        Iterator<Entry<QName, Message>> iter1 = msgMap1.entrySet().iterator();
         while (iter1.hasNext()) {
-            Map.Entry entry1 = (Entry) iter1.next();
+            Entry<QName, Message> entry1 = iter1.next();
             String m1value = entry1.getValue() == null ? "" : entry1.getValue().toString();
             String m2value = msgMap2.get(entry1.getKey()) == null ? "" : msgMap2.get(entry1.getKey()).toString();
             if (!m1value.equals(m2value) && (!m1value.equals("")) && (!m2value.equals(""))) {// 若两个map中相同key对应的value不相等
@@ -138,7 +151,7 @@ public class WSDLMerger {
             }
         }
         // 如果有名字一样的情况 如果namespace也一样 就更名 不一样就不管
-        Iterator keyListItr = keyList.iterator();
+        Iterator<QName> keyListItr = keyList.iterator();
         while (keyListItr.hasNext()) {
             // 所有可能重名的key
             QName key = (QName) keyListItr.next();
@@ -161,7 +174,7 @@ public class WSDLMerger {
     }
 
     // 针对只有porttype一个的情况
-    @SuppressWarnings({ "rawtypes", "unchecked" })
+    @SuppressWarnings("unchecked")
     private static Definition mergePortType(Definition def1, Definition def2, String portName) {
         PortType portType1 = null;
         PortType portType2 = null;
@@ -170,20 +183,20 @@ public class WSDLMerger {
         List<Operation> optlistAll = null;
 
         // 获取def1下portType的所有operation
-        Map porttypesMap1 = def1.getAllPortTypes();
-        Iterator itr = porttypesMap1.entrySet().iterator();
+        Map<QName, PortType> porttypesMap1 = def1.getAllPortTypes();
+        Iterator<Entry<QName, PortType>> itr = porttypesMap1.entrySet().iterator();
         while (itr.hasNext()) {
-            Map.Entry portTypeEntry = (Entry) itr.next();
+            Entry<QName, PortType> portTypeEntry = itr.next();
             portType1 = (PortType) portTypeEntry.getValue();
             optlist1 = portType1.getOperations();
             break;
         }
 
         // 添加到def2中去
-        Map porttypesMap2 = def2.getAllPortTypes();
-        Iterator itr2 = porttypesMap2.entrySet().iterator();
+        Map<QName, PortType> porttypesMap2 = def2.getAllPortTypes();
+        Iterator<Entry<QName, PortType>> itr2 = porttypesMap2.entrySet().iterator();
         while (itr2.hasNext()) {
-            Map.Entry portTypeEntry = (Entry) itr2.next();
+            Entry<QName, PortType> portTypeEntry = itr2.next();
             portTypeQname2 = (QName) portTypeEntry.getKey();
             portType2 = (PortType) portTypeEntry.getValue();
             portType2.getOperations().addAll(optlist1);
@@ -197,10 +210,10 @@ public class WSDLMerger {
             Message inputMessage = tempOpt.getInput().getMessage();
             Message outputMessage = tempOpt.getOutput().getMessage();
 
-            Map faultMap = tempOpt.getFaults();
-            Iterator faultItr = faultMap.entrySet().iterator();
+            Map<QName, Fault> faultMap = tempOpt.getFaults();
+            Iterator<Entry<QName, Fault>> faultItr = faultMap.entrySet().iterator();
             while (faultItr.hasNext()) {
-                Map.Entry faultEntry = (Map.Entry) faultItr.next();
+                Entry<QName, Fault> faultEntry = faultItr.next();
                 Fault fault = (Fault) faultEntry.getValue();
                 Message faultMessage = fault.getMessage();
                 faultMessage.setQName(new QName(def2.getNamespace("tns"), faultMessage.getQName().getLocalPart()));
@@ -211,33 +224,33 @@ public class WSDLMerger {
             outputMessage.setQName(new QName(def2.getNamespace("tns"), outputMessage.getQName().getLocalPart()));
 
         }
-        
+
         portType2.setQName(new QName(def2.getNamespace("tns"), portName));
         def2.getAllPortTypes().put(portTypeQname2, portType2);
         return def2;
     }
 
     // 合并单个binding下面的Operation
-    @SuppressWarnings({ "rawtypes", "unchecked" })
+    @SuppressWarnings("unchecked")
     private static Definition mergeBinding(Definition def1, Definition def2, String portName) {
         Binding binding1 = null;
         Binding binding2 = null;
         QName bindingQname2 = null;
-        List optlist1 = null;
+        List<BindingOperation> optlist1 = null;
 
-        Map bindingMap1 = def1.getAllBindings();
-        Iterator itr = bindingMap1.entrySet().iterator();
+        Map<QName, Binding> bindingMap1 = def1.getAllBindings();
+        Iterator<Entry<QName, Binding>> itr = bindingMap1.entrySet().iterator();
         while (itr.hasNext()) {
-            Map.Entry bindingEntry = (Entry) itr.next();
+            Entry<QName, Binding> bindingEntry = itr.next();
             binding1 = (Binding) bindingEntry.getValue();
             optlist1 = binding1.getBindingOperations();
             break;
         }
         // 添加到def2中去
-        Map porttypesMap2 = def2.getAllBindings();
-        Iterator itr2 = porttypesMap2.entrySet().iterator();
+        Map<QName, Binding> porttypesMap2 = def2.getAllBindings();
+        Iterator<Entry<QName, Binding>> itr2 = porttypesMap2.entrySet().iterator();
         while (itr2.hasNext()) {
-            Map.Entry bindingEntry = (Entry) itr2.next();
+            Entry<QName, Binding> bindingEntry = itr2.next();
             bindingQname2 = (QName) bindingEntry.getKey();
             binding2 = (Binding) bindingEntry.getValue();
             binding2.getBindingOperations().addAll(optlist1);
@@ -247,20 +260,20 @@ public class WSDLMerger {
         def2.getAllBindings().put(bindingQname2, binding2);
         return def2;
     }
-    
+
     // 合并服务 用主的
-    @SuppressWarnings({ "rawtypes" })
+    @SuppressWarnings("unchecked")
     private static Definition mergeService(Definition def2, String srvName, String portName) {
-        Map srvmap = def2.getAllServices();
-        Iterator itr = srvmap.entrySet().iterator();
+        Map<QName, Service> srvmap = def2.getAllServices();
+        Iterator<Entry<QName, Service>> itr = srvmap.entrySet().iterator();
         while (itr.hasNext()) {
-            Map.Entry srvEntry = (Entry) itr.next();
+            Entry<QName, Service> srvEntry = itr.next();
             Service service = (Service) srvEntry.getValue();
             service.setQName(new QName(def2.getNamespace("tns"), srvName));
-            Map portMap = service.getPorts();
-            Iterator portItr = portMap.entrySet().iterator();
+            Map<String, Port> portMap = service.getPorts();
+            Iterator<Entry<String, Port>> portItr = portMap.entrySet().iterator();
             while (portItr.hasNext()) {
-                Map.Entry portMapEntry = (Entry) portItr.next();
+                Entry<String, Port> portMapEntry = portItr.next();
                 Port port = (Port) portMapEntry.getValue();
                 port.setName(portName);
                 break;

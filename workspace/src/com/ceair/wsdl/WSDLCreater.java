@@ -70,7 +70,7 @@ public class WSDLCreater {
             reader.setFeature("javax.wsdl.verbose", true);
             reader.setFeature("javax.wsdl.importDocuments", true);
             Definition def = reader.readWSDL("", new InputSource(in_withcode));
-            
+
             //遍历整个PortTypes
             Iterator<Entry<QName, PortType>> portTypeItr = def.getAllPortTypes().entrySet().iterator();
             while (portTypeItr.hasNext()) {          

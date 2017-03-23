@@ -23,9 +23,12 @@ import java.util.Map.Entry;
 
 public class WSDLParser {
     
+
+
+    
     public static void main(String args[]){
         //Map<String, ServiceOperation> map = WSDLParser.parseWSDL("./wsdlfile/SM1.wsdl",7,5);
-        Map<String, ServiceOperation> map = WSDLParser.parseWSDL("./wsdlfile/35wsdl/AirScheduleService.wsdl",7,5);
+        Map<String, ServiceOperation> map = WSDLParser.parseWSDL("./wsdlfile/S1.wsdl",7,5);
 
         System.out.println("Map Size:"+map.size());
         Iterator iterator = map.entrySet().iterator();
@@ -79,8 +82,11 @@ public class WSDLParser {
             WSDLReader reader = factory.newWSDLReader();
             reader.setFeature("javax.wsdl.verbose", true);
             reader.setFeature("javax.wsdl.importDocuments", true);
+            
             Definition def = reader.readWSDL(wsdlLocation);
             //解析service————port（获取ENDPOINT）————binding（获取PROTOCOL_TYPE）——operation（获取 SOAP_ACTION）
+            
+                      
             Map<QName, Service> serviceMap = def.getAllServices();
             Iterator<Entry<QName, Service>> serviceItr = serviceMap.entrySet().iterator();
             while (serviceItr.hasNext()) {
