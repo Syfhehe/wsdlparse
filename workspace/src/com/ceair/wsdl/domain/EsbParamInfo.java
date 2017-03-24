@@ -3,7 +3,7 @@ package com.ceair.wsdl.domain;
 public class EsbParamInfo {
 
     private int paramId;
-    private int parentParamId;
+    private EsbParamInfo parentParam;
     private int paramGroupId;
     private String nodeName;
     private String nodeDesc;
@@ -19,14 +19,6 @@ public class EsbParamInfo {
 
     public void setParamId(int paramId) {
         this.paramId = paramId;
-    }
-
-    public int getParentParamId() {
-        return parentParamId;
-    }
-
-    public void setParentParamId(int parentParamId) {
-        this.parentParamId = parentParamId;
     }
 
     public int getParamGroupId() {
@@ -91,6 +83,14 @@ public class EsbParamInfo {
 
     public void setSampleValue(String sampleValue) {
         this.sampleValue = sampleValue;
+    }
+
+    public EsbParamInfo getParentParam() {
+        return parentParam;
+    }
+
+    public void setParentParam(EsbParamInfo parentParam) {
+        this.parentParam = parentParam;
     }
 
    

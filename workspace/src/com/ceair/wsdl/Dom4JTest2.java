@@ -12,6 +12,7 @@ import org.dom4j.io.SAXReader;
 
 import com.ceair.wsdl.domain.EsbParamInfo;
 
+import oracle.jdbc.internal.XSPrincipal.Flag;
 import oracle.net.aso.i;
 
 public class Dom4JTest2 {
@@ -22,6 +23,8 @@ public class Dom4JTest2 {
     public static final String ELEMENT_MAXOCCURS = "maxOccurs";
     public static final String ELEMENT_NAME = "name";
     public static final String ELEMENT_TYPE = "type";
+    
+    private static boolean Flag = true;
 
     public static void main(String[] args) throws Exception {
         int index = 1;
@@ -38,7 +41,9 @@ public class Dom4JTest2 {
 //            System.out.println("nodeDesc:" + paramInfo.getNodeDesc());
 //            System.out.println("valueRange:" + paramInfo.getValueRange());
 //            System.out.println("sampleValue:" + paramInfo.getSampleValue());
-
+            if (paramInfo.getParentParam() != null) {
+                System.out.println("parentParamName:" + paramInfo.getParentParam().getNodeName());
+            }
             System.out.println("nodeName:" + paramInfo.getNodeName());
             System.out.println("dataType:" + paramInfo.getDataType());
             System.out.println("minoccurs:" + paramInfo.getMinoccurs());
@@ -75,39 +80,50 @@ public class Dom4JTest2 {
             // 解析每个element或者complexType
             while (paramItr.hasNext()) {
                 Element parameter = paramItr.next();               
-                parseParam(parameter, paramInfosList);
+                parseParam(parameter, paramInfosList, new EsbParamInfo());
             }
         }
         return paramInfosList;        
     }
     
     @SuppressWarnings("unchecked")
-    private static void parseParam(Element parameter, List<EsbParamInfo> paramInfosList){
+    private static void parseParam(Element parameter, List<EsbParamInfo> paramInfosList, EsbParamInfo parentParamInfo){
         if (parameter.getName() != null) {
             if (parameter.getName().equals(ELEMENT)) {
                 //新建一个对象
-                EsbParamInfo esbParamInfo = new EsbParamInfo();
+                EsbParamInfo tempParamInfo = new EsbParamInfo();
                 for (int attrCount = 0; attrCount < parameter.attributeCount(); attrCount++) {
                     Attribute attr = parameter.attribute(attrCount);
-                    setData(esbParamInfo, attr); 
+                    setData(tempParamInfo, attr); 
+                    System.out.println("++++++++++++++++++++++++++++++++++++++++");   
+                    
                 }
+                if(parentParamInfo.getNodeName()==null && parentParamInfo.getDataType()==null){
+                    tempParamInfo.setParentParam(parentParamInfo.getParentParam());
+                }else{
+                    tempParamInfo.setParentParam(parentParamInfo);
+                }
+                
+          
                 List<Element> paramList = parameter.elements();
                 Iterator<Element> paramItr = paramList.iterator();
                 //将对象添加到list中
-                paramInfosList.add(esbParamInfo);
+                paramInfosList.add(tempParamInfo);
                 
                 while(paramItr.hasNext()){
                     Element parameterTemp = paramItr.next();
-                    parseParam(parameterTemp, paramInfosList);
+                    parseParam(parameterTemp, paramInfosList, tempParamInfo);
                 }
                 
             } else if (parameter.getName().equals(COMPLEX_TPYE)) {
+                EsbParamInfo tempParamInfo = new EsbParamInfo();
                 for (int attrCount = 0; attrCount < parameter.attributeCount(); attrCount++) {
-                    EsbParamInfo esbParamInfo = new EsbParamInfo();
-                    Attribute attr = parameter.attribute(attrCount);
-                    setData(esbParamInfo, attr); 
-                    paramInfosList.add(esbParamInfo);
-                }                
+                    Attribute attr = parameter.attribute(0);
+                    setData(tempParamInfo, attr); 
+                    paramInfosList.add(tempParamInfo);
+                }
+                tempParamInfo.setParentParam(parentParamInfo);
+
                 List<Element> sequenceList = parameter.elements();
                 Iterator<Element> sequenceItr = sequenceList.iterator();
                 while(sequenceItr.hasNext()){
@@ -117,20 +133,14 @@ public class Dom4JTest2 {
                         Iterator<Element> elementItr = elementList.iterator();
                         while(elementItr.hasNext()){
                             Element elementTemp = elementItr.next();
-                            parseParam(elementTemp, paramInfosList);
+                            parseParam(elementTemp, paramInfosList, tempParamInfo);
                         }
                     }
                 }
             }
         }
     }
-    //s:string 取string
-    private static String handleTypeString(String typeString){
-        String[] strArray = null;   
-        strArray = typeString.split(":");
-        return strArray[1];
-    }
-    
+       
     private static void setData(EsbParamInfo paramInfo, Attribute attr){
         if(attr.getQName().getName().equals(ELEMENT_MAXOCCURS)){
             paramInfo.setMaxoccurs(attr.getValue());
@@ -139,8 +149,15 @@ public class Dom4JTest2 {
         }else if(attr.getQName().getName().equals(ELEMENT_NAME)){
             paramInfo.setNodeName(attr.getValue());
         }else if(attr.getQName().getName().equals(ELEMENT_TYPE)){
-            paramInfo.setDataType(handleTypeString(attr.getValue()));
+            paramInfo.setDataType(attr.getValue());
         }
+    }
+    
+    //s:string 取string
+    private static String handleTypeString(String typeString){
+        String[] strArray = null;   
+        strArray = typeString.split(":");
+        return strArray[1];
     }
 
 }
