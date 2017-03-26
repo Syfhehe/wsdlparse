@@ -1,9 +1,7 @@
 package com.ceair.wsdl;
 
 import java.io.ByteArrayOutputStream;
-import java.io.FileOutputStream;
 import java.io.OutputStream;
-import java.io.Writer;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -29,7 +27,7 @@ import javax.xml.namespace.QName;
 public class WSDLMerger {
 
     public static void main(String args[]) {
-        mergeWSDL("./wsdlfile/S1.wsdl", "./wsdlfile/SM1.wsdl", "SMService", "SMServiceSoap", "www.cea.com");
+        mergeWSDL("./wsdlfile/S1.wsdl", "./wsdlfile/M1.wsdl", "SMService", "SMServiceSoap", "www.cea.com");
     }
 
     public static Definition mergeWSDL(String filepath1, String filepath2, String srvName, String portName,
@@ -58,7 +56,7 @@ public class WSDLMerger {
             wirter.writeWSDL(def2,  wsdlString); 
             wsdlString.toString();
             
-            System.out.println(wsdlString.toString());
+            //System.out.println(wsdlString.toString());
 
             return def2;
 
@@ -76,6 +74,7 @@ public class WSDLMerger {
     private static Definition mergeNamespace(Definition def1, Definition def2, String targetNameSpace) {
         Map<String, String> namespaceMap1 = def1.getNamespaces();
         Map<String, String> namespaceMap2 = def2.getNamespaces();
+        
         // 若两个map中相同key对应的value不相等的key集合
         List<String> keyList = new ArrayList<String>();
         Iterator<Entry<String, String>> iter1 = namespaceMap1.entrySet().iterator();
@@ -84,12 +83,12 @@ public class WSDLMerger {
             String m1value = entry1.getValue() == null ? "" : entry1.getValue();
             String m2value = (String) (namespaceMap2.get(entry1.getKey()) == null ? ""
                     : namespaceMap2.get(entry1.getKey()));
-            // 若两个map中相同key对应的value都存在 却不相等 x修改value
+            // 若两个map中相同key对应的value都存在 却不相等 则修改key 
             if (!m1value.equals(m2value) && (!m1value.equals("")) && (!m2value.equals(""))) {
                 keyList.add(entry1.getKey());
             }
         }
-        // 重命名前缀前缀相同后缀不同的namespace 删除原来map中名字重复的项目
+        // 重命名前缀相同后缀不同的namespace 删除原来map中名字重复的项目
         Iterator<String> keyListItr = keyList.iterator();
         while (keyListItr.hasNext()) {
             String key = keyListItr.next();
@@ -97,12 +96,14 @@ public class WSDLMerger {
             String value2 = namespaceMap2.get(key);
             namespaceMap1.remove(key);
             namespaceMap2.remove(key);
-            // 如果是tns 就改名n1或者n2
+            // 如果是tns 就改名n1(n2,n3...)
             if (key.indexOf("tns") != -1) {
                 key = "n";
             }
-            namespaceMap1.put(key + "1", value1);
-            namespaceMap2.put(key + "2", value2);
+            String[] keyArray = genKeyString(namespaceMap1,namespaceMap2,key);
+
+            namespaceMap1.put(keyArray[0], value1);
+            namespaceMap2.put(keyArray[1], value2);
         }
         namespaceMap2.putAll(namespaceMap1);
         // 插入设定的namespace
@@ -122,6 +123,16 @@ public class WSDLMerger {
         return def2;
     }
 
+    private static String[] genKeyString(Map<String, String> namespaceMap1, Map<String, String> namespaceMap2, String key) {
+        int index=1;
+        while(namespaceMap1.containsKey(key + index)||namespaceMap2.containsKey(key + index)){
+            index++;
+        }
+        String[] keyTemp ={key+index, key+(index+1)};
+
+        return keyTemp;
+    }
+
     // 合并types下面的schema
     @SuppressWarnings("unchecked")
     private static Definition mergeSchema(Definition def1, Definition def2) {
@@ -139,14 +150,14 @@ public class WSDLMerger {
         Map<QName, Message> msgMap1 = def1.getMessages();
         Map<QName, Message> msgMap2 = def2.getMessages();
         // message的名称和实际内容不一样的情况 把key都保存下来
+        /***************************
         List<QName> keyList = new ArrayList<QName>();
         Iterator<Entry<QName, Message>> iter1 = msgMap1.entrySet().iterator();
         while (iter1.hasNext()) {
             Entry<QName, Message> entry1 = iter1.next();
             String m1value = entry1.getValue() == null ? "" : entry1.getValue().toString();
             String m2value = msgMap2.get(entry1.getKey()) == null ? "" : msgMap2.get(entry1.getKey()).toString();
-            if (!m1value.equals(m2value) && (!m1value.equals("")) && (!m2value.equals(""))) {// 若两个map中相同key对应的value不相等
-                                                                                             // x修改value
+            if (!m1value.equals(m2value) && (!m1value.equals("")) && (!m2value.equals(""))) {// 若两个map中相同key对应的value不相等                                                                                          
                 keyList.add(entry1.getKey());
             }
         }
@@ -169,6 +180,7 @@ public class WSDLMerger {
             msgMap1.remove(key);
             msgMap2.remove(key);
         }
+        *****************/
         msgMap2.putAll(msgMap1);
         return def2;
     }
