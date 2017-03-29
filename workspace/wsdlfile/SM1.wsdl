@@ -66,6 +66,8 @@
   <wsdl:message name="getStockInfoSoapOut">
     <wsdl:part name="parameters" element="n2:getStockInfoResponse"/>
   </wsdl:message>
+  
+  
   <wsdl:portType name="SMServiceSoap">
     <wsdl:operation name="getInfoByMobilePhone">
       <wsdl:input message="tns:getInfoByMobilePhoneSoapIn" />
@@ -76,6 +78,8 @@
       <wsdl:output message="tns:getStockInfoSoapOut"/>
     </wsdl:operation>
   </wsdl:portType>
+  
+  
   <wsdl:binding name="SMServiceSoap" type="tns:SMServiceSoap">
     <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
     <wsdl:operation name="getInfoByMobilePhone">

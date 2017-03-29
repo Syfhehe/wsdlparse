@@ -1,0 +1,76 @@
+Retrieving document at './wsdlfile/Online/continent-WService-soap.wsdl'.
+Retrieving document at './wsdlfile/Online/continent.wsdl'.
+Retrieving document at '.\continent-WService-soap.wsdl', relative to 'file:/E:/1learningmaterials/maven/WSDL/workspace/./wsdlfile/Online/continent.wsdl'.
+
+ns2:http://schemas.xmlsoap.org/soap/http
+ns1:http://sysdata.provider.service.ceair.com/
+wsdl:http://schemas.xmlsoap.org/wsdl/
+tns:http://impl.sysdata.provider.service.ceair.com/
+xsd:http://www.w3.org/2001/XMLSchema
+soap:http://schemas.xmlsoap.org/wsdl/soap/
+targetNamespace:http://impl.sysdata.provider.service.ceair.com/
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions name="ContinentWServiceImplService" targetNamespace="http://impl.sysdata.provider.service.ceair.com/" xmlns:ns2="http://schemas.xmlsoap.org/soap/http" xmlns:ns1="http://sysdata.provider.service.ceair.com/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="http://impl.sysdata.provider.service.ceair.com/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/">
+  <wsdl:types>
+    <xsd:schema targetNamespace="http://sysdata.vo.domain.ceair.com/" xmlns:ns0="http://sysdata.vo.domain.ceair.com/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+		  <xsd:complexType name="Continent">
+		    <xsd:sequence>
+		      <xsd:element name="continentId" type="xsd:long"/>
+		      <xsd:element default="" minOccurs="0" name="code" type="xsd:string"/>
+		      <xsd:element default="" minOccurs="0" name="enName" type="xsd:string"/>
+		      <xsd:element default="" minOccurs="0" name="cnName" type="xsd:string"/>
+		      <xsd:element default="" minOccurs="0" name="validity" type="xsd:string"/>
+		    </xsd:sequence>
+		  </xsd:complexType>
+		</xsd:schema>
+    <xsd:schema attributeFormDefault="unqualified" elementFormDefault="unqualified" targetNamespace="http://sysdata.provider.service.ceair.com/" xmlns:ns0="http://sysdata.provider.service.ceair.com/" xmlns:ns1="http://sysdata.vo.domain.ceair.com/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+		  <xsd:import namespace="http://sysdata.vo.domain.ceair.com/"/>
+		  <xsd:complexType name="queryData">
+		    <xsd:sequence>
+		      <xsd:element minOccurs="0" name="xmLParam" type="xsd:string"/>
+		    </xsd:sequence>
+		  </xsd:complexType>
+		  <xsd:complexType name="queryDataResponse">
+		    <xsd:sequence>
+		      <xsd:element maxOccurs="unbounded" minOccurs="0" name="return" type="ns1:Continent"/>
+		    </xsd:sequence>
+		  </xsd:complexType>
+		  <xsd:element name="queryData" type="ns0:queryData"/>
+		  <xsd:element name="queryDataResponse" type="ns0:queryDataResponse"/>
+		  <xsd:element name="Continent" type="ns1:Continent"/>
+		</xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="queryDataResponse">
+    <wsdl:part name="parameters" element="ns1:queryDataResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="queryData">
+    <wsdl:part name="parameters" element="ns1:queryData">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:portType name="ContinentWServiceImplPort">
+    <wsdl:operation name="queryData">
+      <wsdl:input name="queryData" message="tns:queryData">
+    </wsdl:input>
+      <wsdl:output name="queryDataResponse" message="tns:queryDataResponse">
+    </wsdl:output>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="ContinentWServiceImplPort" type="ns1:ContinentWService">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="queryData">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="queryData">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="queryDataResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="ContinentWServiceImplService">
+    <wsdl:port name="ContinentWServiceImplPort" binding="tns:ContinentWServiceImplPort">
+      <soap:address location="http://eal.ceair.com:80/e-mdp/ws/continent-WService-soap/"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

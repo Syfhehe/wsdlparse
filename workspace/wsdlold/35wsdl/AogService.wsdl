@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions name="AogService" targetNamespace="http://service.basic.pss.ceair.com/" xmlns:ns1="http://schemas.xmlsoap.org/soap/http" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="http://service.basic.pss.ceair.com/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <wsdl:types>
+<xs:schema attributeFormDefault="unqualified" elementFormDefault="unqualified" targetNamespace="http://service.basic.pss.ceair.com/" xmlns:tns="http://service.basic.pss.ceair.com/" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:complexType name="aogRQ">
+    <xs:sequence>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="aogQuery" nillable="true" type="tns:aogQuery"/>
+      <xs:element minOccurs="0" name="usrID" type="xs:string"/>
+      <xs:element minOccurs="0" name="usrPwd" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="aogQuery">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="QUERY_TIME" type="xs:string"/>
+      <xs:element minOccurs="0" name="TAIL_NO" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="aogRS">
+    <xs:sequence>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="aog" nillable="true" type="tns:aog"/>
+      <xs:element minOccurs="0" name="comment" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="aog">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="ACT_END_TIME" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="ACT_START_TIME" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="AOG_AIRPORT_CD" type="xs:string"/>
+      <xs:element minOccurs="0" name="CREATED_TIME" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="PLAN_END_TIME" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="START_TIME" type="xs:dateTime"/>
+      <xs:element minOccurs="0" name="TAIL_NO" type="xs:string"/>
+      <xs:element minOccurs="0" name="UPDATED_TIME" type="xs:dateTime"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="queryAog" type="tns:queryAog"/>
+  <xs:complexType name="queryAog">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="arg0" type="tns:aogRQ"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="queryAogResponse" type="tns:queryAogResponse"/>
+  <xs:complexType name="queryAogResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="return" type="tns:aogRS"/>
+    </xs:sequence>
+  </xs:complexType>
+</xs:schema>
+  </wsdl:types>
+  <wsdl:message name="queryAogResponse">
+    <wsdl:part element="tns:queryAogResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="queryAog">
+    <wsdl:part element="tns:queryAog" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:portType name="AogServicePortType">
+    <wsdl:operation name="queryAog">
+      <wsdl:input message="tns:queryAog" name="queryAog">
+    </wsdl:input>
+      <wsdl:output message="tns:queryAogResponse" name="queryAogResponse">
+    </wsdl:output>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="AogServiceSoapBinding" type="tns:AogServicePortType">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="queryAog">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="queryAog">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="queryAogResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="AogService">
+    <wsdl:port binding="tns:AogServiceSoapBinding" name="AogServicePort">
+      <soap:address location="http://172.31.3.194:7602/basiccs/ws/com.ceair.pss.basic.service.AogService"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

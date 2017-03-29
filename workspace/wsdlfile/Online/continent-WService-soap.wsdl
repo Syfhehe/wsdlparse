@@ -1,0 +1,43 @@
+<?xml version='1.0' encoding='UTF-8'?><wsdl:definitions xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:ns1="http://sysdata.provider.service.ceair.com/" name="ContinentWService" targetNamespace="http://sysdata.provider.service.ceair.com/">
+    <wsdl:types>
+		<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:ns0="http://sysdata.vo.domain.ceair.com/" targetNamespace="http://sysdata.vo.domain.ceair.com/">
+		  <xsd:complexType name="Continent">
+		    <xsd:sequence>
+		      <xsd:element name="continentId" type="xsd:long"/>
+		      <xsd:element default="" minOccurs="0" name="code" type="xsd:string"/>
+		      <xsd:element default="" minOccurs="0" name="enName" type="xsd:string"/>
+		      <xsd:element default="" minOccurs="0" name="cnName" type="xsd:string"/>
+		      <xsd:element default="" minOccurs="0" name="validity" type="xsd:string"/>
+		    </xsd:sequence>
+		  </xsd:complexType>
+		</xsd:schema>
+		<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:ns1="http://sysdata.vo.domain.ceair.com/" xmlns:ns0="http://sysdata.provider.service.ceair.com/" attributeFormDefault="unqualified" elementFormDefault="unqualified" targetNamespace="http://sysdata.provider.service.ceair.com/">
+		  <xsd:import namespace="http://sysdata.vo.domain.ceair.com/"/>
+		  <xsd:complexType name="queryData">
+		    <xsd:sequence>
+		      <xsd:element minOccurs="0" name="xmLParam" type="xsd:string"/>
+		    </xsd:sequence>
+		  </xsd:complexType>
+		  <xsd:complexType name="queryDataResponse">
+		    <xsd:sequence>
+		      <xsd:element maxOccurs="unbounded" minOccurs="0" name="return" type="ns1:Continent"/>
+		    </xsd:sequence>
+		  </xsd:complexType>
+		  <xsd:element name="queryData" type="ns0:queryData"/>
+		  <xsd:element name="queryDataResponse" type="ns0:queryDataResponse"/>
+		  <xsd:element name="Continent" type="ns1:Continent"/>
+		</xsd:schema>
+    </wsdl:types>
+    <wsdl:message name="queryData">
+        <wsdl:part element="ns1:queryData" name="parameters"/>
+    </wsdl:message>
+    <wsdl:message name="queryDataResponse">
+        <wsdl:part element="ns1:queryDataResponse" name="parameters"/>
+    </wsdl:message>
+    <wsdl:portType name="ContinentWService">
+        <wsdl:operation name="queryData">
+            <wsdl:input message="ns1:queryData" name="queryData"/>
+            <wsdl:output message="ns1:queryDataResponse" name="queryDataResponse"/>
+        </wsdl:operation>
+    </wsdl:portType>
+</wsdl:definitions>

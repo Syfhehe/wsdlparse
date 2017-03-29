@@ -24,37 +24,43 @@ import java.util.Map.Entry;
 public class WSDLParser {
     
     public static void main(String args[]){
-        
-        Map<String, ServiceOperation> map = WSDLParser.parseWSDL("./wsdlfile/S1.wsdl",7,5);
 
-        System.out.println("Map Size:"+map.size());
-        Iterator<Entry<String, ServiceOperation>> iterator = map.entrySet().iterator();
-        while(iterator.hasNext()){
-            Entry<String, ServiceOperation> serviceOperationEntry = iterator.next();
-            ServiceOperation serviceOperation = (ServiceOperation) serviceOperationEntry.getValue();
-            System.out.println("serviceOperation optId:"+serviceOperation.getOptId());
-            System.out.println("serviceOperation originalOptId:"+serviceOperation.getOriginalOptId());
-            System.out.println("serviceOperation serviceVerId:"+serviceOperation.getServiceVerId());
-            System.out.println("serviceOperation optEnName:"+serviceOperation.getOptEnName());
-            System.out.println("serviceOperation optSrcEnName:"+serviceOperation.getOptSrcEnName());
-            System.out.println("serviceOperation protocolType:"+serviceOperation.getProtocolType());
-            System.out.println("serviceOperation formateType:"+serviceOperation.getFormateType());
-            System.out.println("serviceOperation optInputMsgName:"+serviceOperation.getOptInputMsgName());
-            System.out.println("serviceOperation optInputMsgNs:"+serviceOperation.getOptInputMsgNs());
-            System.out.println("serviceOperation optOutputMsgName:"+serviceOperation.getOptOutputMsgName());
-            System.out.println("serviceOperation optOutputMsgNs:"+serviceOperation.getOptOutputMsgNs());
-            System.out.println("serviceOperation optFaultMsgName:"+serviceOperation.getOptFaultMsgName());
-            System.out.println("serviceOperation optFaultMsgNs:"+serviceOperation.getOptFaultMsgNs());   
-            System.out.println("serviceOperation optSoapAction:"+serviceOperation.getOptSoapAction());            
-            System.out.println("serviceOperation optSrcInputMsgName:"+serviceOperation.getOptSrcInputMsgName());
-            System.out.println("serviceOperation optSrcInputMsgNs:"+serviceOperation.getOptSrcInputMsgNs());
-            System.out.println("serviceOperation optSrcOutputMsgName:"+serviceOperation.getOptSrcOutputMsgName());
-            System.out.println("serviceOperation optSrcOutputMsgNs:"+serviceOperation.getOptOutputMsgNs());
-            System.out.println("serviceOperation optSrcFaultMsgName:"+serviceOperation.getOptSrcFaultMsgName());
-            System.out.println("serviceOperation optSrcFaultMsgNs:"+serviceOperation.getOptSrcFaultMsgNs());
-            System.out.println("serviceOperation optSrcSoapAction:"+serviceOperation.getOptSrcSoapAction());
-            System.out.println("serviceOperation endpoint:"+serviceOperation.getEndpoint());           
+        List<String> filelist = FileUtil.getFileList("E:\\1learningmaterials\\maven\\WSDL\\workspace\\wsdlfile\\online", new ArrayList<String>());
+        Iterator<String> fileNameItr = filelist.iterator();
+        while(fileNameItr.hasNext()){
+            String fileName = fileNameItr.next();
+            Map<String, ServiceOperation> map = WSDLParser.parseWSDL(fileName,7,5);
+            System.out.println("Map Size:"+map.size());
+            Iterator<Entry<String, ServiceOperation>> iterator = map.entrySet().iterator();
+            while(iterator.hasNext()){
+                Entry<String, ServiceOperation> serviceOperationEntry = iterator.next();
+                ServiceOperation serviceOperation = (ServiceOperation) serviceOperationEntry.getValue();
+                System.out.println("serviceOperation optId:"+serviceOperation.getOptId());
+                System.out.println("serviceOperation originalOptId:"+serviceOperation.getOriginalOptId());
+                System.out.println("serviceOperation serviceVerId:"+serviceOperation.getServiceVerId());
+                System.out.println("serviceOperation optEnName:"+serviceOperation.getOptEnName());
+                System.out.println("serviceOperation optSrcEnName:"+serviceOperation.getOptSrcEnName());
+                System.out.println("serviceOperation protocolType:"+serviceOperation.getProtocolType());
+                System.out.println("serviceOperation formateType:"+serviceOperation.getFormateType());
+                System.out.println("serviceOperation optInputMsgName:"+serviceOperation.getOptInputMsgName());
+                System.out.println("serviceOperation optInputMsgNs:"+serviceOperation.getOptInputMsgNs());
+                System.out.println("serviceOperation optOutputMsgName:"+serviceOperation.getOptOutputMsgName());
+                System.out.println("serviceOperation optOutputMsgNs:"+serviceOperation.getOptOutputMsgNs());
+                System.out.println("serviceOperation optFaultMsgName:"+serviceOperation.getOptFaultMsgName());
+                System.out.println("serviceOperation optFaultMsgNs:"+serviceOperation.getOptFaultMsgNs());   
+                System.out.println("serviceOperation optSoapAction:"+serviceOperation.getOptSoapAction());            
+                System.out.println("serviceOperation optSrcInputMsgName:"+serviceOperation.getOptSrcInputMsgName());
+                System.out.println("serviceOperation optSrcInputMsgNs:"+serviceOperation.getOptSrcInputMsgNs());
+                System.out.println("serviceOperation optSrcOutputMsgName:"+serviceOperation.getOptSrcOutputMsgName());
+                System.out.println("serviceOperation optSrcOutputMsgNs:"+serviceOperation.getOptOutputMsgNs());
+                System.out.println("serviceOperation optSrcFaultMsgName:"+serviceOperation.getOptSrcFaultMsgName());
+                System.out.println("serviceOperation optSrcFaultMsgNs:"+serviceOperation.getOptSrcFaultMsgNs());
+                System.out.println("serviceOperation optSrcSoapAction:"+serviceOperation.getOptSrcSoapAction());
+                System.out.println("serviceOperation endpoint:"+serviceOperation.getEndpoint());           
+            }
         }
+       
+        
     }
     
     public static void saveSrvVerWSDLClob(String wsdlLocation){
@@ -81,8 +87,7 @@ public class WSDLParser {
             reader.setFeature("javax.wsdl.importDocuments", true);
             
             Definition def = reader.readWSDL(wsdlLocation);
-            //解析service————port（获取ENDPOINT）————binding（获取PROTOCOL_TYPE）——operation（获取 SOAP_ACTION）
-            
+            //解析service————port（获取ENDPOINT）————binding（获取PROTOCOL_TYPE）——operation（获取 SOAP_ACTION）            
                       
             Map<QName, Service> serviceMap = def.getAllServices();
             Iterator<Entry<QName, Service>> serviceItr = serviceMap.entrySet().iterator();
@@ -142,7 +147,12 @@ public class WSDLParser {
                 Iterator<Operation> portTypeOperationItr = portTypeOperationList.iterator();
                 while (portTypeOperationItr.hasNext()) {   
                     Operation portTypeOperation = (OperationImpl) portTypeOperationItr.next();
+                    
                     ServiceOperation tempServiceOperation = srvOptMap.get(portTypeOperation.getName());
+                    if(tempServiceOperation==null){
+                        tempServiceOperation = new ServiceOperation();
+                    }
+                    
                     System.out.println("Operation Name:" + portTypeOperation.getName());
                     QName qnameInput = portTypeOperation.getInput().getMessage().getQName();
                     System.out.println("InputNameSpace:" + qnameInput.getNamespaceURI());

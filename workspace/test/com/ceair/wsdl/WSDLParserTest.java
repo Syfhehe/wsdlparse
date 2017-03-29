@@ -27,30 +27,5 @@ public class WSDLParserTest {
         assertEquals(1, map.size());
 
     }
-//
-//    @Test
-//    public void testParseWSDL2() {
-//        Map<String, ServiceOperation> map = WSDLParser.parseWSDL("./wsdlfile/S1.wsdl",5);
-//        assertEquals(1, map.size());
-//    }
-//
-//    @Test
-//    public void testParseWSDL3() {
-//        ;
-//        Map<String, ServiceOperation> map = WSDLParser.parseWSDL("./wsdlfile/SM1.wsdl",5);
-//        assertEquals(3, map.size());
-//    }
-//
-//    @Test
-//    public void testParseWSDL4() {
-//        Map<String, ServiceOperation> map = WSDLParser.parseWSDL("./wsdlfile/test.wsdl",5);
-//        assertEquals(1, map.size());
-//    }
-//    
-//    @Test
-//    public void testParseWSDLwithFault() {
-//        Map<String, ServiceOperation> map = WSDLParser.parseWSDL("./wsdlfile/M1_withfault.wsdl",5);
-//        assertEquals(1, map.size());
-//    }
 
 }

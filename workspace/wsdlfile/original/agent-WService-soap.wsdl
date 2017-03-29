@@ -1,0 +1,118 @@
+<?xml version='1.0' encoding='UTF-8'?><wsdl:definitions xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:ns1="http://sysdata.provider.service.ceair.com/" name="AgentWService" targetNamespace="http://sysdata.provider.service.ceair.com/">
+    <wsdl:types>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:ns0="http://sysdata.vo.domain.ceair.com/" targetNamespace="http://sysdata.vo.domain.ceair.com/">
+  <xsd:complexType name="Agent">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="id" type="xsd:long"/>
+      <xsd:element minOccurs="0" name="agentCode" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="sellCity" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="sellAreaCode" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="sellAreaName" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="regionCode" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="chargeArea" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="portCity" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="agentName" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="agentShortName" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="threeCode" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="agentType" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="agentMark" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="agentDescription" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="superior" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="tranType" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="isProcedureRate" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="declareRate" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="billLevel" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="balanceType" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="isMember" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="isCassMember" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="cassOffice" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="reportPeriod" type="xsd:long"/>
+      <xsd:element minOccurs="0" name="beginDate" type="xsd:dateTime"/>
+      <xsd:element minOccurs="0" name="endDate" type="xsd:dateTime"/>
+      <xsd:element minOccurs="0" name="reportCurrency" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="salCurrency1" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="salCurrency2" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="salCurrency3" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="salCurrency4" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="salCurrency5" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="salCurrency6" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="salCurrency7" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="salCurrency8" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="salCurrency9" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="salCurrency10" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="stopMark" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="stopBeginDate" type="xsd:dateTime"/>
+      <xsd:element minOccurs="0" name="stopEndDate" type="xsd:dateTime"/>
+      <xsd:element minOccurs="0" name="clearCode" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="delayPeriod" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="licenseBeginDate" type="xsd:dateTime"/>
+      <xsd:element minOccurs="0" name="licenseEndDate" type="xsd:dateTime"/>
+      <xsd:element minOccurs="0" name="agentAddress" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="city" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="province" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="country" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="zipcode" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="contact" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="telAreacode" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="tel" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="fax" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="email" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="system" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="iataRegionTeam" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="account" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="bankGuarantee" type="xsd:long"/>
+      <xsd:element minOccurs="0" name="activeDebtPeriod" type="xsd:dateTime"/>
+      <xsd:element minOccurs="0" name="maxDebtPeriod" type="xsd:dateTime"/>
+      <xsd:element minOccurs="0" name="debtCredit" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="storeStatus" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="sellType" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="trainingBeginDate" type="xsd:dateTime"/>
+      <xsd:element minOccurs="0" name="trainingEndDate" type="xsd:dateTime"/>
+      <xsd:element minOccurs="0" name="capacityBeginDate" type="xsd:dateTime"/>
+      <xsd:element minOccurs="0" name="capacityEndDate" type="xsd:dateTime"/>
+      <xsd:element minOccurs="0" name="portBeginDate" type="xsd:dateTime"/>
+      <xsd:element minOccurs="0" name="portEndDate" type="xsd:dateTime"/>
+      <xsd:element minOccurs="0" name="illegalRecord" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="aord" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="creator" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="createTime" type="xsd:dateTime"/>
+      <xsd:element minOccurs="0" name="lastModifier" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="lastModifyTime" type="xsd:dateTime"/>
+      <xsd:element minOccurs="0" name="validity" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="grossRate" type="xsd:long"/>
+      <xsd:element minOccurs="0" name="pureRate" type="xsd:long"/>
+      <xsd:element minOccurs="0" name="oracleClientNo" type="xsd:string"/>
+      <xsd:element minOccurs="0" name="finanalIdentification" type="xsd:string"/>
+    </xsd:sequence>
+  </xsd:complexType>
+</xsd:schema>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:ns1="http://sysdata.vo.domain.ceair.com/" xmlns:ns0="http://sysdata.provider.service.ceair.com/" attributeFormDefault="unqualified" elementFormDefault="unqualified" targetNamespace="http://sysdata.provider.service.ceair.com/">
+  <xsd:import namespace="http://sysdata.vo.domain.ceair.com/"/>
+  <xsd:complexType name="queryData">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="xmLParam" type="xsd:string"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="queryDataResponse">
+    <xsd:sequence>
+      <xsd:element maxOccurs="unbounded" minOccurs="0" name="return" type="ns1:Agent"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:element name="queryData" type="ns0:queryData"/>
+  <xsd:element name="Agent" type="ns1:Agent"/>
+  <xsd:element name="queryDataResponse" type="ns0:queryDataResponse"/>
+</xsd:schema>
+    </wsdl:types>
+    <wsdl:message name="queryData">
+        <wsdl:part element="ns1:queryData" name="parameters"/>
+    </wsdl:message>
+    <wsdl:message name="queryDataResponse">
+        <wsdl:part element="ns1:queryDataResponse" name="parameters"/>
+    </wsdl:message>
+    <wsdl:portType name="AgentWService">
+        <wsdl:operation name="queryData">
+            <wsdl:input message="ns1:queryData" name="queryData"/>
+            <wsdl:output message="ns1:queryDataResponse" name="queryDataResponse"/>
+        </wsdl:operation>
+    </wsdl:portType>
+</wsdl:definitions>

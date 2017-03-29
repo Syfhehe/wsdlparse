@@ -1,0 +1,20 @@
+<?xml version='1.0' encoding='UTF-8'?><wsdl:definitions xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="http://impl.sysdata.provider.service.ceair.com/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:ns2="http://schemas.xmlsoap.org/soap/http" xmlns:ns1="http://sysdata.provider.service.ceair.com/" name="SpecCargoWServiceImplService" targetNamespace="http://impl.sysdata.provider.service.ceair.com/">
+    <wsdl:import location=".\specCargo-WService-soap.wsdl" namespace="http://sysdata.provider.service.ceair.com/"/>
+    <wsdl:binding name="SpecCargoWServiceImplServiceSoapBinding" type="ns1:SpecCargoWService">
+        <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+        <wsdl:operation name="queryData">
+            <soap:operation soapAction="" style="document"/>
+            <wsdl:input name="queryData">
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output name="queryDataResponse">
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+    </wsdl:binding>
+    <wsdl:service name="SpecCargoWServiceImplService">
+        <wsdl:port binding="tns:SpecCargoWServiceImplServiceSoapBinding" name="SpecCargoWServiceImplPort">
+            <soap:address location="http://eal.ceair.com:80/e-mdp/ws/specCargo-WService-soap/"/>
+        </wsdl:port>
+    </wsdl:service>
+</wsdl:definitions>

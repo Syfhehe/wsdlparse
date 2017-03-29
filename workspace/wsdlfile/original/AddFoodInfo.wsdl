@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions targetNamespace="http://DefaultNamespace" xmlns:impl="http://DefaultNamespace" xmlns:intf="http://DefaultNamespace" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/"
+                  xmlns:wsi="http://ws-i.org/profiles/basic/1.1/xsd" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+	<wsdl:types>
+		<schema targetNamespace="http://DefaultNamespace" xmlns="http://www.w3.org/2001/XMLSchema" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+			<complexType name="ECIFHead">
+				<all>
+					<element name="SYS_HEAD" nillable="true" type="impl:SystemHead"/>
+					<element name="APP_HEAD" nillable="true" type="impl:APPHead"/>
+					<element name="LOCAL_HEAD" nillable="true" type="impl:LocalHead"/>
+				</all>
+			</complexType>
+			<complexType name="SystemHead">
+				<all>
+					<element name="SERVICE_CODE" nillable="true" type="xsd:string"/>
+					<element name="SEQ_NO" nillable="true" type="xsd:string"/>
+					<element name="TRAN_TYPE" nillable="true" type="xsd:string"/>
+					<element name="ZONENO" nillable="true" type="xsd:string"/>
+					<element name="BRNO" nillable="true" type="xsd:string"/>
+					<element name="EMPLOYEE" nillable="true" type="xsd:string"/>
+					<element name="CHANNEL_NO" nillable="true" type="xsd:string"/>
+					<element name="TRAN_DATE" nillable="true" type="xsd:string"/>
+					<element name="TRAN_TIMESTAMP" nillable="true" type="xsd:string"/>
+					<element name="SOURCE_BRANCH_NO" nillable="true" type="xsd:string"/>
+					<element name="DEST_BRANCH_NO" nillable="true" type="xsd:string"/>
+					<element name="MODULE_ID" nillable="true" type="xsd:string"/>
+					<element name="MESSAGE_TYPE" nillable="true" type="xsd:string"/>
+				</all>
+			</complexType>
+			<complexType name="APPHead">
+				<all>
+					<element name="GET_REC_NUM" type="xsd:int"/>
+					<element name="BEGIN_REC_NUM" type="xsd:int"/>
+				</all>
+			</complexType>
+			<complexType name="LocalHead">
+				<sequence/>
+			</complexType>
+			<element name="AddFoodInfoRequest">
+				<complexType>
+					<all>
+						<element name="ECIFHEAD" nillable="true" type="impl:ECIFHead"/>						
+						<element name="INDIVIDUALINFO" nillable="true" type="impl:INDIVIDUALINFO"/>
+						<element name="FLIGHTINFO" nillable="true" type="impl:FLIGHTINFO"/>
+						<element name="FOODINFO" nillable="true" type="impl:FOODINFO"/>
+					</all>
+				</complexType>
+			</element>			
+			<complexType name="INDIVIDUALINFO">
+				<all>
+					<element name="NAME" type="xsd:string"/><!-- 必填 -->
+					<element name="AGE" type="xsd:string"/>
+					<element name="GENDER" type="xsd:string"/>
+					<element name="TELEPHONE" type="xsd:string"/>
+					<element name="REGISTRATIONTYPE" type="xsd:string"/><!-- 必填-->
+					<element name="REGISTRATIONNO"  type="xsd:string"/><!-- 必填-->
+				</all>
+			</complexType>
+			<complexType name="FLIGHTINFO">
+				<all>
+					<element name="DEPTAIRPORT" type="xsd:string"/><!-- 必填-->
+					<element name="ARRAIRPORT" type="xsd:string"/><!-- 必填-->
+					<element name="FLIGHTNO"  type="xsd:string"/><!-- 必填-->
+					<element name="FLIGHTDATE" type="xsd:string"/><!-- 必填-->
+					<element name="TICKETNO" type="xsd:string"/><!-- 必填-->
+					<element name="CABIN" type="xsd:string"/><!-- 必填-->
+					<element name="SEATNUM" type="xsd:string"/>					
+				</all>
+			</complexType>	
+			<complexType name="FOODINFO">
+				<all>
+				    <element name="FOODID" type="xsd:string"/><!-- 必填-->
+					<element name="FOODTYPE" type="xsd:string"/>
+					<element name="FOODCODE" type="xsd:string"/><!-- 必填-->
+					<element name="FOODNAME" type="xsd:string"/>
+					<element name="UNITPRICE" type="xsd:string"/>
+					<element name="FOODAMOUNT" type="xsd:string"/>
+					<element name="OPERATORNAME" type="xsd:string"/><!-- 必填-->
+					<element name="OPERATORTEL" type="xsd:string"/>	<!-- 必填-->
+					<element name="OPERATOREMAIL" type="xsd:string"/>	
+					<element name="SUBFROM" type="xsd:string"/>	<!-- 必填-->
+					<element name="SUBNAME" type="xsd:string"/>	<!-- 必填-->
+					<element name="SYSTEMCODE"  type="xsd:string"/>
+					<element name="EVENTDESCRIPTION"  type="xsd:string"/><!--服务事件或餐食信息必须有一个 -->
+				</all>
+			</complexType>		
+			<element name="AddFoodInfoResponse">
+				<complexType>
+					<all>
+						<element name="code" type="xsd:string"/>
+						<element name="mesage" type="xsd:string"/>
+					</all>
+				</complexType>
+			</element>
+			<element name="AddFoodInfoFault">
+				<complexType>
+					<sequence>
+						<element name="code" type="xsd:string"/>
+						<element name="mesage" type="xsd:string"/>
+					</sequence>
+				</complexType>
+			</element>
+		</schema>
+	</wsdl:types>
+	<wsdl:message name="AddFoodInfoRequestMessage">
+		<wsdl:part element="impl:AddFoodInfoRequest" name="parameters"/>
+	</wsdl:message>
+	<wsdl:message name="AddFoodInfoResponseMessage">
+		<wsdl:part element="impl:AddFoodInfoResponse" name="parameters"/>
+	</wsdl:message>
+	<wsdl:message name="AddFoodInfoFaultMessage">
+		<wsdl:part element="impl:AddFoodInfoFault" name="parameters"/>
+	</wsdl:message>
+	<wsdl:portType name="AddFoodInfoService">
+		<wsdl:operation name="AddFoodInfo">
+			<wsdl:input message="impl:AddFoodInfoRequestMessage" name="AddFoodInfoRequestMessageInput"/>
+			<wsdl:output message="impl:AddFoodInfoResponseMessage" name="AddFoodInfoResponseMessageOut"/>
+			<wsdl:fault message="impl:AddFoodInfoFaultMessage" name="AddFoodInfoFaultMessageFault"/>
+		</wsdl:operation>
+	</wsdl:portType>
+
+	<wsdl:binding name="AddFoodInfoServiceSoapBinding" type="impl:AddFoodInfoService">
+		<wsaw:UsingAddressing wsdl:required="false" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl"/>
+		<wsdlsoap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+
+		<wsdl:operation name="AddFoodInfo">
+			<wsdlsoap:operation soapAction="AddFoodInfo"/>
+			<wsdl:input name="AddFoodInfoRequestMessageInput">
+				<wsdlsoap:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output name="AddFoodInfoResponseMessageOut">
+				<wsdlsoap:body use="literal"/>
+			</wsdl:output>
+			<wsdl:fault name="AddFoodInfoFaultMessageFault">
+				<wsdlsoap:body use="literal"/>
+			</wsdl:fault>
+		</wsdl:operation>
+	</wsdl:binding>
+
+	<wsdl:service name="AddFoodInfoServiceService">
+		<wsdl:port binding="impl:AddFoodInfoServiceSoapBinding" name="AddFoodInfoService">
+			<wsdlsoap:address location="http://172.20.35.36:9080/ECIF/xmlservlet/XMLServlet"/>
+		</wsdl:port>
+	</wsdl:service>
+</wsdl:definitions>

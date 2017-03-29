@@ -38,12 +38,16 @@
   <wsdl:message name="getInfoByMobilePhoneSoapOut">
     <wsdl:part name="parameters" element="tns:getInfoByMobilePhoneResponse" />
   </wsdl:message>
+  
+  
   <wsdl:portType name="MobilePhoneServiceSoap">
     <wsdl:operation name="getInfoByMobilePhone">
       <wsdl:input message="tns:getInfoByMobilePhoneSoapIn" />
       <wsdl:output message="tns:getInfoByMobilePhoneSoapOut" />
     </wsdl:operation>
   </wsdl:portType>
+  
+  
   <wsdl:binding name="MobilePhoneServiceSoap" type="tns:MobilePhoneServiceSoap">
     <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
     <wsdl:operation name="getInfoByMobilePhone">

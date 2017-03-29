@@ -1,0 +1,491 @@
+<?xml version='1.0' encoding='UTF-8'?><wsdl:definitions xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="http://web.ecif.cea.com/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:ns1="http://schemas.xmlsoap.org/soap/http" name="GetPAXInfoService" targetNamespace="http://web.ecif.cea.com/">
+  <wsdl:types>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://web.ecif.cea.com/" elementFormDefault="unqualified" targetNamespace="http://web.ecif.cea.com/" version="1.0">
+
+  <xs:element name="GetPax" type="tns:GetPax"/>
+
+  <xs:element name="GetPaxResponse" type="tns:GetPaxResponse"/>
+
+  <xs:complexType name="GetPax">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="flightnumber" type="xs:string"/>
+      <xs:element minOccurs="0" name="postfix" type="xs:string"/>
+      <xs:element minOccurs="0" name="dateStr" type="xs:string"/>
+      <xs:element minOccurs="0" name="depCD" type="xs:string"/>
+      <xs:element minOccurs="0" name="arrCD" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="GetPaxResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="return" type="tns:paxInfo"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="paxInfo">
+    <xs:sequence>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="record" nillable="true" type="tns:flightCust"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="flightCust">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="airpreference" type="tns:airpreference"/>
+      <xs:element minOccurs="0" name="baggage" type="tns:baggage"/>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="connectingflightgroup" nillable="true" type="tns:connectingflight"/>
+      <xs:element minOccurs="0" name="customcomplain" type="tns:customcomplain"/>
+      <xs:element minOccurs="0" name="customerinsight" type="tns:customerinsight"/>
+      <xs:element minOccurs="0" name="ffpcard" type="tns:ffpcard"/>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="ffppointgroup" nillable="true" type="tns:ffppoint"/>
+      <xs:element minOccurs="0" name="flightcount" type="xs:string"/>
+      <xs:element minOccurs="0" name="flightpnrinfo" type="tns:flightpnrinfo"/>
+      <xs:element minOccurs="0" name="flightsegment" type="tns:flightsegment"/>
+      <xs:element minOccurs="0" name="flightstatiscs" type="tns:flightstatiscs"/>
+      <xs:element minOccurs="0" name="hotelpreference" type="tns:hotelpreference"/>
+      <xs:element minOccurs="0" name="individual" type="tns:individual"/>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="servicecompensationgroup" nillable="true" type="tns:servicecompensation"/>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="serviceeventgroup" nillable="true" type="tns:serviceevent"/>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="specialservicerequestgroup" nillable="true" type="tns:specialservicerequest"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="airpreference">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="beverage" type="xs:string"/>
+      <xs:element minOccurs="0" name="boardingtype" type="xs:string"/>
+      <xs:element minOccurs="0" name="businesstravelcabin" type="xs:string"/>
+      <xs:element minOccurs="0" name="contactmethod" type="xs:string"/>
+      <xs:element minOccurs="0" name="distributiontype" type="xs:string"/>
+      <xs:element minOccurs="0" name="domesticclass" type="xs:string"/>
+      <xs:element minOccurs="0" name="equipmenttype1" type="xs:string"/>
+      <xs:element minOccurs="0" name="equipmenttype2" type="xs:string"/>
+      <xs:element minOccurs="0" name="faith" type="xs:string"/>
+      <xs:element minOccurs="0" name="flighttype" type="xs:string"/>
+      <xs:element minOccurs="0" name="foreignairline1" type="xs:string"/>
+      <xs:element minOccurs="0" name="foreignairline2" type="xs:string"/>
+      <xs:element minOccurs="0" name="internationalclass" type="xs:string"/>
+      <xs:element minOccurs="0" name="language" type="xs:string"/>
+      <xs:element minOccurs="0" name="leisuretravelcabin" type="xs:string"/>
+      <xs:element minOccurs="0" name="mailingsuppressindicator" type="xs:string"/>
+      <xs:element minOccurs="0" name="mealtype" type="xs:string"/>
+      <xs:element minOccurs="0" name="mediaentertainment" type="xs:string"/>
+      <xs:element minOccurs="0" name="moviecategory" type="xs:string"/>
+      <xs:element minOccurs="0" name="personality" type="xs:string"/>
+      <xs:element minOccurs="0" name="readingmaterial" type="xs:string"/>
+      <xs:element minOccurs="0" name="readingmateriallanguage" type="xs:string"/>
+      <xs:element minOccurs="0" name="readingtiming" type="xs:string"/>
+      <xs:element minOccurs="0" name="seatlocation" type="xs:string"/>
+      <xs:element minOccurs="0" name="seatno" type="xs:string"/>
+      <xs:element minOccurs="0" name="specialrequests" type="xs:string"/>
+      <xs:element minOccurs="0" name="taboo" type="xs:string"/>
+      <xs:element minOccurs="0" name="tickettype" type="xs:string"/>
+      <xs:element minOccurs="0" name="topic" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="baggage">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="baggageclaimairport" type="xs:string"/>
+      <xs:element minOccurs="0" name="baggagepieces" type="xs:string"/>
+      <xs:element minOccurs="0" name="baggageweight" type="xs:string"/>
+      <xs:element minOccurs="0" name="eventreference" type="xs:string"/>
+      <xs:element minOccurs="0" name="excessbaggagepaytype" type="xs:string"/>
+      <xs:element minOccurs="0" name="excessbaggageweight" type="xs:string"/>
+      <xs:element minOccurs="0" name="payamount" type="xs:string"/>
+      <xs:element minOccurs="0" name="paycurrency" type="xs:string"/>
+      <xs:element minOccurs="0" name="weightunit" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="connectingflight">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="actualarrivedate" type="xs:string"/>
+      <xs:element minOccurs="0" name="actualarrivetime" type="xs:string"/>
+      <xs:element minOccurs="0" name="actualdeparturedate" type="xs:string"/>
+      <xs:element minOccurs="0" name="actualdeparturetime" type="xs:string"/>
+      <xs:element minOccurs="0" name="airporttax" type="xs:string"/>
+      <xs:element minOccurs="0" name="arriveairport" type="xs:string"/>
+      <xs:element minOccurs="0" name="arrivedate" type="xs:string"/>
+      <xs:element minOccurs="0" name="arrivetime" type="xs:string"/>
+      <xs:element minOccurs="0" name="boardingchecknumber" type="xs:string"/>
+      <xs:element minOccurs="0" name="boardinggatenumber" type="xs:string"/>
+      <xs:element minOccurs="0" name="cabin" type="xs:string"/>
+      <xs:element minOccurs="0" name="carrier" type="xs:string"/>
+      <xs:element minOccurs="0" name="checkintype" type="xs:string"/>
+      <xs:element minOccurs="0" name="childflightsegmentid" type="xs:string"/>
+      <xs:element minOccurs="0" name="codesharetype" type="xs:string"/>
+      <xs:element minOccurs="0" name="connectingindicator" type="xs:string"/>
+      <xs:element minOccurs="0" name="crspnrid" type="xs:string"/>
+      <xs:element minOccurs="0" name="curoptcode" type="xs:string"/>
+      <xs:element minOccurs="0" name="currency" type="xs:string"/>
+      <xs:element minOccurs="0" name="degradeindicator" type="xs:string"/>
+      <xs:element minOccurs="0" name="deniedboardingtype" type="xs:string"/>
+      <xs:element minOccurs="0" name="departureairport" type="xs:string"/>
+      <xs:element minOccurs="0" name="departuredate" type="xs:string"/>
+      <xs:element minOccurs="0" name="departuredayofweek" type="xs:string"/>
+      <xs:element minOccurs="0" name="departuretime" type="xs:string"/>
+      <xs:element minOccurs="0" name="ffpmembercardno" type="xs:string"/>
+      <xs:element minOccurs="0" name="flightnumber" type="xs:string"/>
+      <xs:element minOccurs="0" name="flightsegmentstatus" type="xs:string"/>
+      <xs:element minOccurs="0" name="flowncabin" type="xs:string"/>
+      <xs:element minOccurs="0" name="flownsubcabin" type="xs:string"/>
+      <xs:element minOccurs="0" name="fnpostfix" type="xs:string"/>
+      <xs:element minOccurs="0" name="fultax" type="xs:string"/>
+      <xs:element minOccurs="0" name="goshowindicator" type="xs:string"/>
+      <xs:element minOccurs="0" name="icspnrid" type="xs:string"/>
+      <xs:element minOccurs="0" name="infantacceptindicator" type="xs:string"/>
+      <xs:element minOccurs="0" name="infantetktnumber" type="xs:string"/>
+      <xs:element minOccurs="0" name="infantindicator" type="xs:string"/>
+      <xs:element minOccurs="0" name="jumpseatindicator" type="xs:string"/>
+      <xs:element minOccurs="0" name="loyaltyprogram" type="xs:string"/>
+      <xs:element minOccurs="0" name="mktgcarrier" type="xs:string"/>
+      <xs:element minOccurs="0" name="mktgflightnumber" type="xs:string"/>
+      <xs:element minOccurs="0" name="mktgfnpostfix" type="xs:string"/>
+      <xs:element minOccurs="0" name="noshowindicator" type="xs:string"/>
+      <xs:element minOccurs="0" name="overbookingqty" type="xs:string"/>
+      <xs:element minOccurs="0" name="partyid" type="xs:string"/>
+      <xs:element minOccurs="0" name="partytype" type="xs:string"/>
+      <xs:element minOccurs="0" name="pnragentcode" type="xs:string"/>
+      <xs:element minOccurs="0" name="pnrcreatedate" type="xs:string"/>
+      <xs:element minOccurs="0" name="pnrofficecode" type="xs:string"/>
+      <xs:element minOccurs="0" name="pnrreference" type="xs:string"/>
+      <xs:element minOccurs="0" name="price" type="xs:string"/>
+      <xs:element minOccurs="0" name="prmcarrier" type="xs:string"/>
+      <xs:element minOccurs="0" name="prmflightnumber" type="xs:string"/>
+      <xs:element minOccurs="0" name="prmfnpostfix" type="xs:string"/>
+      <xs:element minOccurs="0" name="seatnumber" type="xs:string"/>
+      <xs:element minOccurs="0" name="subcabin" type="xs:string"/>
+      <xs:element minOccurs="0" name="ticketnumber" type="xs:string"/>
+      <xs:element minOccurs="0" name="umnrindicator" type="xs:string"/>
+      <xs:element minOccurs="0" name="upgradeindicator" type="xs:string"/>
+      <xs:element minOccurs="0" name="voluntaryindicator" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="customcomplain">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="amount" type="xs:string"/>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="complaingroup" nillable="true" type="tns:complain"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="complain">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="complaindescription" type="xs:string"/>
+      <xs:element minOccurs="0" name="customerrequirement" type="xs:string"/>
+      <xs:element minOccurs="0" name="eventdate" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="customerinsight">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="advancebookingpropensity" type="xs:string"/>
+      <xs:element minOccurs="0" name="agerange" type="xs:string"/>
+      <xs:element minOccurs="0" name="bookdirectpropensity" type="xs:string"/>
+      <xs:element minOccurs="0" name="cancelpropensity" type="xs:string"/>
+      <xs:element minOccurs="0" name="channeltypepropensity" type="xs:string"/>
+      <xs:element minOccurs="0" name="customercontribution" type="xs:string"/>
+      <xs:element minOccurs="0" name="customervalue" type="xs:string"/>
+      <xs:element minOccurs="0" name="domesticpropensity" type="xs:string"/>
+      <xs:element minOccurs="0" name="ffptier" type="xs:string"/>
+      <xs:element minOccurs="0" name="highyieldpropensity" type="xs:string"/>
+      <xs:element minOccurs="0" name="incomerange" type="xs:string"/>
+      <xs:element minOccurs="0" name="isvalid" type="xs:string"/>
+      <xs:element minOccurs="0" name="lifecyclephase" type="xs:string"/>
+      <xs:element minOccurs="0" name="lifetimeyears" type="xs:string"/>
+      <xs:element minOccurs="0" name="longhaulpropensity" type="xs:string"/>
+      <xs:element minOccurs="0" name="noshowpropensity" type="xs:string"/>
+      <xs:element minOccurs="0" name="passengerbiztype" type="xs:string"/>
+      <xs:element minOccurs="0" name="reservationarrangementcode" type="xs:string"/>
+      <xs:element minOccurs="0" name="selfservicepropensity" type="xs:string"/>
+      <xs:element minOccurs="0" name="usualticketmethodcode" type="xs:string"/>
+      <xs:element minOccurs="0" name="viplevel" type="xs:string"/>
+      <xs:element minOccurs="0" name="wholesorting" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="ffpcard">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="cardindiator" type="xs:string"/>
+      <xs:element minOccurs="0" name="cardlevel" type="xs:string"/>
+      <xs:element minOccurs="0" name="ffpprogramowner" type="xs:string"/>
+      <xs:element minOccurs="0" name="loyaltycardno" type="xs:string"/>
+      <xs:element minOccurs="0" name="loyaltynumber" type="xs:string"/>
+      <xs:element minOccurs="0" name="loyaltyprogram" type="xs:string"/>
+      <xs:element minOccurs="0" name="partnerid" type="xs:string"/>
+      <xs:element minOccurs="0" name="validfromdate" type="xs:string"/>
+      <xs:element minOccurs="0" name="validtodate" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="ffppoint">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="consumepointsexpired3" type="xs:string"/>
+      <xs:element minOccurs="0" name="curconsumepoints" type="xs:string"/>
+      <xs:element minOccurs="0" name="curflightsegments" type="xs:string"/>
+      <xs:element minOccurs="0" name="curoverdraftpoints" type="xs:string"/>
+      <xs:element minOccurs="0" name="curupgradepoints" type="xs:string"/>
+      <xs:element minOccurs="0" name="loyaltycardno" type="xs:string"/>
+      <xs:element minOccurs="0" name="loyaltynumber" type="xs:string"/>
+      <xs:element minOccurs="0" name="loyaltyprogram" type="xs:string"/>
+      <xs:element minOccurs="0" name="periodadditionalpoints" type="xs:string"/>
+      <xs:element minOccurs="0" name="periodbasicpoints" type="xs:string"/>
+      <xs:element minOccurs="0" name="periodclassbonuspoints" type="xs:string"/>
+      <xs:element minOccurs="0" name="periodconsumepoints" type="xs:string"/>
+      <xs:element minOccurs="0" name="periodflightsegments" type="xs:string"/>
+      <xs:element minOccurs="0" name="periodgradebonuspoints" type="xs:string"/>
+      <xs:element minOccurs="0" name="periodoverdraftpoints" type="xs:string"/>
+      <xs:element minOccurs="0" name="periodpromotionalpoints" type="xs:string"/>
+      <xs:element minOccurs="0" name="periodpurchasepoints" type="xs:string"/>
+      <xs:element minOccurs="0" name="periodredeemedpoints" type="xs:string"/>
+      <xs:element minOccurs="0" name="periodupgradepoints" type="xs:string"/>
+      <xs:element minOccurs="0" name="upgradepointsexpired3" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="flightpnrinfo">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="name" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="flightsegment">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="actualarrivedate" type="xs:string"/>
+      <xs:element minOccurs="0" name="actualarrivetime" type="xs:string"/>
+      <xs:element minOccurs="0" name="actualdeparturedate" type="xs:string"/>
+      <xs:element minOccurs="0" name="actualdeparturetime" type="xs:string"/>
+      <xs:element minOccurs="0" name="airporttax" type="xs:string"/>
+      <xs:element minOccurs="0" name="arriveairport" type="xs:string"/>
+      <xs:element minOccurs="0" name="arrivedate" type="xs:string"/>
+      <xs:element minOccurs="0" name="arrivetime" type="xs:string"/>
+      <xs:element minOccurs="0" name="boardingchecknumber" type="xs:string"/>
+      <xs:element minOccurs="0" name="boardinggatenumber" type="xs:string"/>
+      <xs:element minOccurs="0" name="cabin" type="xs:string"/>
+      <xs:element minOccurs="0" name="carrier" type="xs:string"/>
+      <xs:element minOccurs="0" name="checkintype" type="xs:string"/>
+      <xs:element minOccurs="0" name="childflightsegmentid" type="xs:string"/>
+      <xs:element minOccurs="0" name="codesharetype" type="xs:string"/>
+      <xs:element minOccurs="0" name="connectingindicator" type="xs:string"/>
+      <xs:element minOccurs="0" name="crspnrid" type="xs:string"/>
+      <xs:element minOccurs="0" name="curoptcode" type="xs:string"/>
+      <xs:element minOccurs="0" name="currency" type="xs:string"/>
+      <xs:element minOccurs="0" name="degradeindicator" type="xs:string"/>
+      <xs:element minOccurs="0" name="deniedboardingtype" type="xs:string"/>
+      <xs:element minOccurs="0" name="departureairport" type="xs:string"/>
+      <xs:element minOccurs="0" name="departuredate" type="xs:string"/>
+      <xs:element minOccurs="0" name="departuredayofweek" type="xs:string"/>
+      <xs:element minOccurs="0" name="departuretime" type="xs:string"/>
+      <xs:element minOccurs="0" name="ffpmembercardno" type="xs:string"/>
+      <xs:element minOccurs="0" name="flightnumber" type="xs:string"/>
+      <xs:element minOccurs="0" name="flightsegmentstatus" type="xs:string"/>
+      <xs:element minOccurs="0" name="flowncabin" type="xs:string"/>
+      <xs:element minOccurs="0" name="flownsubcabin" type="xs:string"/>
+      <xs:element minOccurs="0" name="fnpostfix" type="xs:string"/>
+      <xs:element minOccurs="0" name="fultax" type="xs:string"/>
+      <xs:element minOccurs="0" name="goshowindicator" type="xs:string"/>
+      <xs:element minOccurs="0" name="icspnrid" type="xs:string"/>
+      <xs:element minOccurs="0" name="infantacceptindicator" type="xs:string"/>
+      <xs:element minOccurs="0" name="infantetktnumber" type="xs:string"/>
+      <xs:element minOccurs="0" name="infantindicator" type="xs:string"/>
+      <xs:element minOccurs="0" name="jumpseatindicator" type="xs:string"/>
+      <xs:element minOccurs="0" name="loyaltyprogram" type="xs:string"/>
+      <xs:element minOccurs="0" name="mktgcarrier" type="xs:string"/>
+      <xs:element minOccurs="0" name="mktgflightnumber" type="xs:string"/>
+      <xs:element minOccurs="0" name="mktgfnpostfix" type="xs:string"/>
+      <xs:element minOccurs="0" name="noshowindicator" type="xs:string"/>
+      <xs:element minOccurs="0" name="overbookingqty" type="xs:string"/>
+      <xs:element minOccurs="0" name="partyid" type="xs:string"/>
+      <xs:element minOccurs="0" name="partytype" type="xs:string"/>
+      <xs:element minOccurs="0" name="pnragentcode" type="xs:string"/>
+      <xs:element minOccurs="0" name="pnrcreatedate" type="xs:string"/>
+      <xs:element minOccurs="0" name="pnrofficecode" type="xs:string"/>
+      <xs:element minOccurs="0" name="pnrreference" type="xs:string"/>
+      <xs:element minOccurs="0" name="price" type="xs:string"/>
+      <xs:element minOccurs="0" name="prmcarrier" type="xs:string"/>
+      <xs:element minOccurs="0" name="prmflightnumber" type="xs:string"/>
+      <xs:element minOccurs="0" name="prmfnpostfix" type="xs:string"/>
+      <xs:element minOccurs="0" name="seatnumber" type="xs:string"/>
+      <xs:element minOccurs="0" name="subcabin" type="xs:string"/>
+      <xs:element minOccurs="0" name="ticketnumber" type="xs:string"/>
+      <xs:element minOccurs="0" name="umnrindicator" type="xs:string"/>
+      <xs:element minOccurs="0" name="upgradeindicator" type="xs:string"/>
+      <xs:element minOccurs="0" name="voluntaryindicator" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="flightstatiscs">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="flightstat" type="tns:flightstat"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="flightstat">
+    <xs:sequence>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="count" nillable="true" type="xs:string"/>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="month" nillable="true" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="hotelpreference">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="name" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="individual">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="agetype" type="xs:string"/>
+      <xs:element minOccurs="0" name="birthdate" type="xs:string"/>
+      <xs:element minOccurs="0" name="bodytype" type="xs:string"/>
+      <xs:element minOccurs="0" name="ccgreenchunnelindicator" type="xs:string"/>
+      <xs:element minOccurs="0" name="ccpremiterindicator" type="xs:string"/>
+      <xs:element minOccurs="0" name="ceacustomermanager" type="xs:string"/>
+      <xs:element minOccurs="0" name="companycitylocationid" type="xs:string"/>
+      <xs:element minOccurs="0" name="companyconutrylocationid" type="xs:string"/>
+      <xs:element minOccurs="0" name="companyname" type="xs:string"/>
+      <xs:element minOccurs="0" name="deafindicator" type="xs:string"/>
+      <xs:element minOccurs="0" name="educationlevel" type="xs:string"/>
+      <xs:element minOccurs="0" name="eliteindicator" type="xs:string"/>
+      <xs:element minOccurs="0" name="email" type="xs:string"/>
+      <xs:element minOccurs="0" name="ethnicgroup" type="xs:string"/>
+      <xs:element minOccurs="0" name="ffpindicator" type="xs:string"/>
+      <xs:element minOccurs="0" name="ffpprogramowner" type="xs:string"/>
+      <xs:element minOccurs="0" name="gender" type="xs:string"/>
+      <xs:element minOccurs="0" name="homecitylocationid" type="xs:string"/>
+      <xs:element minOccurs="0" name="homeconutrylocationid" type="xs:string"/>
+      <xs:element minOccurs="0" name="incomegroup" type="xs:string"/>
+      <xs:element minOccurs="0" name="industry" type="xs:string"/>
+      <xs:element minOccurs="0" name="legdisabledindicator" type="xs:string"/>
+      <xs:element minOccurs="0" name="maritalstatus" type="xs:string"/>
+      <xs:element minOccurs="0" name="muteindicator" type="xs:string"/>
+      <xs:element minOccurs="0" name="nationality" type="xs:string"/>
+      <xs:element minOccurs="0" name="numberofchildren" type="xs:string"/>
+      <xs:element minOccurs="0" name="occupation" type="xs:string"/>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="partynamegroup" nillable="true" type="tns:partyname"/>
+      <xs:element minOccurs="0" name="partynumber" type="xs:string"/>
+      <xs:element minOccurs="0" name="passengeranalysis" type="xs:string"/>
+      <xs:element minOccurs="0" name="pcindicator" type="xs:string"/>
+      <xs:element minOccurs="0" name="postiondescription" type="xs:string"/>
+      <xs:element minOccurs="0" name="registratedname" type="xs:string"/>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="registrationgroup" nillable="true" type="tns:registration"/>
+      <xs:element minOccurs="0" name="seniority" type="xs:string"/>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="telephonegroup" nillable="true" type="tns:telephone"/>
+      <xs:element minOccurs="0" name="vipindicator" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="partyname">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="familyname" type="xs:string"/>
+      <xs:element minOccurs="0" name="fullname" type="xs:string"/>
+      <xs:element minOccurs="0" name="givenname" type="xs:string"/>
+      <xs:element minOccurs="0" name="isdefaultname" type="xs:string"/>
+      <xs:element minOccurs="0" name="middlename" type="xs:string"/>
+      <xs:element minOccurs="0" name="partynametype" type="xs:string"/>
+      <xs:element minOccurs="0" name="preferredtitle" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="registration">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="registratedname" type="xs:string"/>
+      <xs:element minOccurs="0" name="registrationnumber" type="xs:string"/>
+      <xs:element minOccurs="0" name="registrationtype" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="telephone">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="areacode" type="xs:string"/>
+      <xs:element minOccurs="0" name="contactlimittime" type="xs:string"/>
+      <xs:element minOccurs="0" name="countryareacode" type="xs:string"/>
+      <xs:element minOccurs="0" name="created_system" type="xs:string"/>
+      <xs:element minOccurs="0" name="ecif_created_time" type="xs:string"/>
+      <xs:element minOccurs="0" name="extensionnumber" type="xs:string"/>
+      <xs:element minOccurs="0" name="ispreferredcontact" type="xs:string"/>
+      <xs:element minOccurs="0" name="numberbody" type="xs:string"/>
+      <xs:element minOccurs="0" name="phonetype" type="xs:string"/>
+      <xs:element minOccurs="0" name="privateflag" type="xs:string"/>
+      <xs:element minOccurs="0" name="usestatus" type="xs:string"/>
+      <xs:element minOccurs="0" name="usetype" type="xs:string"/>
+      <xs:element minOccurs="0" name="usingsequence" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="servicecompensation">
+    <xs:sequence/>
+  </xs:complexType>
+
+  <xs:complexType name="serviceevent">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="arriveairport" type="xs:string"/>
+      <xs:element minOccurs="0" name="createdsystem" type="xs:string"/>
+      <xs:element minOccurs="0" name="departuredate" type="xs:string"/>
+      <xs:element minOccurs="0" name="eventdate" type="xs:string"/>
+      <xs:element minOccurs="0" name="eventdescription" type="xs:string"/>
+      <xs:element minOccurs="0" name="eventrecorddate" type="xs:string"/>
+      <xs:element minOccurs="0" name="eventreference" type="xs:string"/>
+      <xs:element minOccurs="0" name="eventseverity" type="xs:string"/>
+      <xs:element minOccurs="0" name="eventstatus" type="xs:string"/>
+      <xs:element minOccurs="0" name="eventtype" type="xs:string"/>
+      <xs:element minOccurs="0" name="flightnumber" type="xs:string"/>
+      <xs:element minOccurs="0" name="fnpostfix" type="xs:string"/>
+      <xs:element minOccurs="0" name="handleresult" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="specialservicerequest">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="contactmethod" type="xs:string"/>
+      <xs:element minOccurs="0" name="eventreference" type="xs:string"/>
+      <xs:element minOccurs="0" name="flightsegementid" type="xs:string"/>
+      <xs:element minOccurs="0" name="handleclass" type="xs:string"/>
+      <xs:element minOccurs="0" name="handledate" type="xs:string"/>
+      <xs:element minOccurs="0" name="handleresult" type="xs:string"/>
+      <xs:element minOccurs="0" name="handlestaff" type="xs:string"/>
+      <xs:element minOccurs="0" name="handlestatus" type="xs:string"/>
+      <xs:element minOccurs="0" name="pnrcreatedate" type="xs:string"/>
+      <xs:element minOccurs="0" name="pnrreference" type="xs:string"/>
+      <xs:element minOccurs="0" name="ssrcategory" type="xs:string"/>
+      <xs:element minOccurs="0" name="ssrdescription" type="xs:string"/>
+      <xs:element minOccurs="0" name="ssrsubcategory" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+
+</xs:schema>
+  </wsdl:types>
+  <wsdl:message name="GetPax">
+    <wsdl:part element="tns:GetPax" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="GetPaxResponse">
+    <wsdl:part element="tns:GetPaxResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:portType name="IGetPaxInfo">
+    <wsdl:operation name="GetPax">
+      <wsdl:input message="tns:GetPax" name="GetPax">
+    </wsdl:input>
+      <wsdl:output message="tns:GetPaxResponse" name="GetPaxResponse">
+    </wsdl:output>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="GetPAXInfoServiceSoapBinding" type="tns:IGetPaxInfo">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="GetPax">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="GetPax">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="GetPaxResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="GetPAXInfoService">
+    <wsdl:port binding="tns:GetPAXInfoServiceSoapBinding" name="GetPAXInfoPort">
+      <soap:address location="http://172.28.29.98:9080/ECIF/GetPAXInfo"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

@@ -1,0 +1,97 @@
+<?xml version='1.0' encoding='UTF-8'?><wsdl:definitions xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:ns1="http://provider.service.ceair.com/" name="RealExtractDataService" targetNamespace="http://provider.service.ceair.com/">
+    <wsdl:types>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:ns1="http://vo.domain.ceair.com/" xmlns:ns0="http://provider.service.ceair.com/" attributeFormDefault="unqualified" elementFormDefault="unqualified" targetNamespace="http://provider.service.ceair.com/">
+  <xsd:import namespace="http://vo.domain.ceair.com/"/>
+  <xsd:complexType name="codeText">
+    <xsd:complexContent>
+      <xsd:extension base="ns0:baseDTO">
+        <xsd:sequence>
+          <xsd:element minOccurs="0" name="chText" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="code" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="enText" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="hotFlag" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="jsonObj" type="xsd:anyType"/>
+          <xsd:element minOccurs="0" name="pid" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="pid1" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="pid2" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="pid3" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="pid4" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="pinyin" type="xsd:string"/>
+          <xsd:element minOccurs="0" name="sign" type="xsd:string"/>
+        </xsd:sequence>
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
+  <xsd:complexType name="getCacheDictResponse">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="return" type="ns1:SysCodes"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="queryData">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="enquire" type="xsd:string"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="queryDataResponse">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="result" type="xsd:string"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType abstract="true" name="baseDTO">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="id" type="xsd:anyType"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:complexType name="getCacheDict">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="enquire" type="xsd:string"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  <xsd:element name="getCacheDictResponse" type="ns0:getCacheDictResponse"/>
+  <xsd:element name="SysCodes" type="ns1:SysCodes"/>
+  <xsd:element name="queryData" type="ns0:queryData"/>
+  <xsd:element name="queryDataResponse" type="ns0:queryDataResponse"/>
+  <xsd:element name="getCacheDict" type="ns0:getCacheDict"/>
+  <xsd:element name="ServiceException" type="ns0:ServiceException"/>
+  <xsd:complexType name="ServiceException">
+    <xsd:sequence>
+      <xsd:element minOccurs="0" name="message" type="xsd:string"/>
+    </xsd:sequence>
+  </xsd:complexType>
+</xsd:schema>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:ns1="http://provider.service.ceair.com/" xmlns:ns0="http://vo.domain.ceair.com/" attributeFormDefault="unqualified" elementFormDefault="unqualified" targetNamespace="http://vo.domain.ceair.com/">
+  <xsd:import namespace="http://provider.service.ceair.com/"/>
+  <xsd:complexType name="SysCodes">
+    <xsd:sequence>
+      <xsd:element maxOccurs="unbounded" minOccurs="0" name="codeTexts" type="ns1:codeText"/>
+    </xsd:sequence>
+  </xsd:complexType>
+</xsd:schema>
+    </wsdl:types>
+    <wsdl:message name="queryData">
+        <wsdl:part element="ns1:queryData" name="parameters"/>
+    </wsdl:message>
+    <wsdl:message name="queryDataResponse">
+        <wsdl:part element="ns1:queryDataResponse" name="parameters"/>
+    </wsdl:message>
+    <wsdl:message name="getCacheDict">
+        <wsdl:part element="ns1:getCacheDict" name="parameters"/>
+    </wsdl:message>
+    <wsdl:message name="getCacheDictResponse">
+        <wsdl:part element="ns1:getCacheDictResponse" name="parameters"/>
+    </wsdl:message>
+    <wsdl:message name="ServiceException">
+        <wsdl:part element="ns1:ServiceException" name="ServiceException"/>
+    </wsdl:message>
+    <wsdl:portType name="RealExtractDataService">
+        <wsdl:operation name="queryData">
+            <wsdl:input message="ns1:queryData" name="queryData"/>
+            <wsdl:output message="ns1:queryDataResponse" name="queryDataResponse"/>
+        </wsdl:operation>
+        <wsdl:operation name="getCacheDict">
+            <wsdl:input message="ns1:getCacheDict" name="getCacheDict"/>
+            <wsdl:output message="ns1:getCacheDictResponse" name="getCacheDictResponse"/>
+            <wsdl:fault message="ns1:ServiceException" name="ServiceException"/>
+        </wsdl:operation>
+    </wsdl:portType>
+</wsdl:definitions>

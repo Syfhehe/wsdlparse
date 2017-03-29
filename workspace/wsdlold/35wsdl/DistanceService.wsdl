@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions name="DistanceService" targetNamespace="http://service.basic.pss.ceair.com/" xmlns:ns1="http://schemas.xmlsoap.org/soap/http" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="http://service.basic.pss.ceair.com/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <wsdl:types>
+<xs:schema attributeFormDefault="unqualified" elementFormDefault="unqualified" targetNamespace="http://service.basic.pss.ceair.com/" xmlns:tns="http://service.basic.pss.ceair.com/" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:complexType name="distanceRQ">
+    <xs:sequence>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="queryDistanceInfo" nillable="true" type="tns:queryDistanceInfo"/>
+      <xs:element minOccurs="0" name="usrID" type="xs:string"/>
+      <xs:element minOccurs="0" name="usrPwd" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="queryDistanceInfo">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="DEST_AIRPORT_CD" type="xs:string"/>
+      <xs:element minOccurs="0" name="ORIG_AIRPORT_CD" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="distanceRS">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="comment" type="xs:string"/>
+      <xs:element maxOccurs="unbounded" minOccurs="0" name="distance" nillable="true" type="tns:distance"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="distance">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="DEST_AIRPORT_CD" type="xs:string"/>
+      <xs:element minOccurs="0" name="DISTANCE" type="xs:string"/>
+      <xs:element minOccurs="0" name="ORIG_AIRPORT_CD" type="xs:string"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="queryDistance" type="tns:queryDistance"/>
+  <xs:complexType name="queryDistance">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="arg0" type="tns:distanceRQ"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="queryDistanceResponse" type="tns:queryDistanceResponse"/>
+  <xs:complexType name="queryDistanceResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="return" type="tns:distanceRS"/>
+    </xs:sequence>
+  </xs:complexType>
+</xs:schema>
+  </wsdl:types>
+  <wsdl:message name="queryDistance">
+    <wsdl:part element="tns:queryDistance" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="queryDistanceResponse">
+    <wsdl:part element="tns:queryDistanceResponse" name="parameters">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:portType name="DistanceServicePortType">
+    <wsdl:operation name="queryDistance">
+      <wsdl:input message="tns:queryDistance" name="queryDistance">
+    </wsdl:input>
+      <wsdl:output message="tns:queryDistanceResponse" name="queryDistanceResponse">
+    </wsdl:output>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="DistanceServiceSoapBinding" type="tns:DistanceServicePortType">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="queryDistance">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="queryDistance">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="queryDistanceResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="DistanceService">
+    <wsdl:port binding="tns:DistanceServiceSoapBinding" name="DistanceServicePort">
+      <soap:address location="http://172.31.3.194:7602/basiccs/ws/com.ceair.pss.basic.service.DistanceService"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>
