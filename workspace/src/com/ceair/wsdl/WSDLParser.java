@@ -25,7 +25,7 @@ public class WSDLParser {
     
     public static void main(String args[]){
 
-        List<String> filelist = FileUtil.getFileList("E:\\1learningmaterials\\maven\\WSDL\\workspace\\wsdlfile\\online", new ArrayList<String>());
+        List<String> filelist = FileUtil.getFileList("E:\\1learningmaterials\\maven\\WSDL\\workspace\\wsdlfile\\todo", new ArrayList<String>());
         Iterator<String> fileNameItr = filelist.iterator();
         while(fileNameItr.hasNext()){
             String fileName = fileNameItr.next();

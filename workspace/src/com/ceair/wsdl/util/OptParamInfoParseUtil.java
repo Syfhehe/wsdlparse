@@ -35,8 +35,7 @@ public class OptParamInfoParseUtil {
             reader.setFeature("javax.wsdl.verbose", true);
             reader.setFeature("javax.wsdl.importDocuments", true);
 
-
-            String filepath = "./wsdlfile/S1.wsdl";
+            String filepath = "./wsdlfile/todo/E-HR主数据.wsdl";
             
             Definition def = reader.readWSDL(filepath);
             List<EsbParamInfo> paramInfosList = ParamInfoParseUtil.parseParamInfo(filepath);
@@ -48,7 +47,9 @@ public class OptParamInfoParseUtil {
                 System.out.println("+++++++++++++++++++++++++++++++++++++++");
                 System.out.println("paramName:" + esbOptParam.getParamName());
                 System.out.println("paramType:" + esbOptParam.getParamType());
-                System.out.println("paramsInfoParam:" + esbOptParam.getParamsInfoParam().getNodeName());
+                if(esbOptParam.getParamsInfoParam()!= null){
+                    System.out.println("paramsInfoParam:" + esbOptParam.getParamsInfoParam().getNodeName());
+                }
             }
         } catch (WSDLException e) {
             e.printStackTrace();
@@ -117,13 +118,17 @@ public class OptParamInfoParseUtil {
                         EsbOptParam esbOptParam = new EsbOptParam();
                         Entry<QName, Part> partEntry = msgPartItr.next();
                         Part part = partEntry.getValue();
-                        System.out.println("Part Name:" + part.getName());
-                        System.out.println("Part Type Name:" + part.getElementName().getLocalPart());
-                        EsbParamInfo esbParamInfo = paramInfoMap.get(part.getElementName().getLocalPart());
-
-                        esbOptParam.setParamName(part.getElementName().getLocalPart());
-                        esbOptParam.setParamType(optParamEntry.getKey());
-                        esbOptParam.setParamsInfoParam(esbParamInfo);
+                        if(part.getTypeName()!=null){
+                            if (paramInfoMap.containsKey(part.getTypeName().getLocalPart())) {
+                                EsbParamInfo esbParamInfo = paramInfoMap.get(part.getTypeName().getLocalPart());
+                                esbOptParam.setParamName(part.getTypeName().getLocalPart());
+                                esbOptParam.setParamType(optParamEntry.getKey());
+                                esbOptParam.setParamsInfoParam(esbParamInfo);
+                            } else {
+                                esbOptParam.setParamName(part.getName());
+                                esbOptParam.setParamType(optParamEntry.getKey());
+                            }
+                        }
                         optParamsList.add(esbOptParam);
                     }
                 }
