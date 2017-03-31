@@ -50,7 +50,6 @@ public class FileUtil {
     }
 
     public static String string2File(String res, String filePath) {
-        boolean flag = true;
         BufferedReader bufferedReader = null;
         BufferedWriter bufferedWriter = null;
 

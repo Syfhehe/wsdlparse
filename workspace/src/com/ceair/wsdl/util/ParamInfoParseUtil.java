@@ -23,7 +23,9 @@ public class ParamInfoParseUtil {
     public static void main(String[] args) throws Exception {
 
         int index = 1;
-        String filepath = "./wsdlfile/M1.wsdl";
+        String filepath = "./wsdlfile/todo/E-HR主数据.wsdl";
+        //String filepath = "./wsdlfile/SM1.wsdl";
+
         List<EsbParamInfo> paramInfosList = parseParamInfo(filepath);
         Iterator<EsbParamInfo> iterator = paramInfosList.iterator();
         while (iterator.hasNext()) {
@@ -46,7 +48,10 @@ public class ParamInfoParseUtil {
     @SuppressWarnings("unchecked")
     public static List<EsbParamInfo> parseParamInfo(String filepath) throws Exception {
 
+        
         List<EsbParamInfo> paramInfosList = new ArrayList<EsbParamInfo>();
+        List<EsbParamInfo> paramInfosFromSchemaList = new ArrayList<EsbParamInfo>();
+        List<EsbParamInfo> paramInfosFromMsgList = new ArrayList<EsbParamInfo>();
 
         SAXReader saxReader = new SAXReader();
         Document document = saxReader.read(new File(filepath));
@@ -60,7 +65,7 @@ public class ParamInfoParseUtil {
         List<Element> schemaList = types.elements();
         System.out.println("schemaElementList count: " + schemaList.size());
         Iterator<Element> schemaItr = schemaList.iterator();
-        // 遍历每个schema下的parameter
+        // step1 遍历每个schema下的parameter
         while (schemaItr.hasNext()) {
             Element schema = schemaItr.next();
             List<Element> paramsList = schema.elements();
@@ -69,9 +74,49 @@ public class ParamInfoParseUtil {
             // 解析每个element或者complexType
             while (paramItr.hasNext()) {
                 Element parameter = paramItr.next();
-                parseParam(parameter, paramInfosList, new EsbParamInfo());
+                parseParam(parameter, paramInfosFromSchemaList, new EsbParamInfo());
             }
         }
+
+        //step2 遍历所有的message下面的part 为了应对直接将参数写在message里的情况
+        List<Element> messageList = root.elements("message");
+        Iterator<Element> iterator = messageList.iterator();
+        while (iterator.hasNext()) {
+            Element message = (Element) iterator.next();
+            List<Element> partList = message.elements("part");
+            Iterator<Element> partItr = partList.iterator();
+            while (partItr.hasNext()) {
+                Element part = (Element) partItr.next();
+                EsbParamInfo tempParamInfo = new EsbParamInfo();
+                for (int attrCount = 0; attrCount < part.attributeCount(); attrCount++) { 
+                    Attribute attr = part.attribute(attrCount);
+                    setData(tempParamInfo, attr);
+                }
+                if(tempParamInfo.getDataType()!=null){
+                    paramInfosFromMsgList.add(tempParamInfo);
+
+                }
+            }
+        }
+        
+        //step3 删除掉重复的内容 因为有的在message-part里的参数不是公共参数 是输入输出参数
+        Iterator<EsbParamInfo> paramInfoFromSchemaItr =  paramInfosFromSchemaList.iterator();
+        while (paramInfoFromSchemaItr.hasNext()) {
+            EsbParamInfo esbParamFromSchemaInfo = (EsbParamInfo) paramInfoFromSchemaItr.next();
+            String nodeName = esbParamFromSchemaInfo.getNodeName();
+            Iterator<EsbParamInfo> paramInfoFromMsgItr =  paramInfosFromMsgList.iterator();
+            while (paramInfoFromMsgItr.hasNext()) {
+                EsbParamInfo esbParamFromMsgInfo = (EsbParamInfo) paramInfoFromMsgItr.next();
+                if(esbParamFromMsgInfo.getDataType()!=null){
+                    if(esbParamFromMsgInfo.getDataType().indexOf(nodeName)!=-1){
+                        paramInfoFromMsgItr.remove();
+                    }
+                }
+            }
+
+        }
+        paramInfosList.addAll(paramInfosFromSchemaList);
+        paramInfosList.addAll(paramInfosFromMsgList);
         return paramInfosList;
     }
 
@@ -85,7 +130,6 @@ public class ParamInfoParseUtil {
                     Attribute attr = parameter.attribute(attrCount);
                     setData(tempParamInfo, attr);
                     System.out.println("++++++++++++++++++++++++++++++++++++++++");
-
                 }
                 if (parentParamInfo.getNodeName() == null && parentParamInfo.getDataType() == null) {
                     tempParamInfo.setParentParam(parentParamInfo.getParentParam());
