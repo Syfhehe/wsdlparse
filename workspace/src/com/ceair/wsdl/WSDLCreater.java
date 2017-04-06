@@ -4,6 +4,7 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
+import java.nio.channels.ScatteringByteChannel;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -16,7 +17,9 @@ import javax.wsdl.Definition;
 import javax.wsdl.Fault;
 import javax.wsdl.Message;
 import javax.wsdl.Operation;
+import javax.wsdl.Port;
 import javax.wsdl.PortType;
+import javax.wsdl.Service;
 import javax.wsdl.WSDLException;
 import javax.wsdl.extensions.ExtensibilityElement;
 import javax.wsdl.factory.WSDLFactory;
@@ -30,10 +33,14 @@ import com.ceair.wsdl.domain.ServiceOperation;
 import com.ceair.wsdl.domain.ServiceVersion;
 import com.ceair.wsdl.util.FileUtil;
 import com.ibm.wsdl.OperationImpl;
+import com.ibm.wsdl.extensions.soap.SOAPAddressImpl;
 import com.ibm.wsdl.extensions.soap.SOAPOperationImpl;
+import com.ibm.wsdl.extensions.soap12.SOAP12AddressImpl;
 import com.ibm.wsdl.extensions.soap12.SOAP12OperationImpl;
 
 public class WSDLCreater {
+
+    private static Object addressURI;
 
     public static void main(String args[]) {
         // ServiceOperation serviceOperation =
@@ -114,12 +121,39 @@ public class WSDLCreater {
                 binding = replaceOptsOfBinding(binding, bindingOperationListModify);
             }
 
+           
+            Map<QName, Service> serviceMap = def.getAllServices();
+            Iterator<Entry<QName, Service>> serviceItr = serviceMap.entrySet().iterator();
+            while (serviceItr.hasNext()) {
+                Entry<QName, Service> svcEntry = serviceItr.next();
+                Service svc = (Service) svcEntry.getValue();
+                Map<String, Binding> portMap = svc.getPorts();
+                Iterator<Entry<String, Binding>> portItr = portMap.entrySet().iterator();
+                while (portItr.hasNext()) {
+                    Entry<String, Binding> portEntry =  portItr.next();
+                    Port port = (Port) portEntry.getValue();
+                    ExtensibilityElement extensibilityElement = (ExtensibilityElement) port.getExtensibilityElements()
+                            .get(0);
+                    setAddressUrl(extensibilityElement, "hahahaha");               
+                }
+            }
+            
             WSDLWriter wirter = wsdlFactory.newWSDLWriter();
             wirter.writeWSDL(def, System.out);
         } catch (WSDLException e) {
             e.printStackTrace();
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
+        }
+    }
+    
+    
+    private static void setAddressUrl(ExtensibilityElement extensibilityElement, String endpoint) {
+        if (extensibilityElement instanceof SOAP12AddressImpl) {
+            ((SOAP12AddressImpl) extensibilityElement).setLocationURI(endpoint);
+        } else if (extensibilityElement instanceof SOAPAddressImpl) {
+            ((SOAPAddressImpl) extensibilityElement).setLocationURI(endpoint);
+        } else {
         }
     }
     

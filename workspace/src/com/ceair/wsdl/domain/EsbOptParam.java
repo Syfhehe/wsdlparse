@@ -7,6 +7,7 @@ public class EsbOptParam {
     private String paramName;
     private String paramDesc;
     private String paramType;
+    private String optEnName;
     private EsbParamInfo paramsInfoParam;//外键到ESB_PARAMS_INFO表中的PARAM_ID
     
     public int getOptParamId() {
@@ -44,6 +45,12 @@ public class EsbOptParam {
     }
     public void setParamsInfoParam(EsbParamInfo paramsInfoParam) {
         this.paramsInfoParam = paramsInfoParam;
+    }
+    public String getOptEnName() {
+        return optEnName;
+    }
+    public void setOptEnName(String optEnName) {
+        this.optEnName = optEnName;
     }
 
 }

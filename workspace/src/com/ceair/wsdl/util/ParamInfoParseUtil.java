@@ -21,27 +21,33 @@ public class ParamInfoParseUtil {
     public static final String ELEMENT_TYPE = "type";
 
     public static void main(String[] args) throws Exception {
+        List<String> filelist = FileUtil.getFileList("E:\\1learningmaterials\\maven\\WSDL\\workspace\\wsdlfile\\todo",
+                new ArrayList<String>());
+        Iterator<String> fileNameItr = filelist.iterator();
+        while (fileNameItr.hasNext()) {
+            int index = 1;
+            String fileName = fileNameItr.next();
+            System.out.println("**************************************************************************************************");
+            System.out.println("***********************fileName=" + fileName + "******************************");
+            System.out.println("**************************************************************************************************");
 
-        int index = 1;
-        String filepath = "./wsdlfile/todo/E-HR主数据.wsdl";
-        //String filepath = "./wsdlfile/SM1.wsdl";
+            List<EsbParamInfo> paramInfosList = parseParamInfo(fileName);
+            Iterator<EsbParamInfo> iterator = paramInfosList.iterator();
+            while (iterator.hasNext()) {
+                EsbParamInfo paramInfo = iterator.next();
+                System.out.println("Object" + index + ":");
+                System.out.println("--------------------------------------");
 
-        List<EsbParamInfo> paramInfosList = parseParamInfo(filepath);
-        Iterator<EsbParamInfo> iterator = paramInfosList.iterator();
-        while (iterator.hasNext()) {
-            EsbParamInfo paramInfo = iterator.next();
-            System.out.println("Object" + index + ":");
-            System.out.println("--------------------------------------");
-
-            if (paramInfo.getParentParam() != null) {
-                System.out.println("parentParamName:" + paramInfo.getParentParam().getNodeName());
+                if (paramInfo.getParentParam() != null) {
+                    System.out.println("parentParamName:" + paramInfo.getParentParam().getNodeName());
+                }
+                System.out.println("nodeName:" + paramInfo.getNodeName());
+                System.out.println("dataType:" + paramInfo.getDataType());
+                System.out.println("minoccurs:" + paramInfo.getMinoccurs());
+                System.out.println("maxoccurs:" + paramInfo.getMaxoccurs());
+                System.out.println("--------------------------------------");
+                index++;
             }
-            System.out.println("nodeName:" + paramInfo.getNodeName());
-            System.out.println("dataType:" + paramInfo.getDataType());
-            System.out.println("minoccurs:" + paramInfo.getMinoccurs());
-            System.out.println("maxoccurs:" + paramInfo.getMaxoccurs());
-            System.out.println("--------------------------------------");
-            index++;
         }
     }
 
@@ -62,21 +68,24 @@ public class ParamInfoParseUtil {
         // 获取types
         Element types = root.element("types");
         // 考虑多个schema的情况
-        List<Element> schemaList = types.elements();
-        System.out.println("schemaElementList count: " + schemaList.size());
-        Iterator<Element> schemaItr = schemaList.iterator();
-        // step1 遍历每个schema下的parameter
-        while (schemaItr.hasNext()) {
-            Element schema = schemaItr.next();
-            List<Element> paramsList = schema.elements();
-            System.out.println("paramsList count: " + paramsList.size());
-            Iterator<Element> paramItr = paramsList.iterator();
-            // 解析每个element或者complexType
-            while (paramItr.hasNext()) {
-                Element parameter = paramItr.next();
-                parseParam(parameter, paramInfosFromSchemaList, new EsbParamInfo());
+        if(types!=null){
+            List<Element> schemaList = types.elements();
+            System.out.println("schemaElementList count: " + schemaList.size());
+            Iterator<Element> schemaItr = schemaList.iterator();
+            // step1 遍历每个schema下的parameter
+            while (schemaItr.hasNext()) {
+                Element schema = schemaItr.next();
+                List<Element> paramsList = schema.elements();
+                System.out.println("paramsList count: " + paramsList.size());
+                Iterator<Element> paramItr = paramsList.iterator();
+                // 解析每个element或者complexType
+                while (paramItr.hasNext()) {
+                    Element parameter = paramItr.next();
+                    parseParam(parameter, paramInfosFromSchemaList, new EsbParamInfo());
+                }
             }
         }
+        
 
         //step2 遍历所有的message下面的part 为了应对直接将参数写在message里的情况
         List<Element> messageList = root.elements("message");
@@ -117,6 +126,15 @@ public class ParamInfoParseUtil {
         }
         paramInfosList.addAll(paramInfosFromSchemaList);
         paramInfosList.addAll(paramInfosFromMsgList);
+        
+        //step4 遍历所有对象 若父类对象存在 但是名字是空的  就移除父类对象
+        Iterator<EsbParamInfo> allParamItr = paramInfosList.iterator();
+        while (allParamItr.hasNext()) {
+            EsbParamInfo esbParamInfo = (EsbParamInfo) allParamItr.next();
+            if(esbParamInfo.getParentParam()!=null&&esbParamInfo.getParentParam().getNodeName()==null){
+                esbParamInfo.setParentParam(null);
+            }            
+        }
         return paramInfosList;
     }
 
@@ -129,7 +147,6 @@ public class ParamInfoParseUtil {
                 for (int attrCount = 0; attrCount < parameter.attributeCount(); attrCount++) {
                     Attribute attr = parameter.attribute(attrCount);
                     setData(tempParamInfo, attr);
-                    System.out.println("++++++++++++++++++++++++++++++++++++++++");
                 }
                 if (parentParamInfo.getNodeName() == null && parentParamInfo.getDataType() == null) {
                     tempParamInfo.setParentParam(parentParamInfo.getParentParam());

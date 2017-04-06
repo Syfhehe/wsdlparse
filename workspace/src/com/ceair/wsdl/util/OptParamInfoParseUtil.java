@@ -35,20 +35,27 @@ public class OptParamInfoParseUtil {
             reader.setFeature("javax.wsdl.verbose", true);
             reader.setFeature("javax.wsdl.importDocuments", true);
 
-            String filepath = "./wsdlfile/todo/E-HR主数据.wsdl";
-            
-            Definition def = reader.readWSDL(filepath);
-            List<EsbParamInfo> paramInfosList = ParamInfoParseUtil.parseParamInfo(filepath);
+            List<String> filelist = FileUtil.getFileList(
+                    "E:\\1learningmaterials\\maven\\WSDL\\workspace\\wsdlfile\\todo", new ArrayList<String>());
+            Iterator<String> fileNameItr = filelist.iterator();
+            while (fileNameItr.hasNext()) {
+                String fileName = fileNameItr.next();
+                Definition def = reader.readWSDL(fileName);
+                List<EsbParamInfo> paramInfosList = ParamInfoParseUtil.parseParamInfo(fileName);
+                List<EsbOptParam> list = parseOptParamInfo(def, paramInfosList);
+                Iterator<EsbOptParam> iterator = list.iterator();
+                while (iterator.hasNext()) {
+                    EsbOptParam esbOptParam = (EsbOptParam) iterator.next();
+                    System.out.println("+++++++++++++++++++++++++++++++++++++++");
+                    System.out.println("paramName:" + esbOptParam.getParamName());
+                    System.out.println("paramType:" + esbOptParam.getParamType());
+                    System.out.println("optName:" + esbOptParam.getOptEnName());
 
-            List<EsbOptParam> list = parseOptParamInfo(def, paramInfosList);
-            Iterator<EsbOptParam> iterator = list.iterator();
-            while (iterator.hasNext()) {
-                EsbOptParam esbOptParam = (EsbOptParam) iterator.next();
-                System.out.println("+++++++++++++++++++++++++++++++++++++++");
-                System.out.println("paramName:" + esbOptParam.getParamName());
-                System.out.println("paramType:" + esbOptParam.getParamType());
-                if(esbOptParam.getParamsInfoParam()!= null){
-                    System.out.println("paramsInfoParam:" + esbOptParam.getParamsInfoParam().getNodeName());
+                    if (esbOptParam.getParamsInfoParam() != null) {
+                        System.out.println("paramsInfoParam:" + esbOptParam.getParamsInfoParam().getNodeName());
+                    }
+                    System.out.println("+++++++++++++++++++++++++++++++++++++++");
+
                 }
             }
         } catch (WSDLException e) {
@@ -96,40 +103,60 @@ public class OptParamInfoParseUtil {
                     System.out.println("FaultName:" + fault.getMessage().getQName().getLocalPart());
                     break;
                 }
-                
+
                 Map<String, QName> optParamMap = new HashMap<String, QName>();
                 if (qnameInput != null) {
-                    optParamMap.put(INPUT_PARAMETER, qnameInput);
+                    optParamMap.put(portTypeOperation.getName() + ":" + INPUT_PARAMETER, qnameInput);
                 }
                 if (qnameOutput != null) {
-                    optParamMap.put(OUTPUT_PARAMETER, qnameOutput);
+                    optParamMap.put(portTypeOperation.getName() + ":" + OUTPUT_PARAMETER, qnameOutput);
                 }
                 if (qnameFault != null) {
-                    optParamMap.put(FAULT_PARAMETER, qnameFault);
+                    optParamMap.put(portTypeOperation.getName() + ":" + FAULT_PARAMETER, qnameFault);
                 }
-                
+
                 Iterator<Entry<String, QName>> optParamItr = optParamMap.entrySet().iterator();
                 while (optParamItr.hasNext()) {
                     Entry<String, QName> optParamEntry = optParamItr.next();
-                    Message message = msgMap.get(optParamEntry.getValue());
-                    Map<QName, Part> msgPartMap = message.getParts();
-                    Iterator<Entry<QName, Part>> msgPartItr = msgPartMap.entrySet().iterator();
-                    while (msgPartItr.hasNext()) {
-                        EsbOptParam esbOptParam = new EsbOptParam();
-                        Entry<QName, Part> partEntry = msgPartItr.next();
-                        Part part = partEntry.getValue();
-                        if(part.getTypeName()!=null){
-                            if (paramInfoMap.containsKey(part.getTypeName().getLocalPart())) {
-                                EsbParamInfo esbParamInfo = paramInfoMap.get(part.getTypeName().getLocalPart());
-                                esbOptParam.setParamName(part.getTypeName().getLocalPart());
-                                esbOptParam.setParamType(optParamEntry.getKey());
-                                esbOptParam.setParamsInfoParam(esbParamInfo);
-                            } else {
+                    if (msgMap.size() != 0) {
+                        Message message = msgMap.get(optParamEntry.getValue());
+                        Map<QName, Part> msgPartMap = message.getParts();
+                        Iterator<Entry<QName, Part>> msgPartItr = msgPartMap.entrySet().iterator();
+                        while (msgPartItr.hasNext()) {
+                            EsbOptParam esbOptParam = new EsbOptParam();
+                            Entry<QName, Part> partEntry = msgPartItr.next();
+                            Part part = partEntry.getValue();
+                            //<wsdl:part name="arg0" type="xsd:string">
+                            if (paramInfoMap.containsKey(part.getName())) {
+                                EsbParamInfo esbParamInfo = paramInfoMap.get(part.getName());
                                 esbOptParam.setParamName(part.getName());
-                                esbOptParam.setParamType(optParamEntry.getKey());
+                                String[] array = spileString(optParamEntry.getKey());
+                                esbOptParam.setOptEnName(array[0]);
+                                esbOptParam.setParamType(array[1]);
+                                esbOptParam.setParamsInfoParam(esbParamInfo);
                             }
+                            //<wsdl:part name="return" type="tns:masterData"></wsdl:part>
+                            else if (part.getTypeName() != null
+                                    && paramInfoMap.containsKey(part.getTypeName().getLocalPart())) {
+                                EsbParamInfo esbParamInfo = paramInfoMap.get(part.getTypeName().getLocalPart());
+                                esbOptParam.setParamName(part.getName());
+                                String[] array = spileString(optParamEntry.getKey());
+                                esbOptParam.setOptEnName(array[0]);
+                                esbOptParam.setParamType(array[1]);
+                                esbOptParam.setParamsInfoParam(esbParamInfo);
+                            } 
+                            //<wsdl:part name="parameters" element="tns:getInfoByMobilePhone" />
+                            else if (part.getElementName() != null
+                                    && paramInfoMap.containsKey(part.getElementName().getLocalPart())) {
+                                EsbParamInfo esbParamInfo = paramInfoMap.get(part.getElementName().getLocalPart());
+                                esbOptParam.setParamName(part.getElementName().getLocalPart());
+                                String[] array = spileString(optParamEntry.getKey());
+                                esbOptParam.setOptEnName(array[0]);
+                                esbOptParam.setParamType(array[1]);
+                                esbOptParam.setParamsInfoParam(esbParamInfo);
+                            }
+                            optParamsList.add(esbOptParam);
                         }
-                        optParamsList.add(esbOptParam);
                     }
                 }
             }
@@ -145,6 +172,11 @@ public class OptParamInfoParseUtil {
             map.put(esbParamInfo.getNodeName(), esbParamInfo);
         }
         return map;
+    }
+    
+    private static String[] spileString(String string){
+        String[] array = string.split(":");
+        return array; 
     }
 
 }
